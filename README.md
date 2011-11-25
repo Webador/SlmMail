@@ -13,7 +13,6 @@ SlmMail is an extension to the available Zend\Mail component of the Zend Framewo
 5. PostageApp
 6. Postmark
 7. SendGrid
-8. SMTP.com
 
 Requirements
 ---
