@@ -15,21 +15,8 @@ $postmarkTransport = array(
 /**
  * You do not need to edit below this line
  */
-return array(
+$config = array(
     'di' => array(
-        'definition' => array(
-            'postmark-service' => array(
-                'methods' => array(
-                    'setApiKey' => array(
-                        'api_key' => array(
-                            'type'        => null,
-                            'is-required' => true,
-                        ),
-                        'is-required' => true,
-                    ),
-                ),
-            ),
-        ),
         'instance' => array(
             'alias' => array(
                 'postmark-transport' => 'SlmMail\Mail\Transport\Postmark',
@@ -47,4 +34,11 @@ return array(
             ),
         ),
     ),
+);
+
+return array(
+    'development' => $config,
+    'production'  => $config,
+    'staging'     => $config,
+    'testing'     => $config,
 );
