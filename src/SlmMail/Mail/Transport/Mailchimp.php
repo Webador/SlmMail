@@ -4,7 +4,7 @@ namespace SlmMail\Mail\Transport;
 
 use Zend\Mail\Transport,
     Zend\Mail\Message,
-    SlmMail\Service\Mailchimp as Service;
+    SlmMail\Service\Mailchimp\Sts as Service;
 
 class Mailchimp implements Transport
 {
@@ -22,6 +22,6 @@ class Mailchimp implements Transport
     
     public function send (Message $message)
     {
-        return $this->service->send($message);
+        return $this->service->sendEmail($message);
     }
 }
