@@ -4,10 +4,15 @@ namespace SlmMail\Mail\Transport;
 
 use Zend\Mail\Transport,
     Zend\Mail\Message,
-    SlmMail\Mail\Service\ElasticEmail as Service;
+    SlmMail\Service\ElasticEmail as Service;
 
 class ElasticEmail implements Transport
 {
+    /**
+     * ElasticEmail service for api calls
+     * 
+     * @var Service
+     */
     protected $service;
     
     public function setService (Service $service)

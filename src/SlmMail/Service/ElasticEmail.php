@@ -25,11 +25,7 @@ class ElasticEmail
         $this->username = $username;
     }
     
-    public function send (Message $message)
-    {
-        // @todo
-    }
-    
+    public function send (Message $message) {}
     public function uploadAttachment () {}
     public function getStatus () {}
     public function getLog () {}

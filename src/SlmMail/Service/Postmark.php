@@ -6,11 +6,12 @@ use Zend\Mail\Message,
     Zend\Http\Client,
     Zend\Http\Request,
     Zend\Http\Response,
-    Zend\Json\Json;
+    Zend\Json\Json,
+    Zend\Mail\Exception\RuntimeException;
 
 class Postmark
 {
-    const API_URI = 'http://api.postmarkapp.com/';
+    const API_URI         = 'http://api.postmarkapp.com/';
     const RECIPIENT_LIMIT = 20;
     
     protected $apiKey;
@@ -45,7 +46,8 @@ class Postmark
     {
         $data = array(
             'Subject'  => $message->getSubject(),
-            'HtmlBody' => $message->getBody(), // @todo get corrent html/plain versions
+            'HtmlBody' => $message->getBody(),
+            'TextBody' => $message->getBodyText(),
         );
         
         $to = array();
@@ -58,7 +60,7 @@ class Postmark
         foreach ($message->cc() as $address) {
             $cc[] = $address->toString();
         }
-        if (20 < count($cc)) {
+        if (self::RECIPIENT_LIMIT < count($cc)) {
             throw new RuntimeException('Limitation exceeded for CC recipients');
         } elseif (count($cc)) {
             $data['Cc'] = implode(',', $cc);
@@ -68,10 +70,18 @@ class Postmark
         foreach ($message->bcc() as $address) {
             $bcc[] = $address->toString();
         }
-        if (20 < count($bcc)) {
+        if (self::RECIPIENT_LIMIT < count($bcc)) {
             throw new RuntimeException('Limitation exceeded for BCC recipients');
         } elseif (count($bcc)) {
             $data['Bcc'] = implode(',', $bcc);
+        }
+        
+        $from = $message->from();
+        if (1 > count($from)) {
+            throw new RuntimeException('Postmark has only support for one from address');
+        } elseif (count($from)) {
+            $from = current($from);
+            $data['From'] = $from->toString();
         }
         
         $replyTo = $message->replyTo();
@@ -82,24 +92,29 @@ class Postmark
             $data['ReplyTo'] = $replyTo->toString();
         }
         
-        // @todo implement from and tags
-//        $data = array(
-//            'From'     => implode( ',', $from),
-//            'tag'      => implode(',', $tags)
-//        );
+        /**
+         * @todo Handling tags for emails
+         */
         
-        // @todo already handling attachments?
-//        if ($hasAttachment) {
-//            $attachments = array();
-//            foreach ($message->getAttachmentCollection() as $attachment) {
-//                $attachments[] = array(
-//                    'ContentType' => $attachment->getContentType(),
-//                    'Name'        => $attachment->getName(),
-//                    'Content'     => $attachment->getContent(),
-//                );
-//            }
-//            $data['Attachments'] = $attachments;
-//        }
+        /**
+         * @todo Handling attachments for emails
+         * 
+         * Example code how that possibly might work:
+         * 
+         * <code>
+         * if ($hasAttachment) {
+         *      $attachments = array();
+         *      foreach ($message->getAttachmentCollection() as $attachment) {
+         *          $attachments[] = array(
+         *              'ContentType' => $attachment->getContentType(),
+         *              'Name'        => $attachment->getName(),
+         *              'Content'     => $attachment->getContent(),
+         *          );
+         *      }
+         *      $data['Attachments'] = $attachments;
+         *  }
+         * </code>
+         */
 
         $response = $this->getHttpClient('/email')
                          ->setRawBody(Json::encode($data))
