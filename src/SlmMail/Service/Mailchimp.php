@@ -11,7 +11,7 @@ use Zend\Mail\Message,
 
 abstract class Mailchimp
 {
-    abstract protected $apiUrl;
+    const API_URI = '';
     
     protected $apiKey;
     protected $client;
@@ -25,7 +25,7 @@ abstract class Mailchimp
     {
         if (null === $this->client) {
             $code = substr($this->apiKey, strpos('-')+1);
-            $uri  = sprintf($this->apiUrl, $code);
+            $uri  = sprintf(static::API_URI, $code);
             
             $this->client = new Client();
             $this->client->setUri($uri)

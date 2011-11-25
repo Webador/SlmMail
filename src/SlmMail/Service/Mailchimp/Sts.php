@@ -6,7 +6,7 @@ use Slm\Service\Mailchimp;
 
 class Sls extends Mailchimp
 {
-    protected $apiUrl = 'http://%s.sts.mailchimp.com/1.0/';
+    const API_URI = 'http://%s.sts.mailchimp.com/1.0/';
     
     public function sendEmail (Message $message) {}
     public function verifyEmailAddress () {}

@@ -6,7 +6,7 @@ use Slm\Service\Mailchimp;
 
 class Campaign extends Mailchimp
 {
-    protected $apiUrl = 'http://%s.mailchimp.com/1.3/';
+    const API_URI = 'http://%s.mailchimp.com/1.3/';
     
     /** Campaign */
     // A lot here to be done
