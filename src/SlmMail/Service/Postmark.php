@@ -7,7 +7,8 @@ use Zend\Mail\Message,
     Zend\Http\Request,
     Zend\Http\Response,
     Zend\Json\Json,
-    Zend\Mail\Exception\RuntimeException;
+    Zend\Mail\Exception\RuntimeException,
+    SlmMail\Mail\Message\Postmark as PostmarkMessage;
 
 class Postmark
 {
@@ -92,9 +93,11 @@ class Postmark
             $data['ReplyTo'] = $replyTo->toString();
         }
         
-        /**
-         * @todo Handling tags for emails
-         */
+        if ($message instanceof PostmarkMessage 
+            && null !== ($tag = $message->getTag())
+        ) {
+            $data['Tag'] = $tag;
+        }
         
         /**
          * @todo Handling attachments for emails
