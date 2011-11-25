@@ -1,0 +1,63 @@
+<?php
+/**
+ * SlmMail ElasticEmail Configuration
+ *
+ * If you have a ./configs/autoload/ directory set up for your project, you can 
+ * drop this config file in it and change the values as you wish.
+ */
+$elasticEmailTransport = array(
+    /**
+     * API key for ElasticEmail Email Service Provider
+     */
+    'api_key' => '',
+    
+    /**
+     * Username for ElasticEmail Email Service Provicer
+     */
+    'username' => '',
+);
+
+/**
+ * You do not need to edit below this line
+ */
+return array(
+    'di' => array(
+        'definition' => array(
+            'elasticemail-service' => array(
+                'methods' => array(
+                    'setApiKey' => array(
+                        'api_key' => array(
+                            'type'        => null,
+                            'is-required' => true,
+                        ),
+                        'is-required' => true,
+                    ),
+                    'setUsername' => array(
+                        'username' => array(
+                            'type'        => null,
+                            'is-required' => true,
+                        ),
+                        'is-required' => true,
+                    ),
+                ),
+            ),
+        ),
+        'instance' => array(
+            'alias' => array(
+                'elasticemail-transport' => 'SlmMail\Mail\Transport\Postmark',
+                'elasticemail-service'   => 'SlmMail\Service\Postmark',
+            ),
+            'elasticemail-transport' => array(
+                'parameters' => array(
+                    'service' => 'elasticemail-service',
+                ),
+            ),
+            'elasticemail-service' => array(
+                'parameters' => array(
+                    'api_key'  => $elasticEmailTransport['api_key'],
+                    'username' => $elasticEmailTransport['username'],
+                ),
+            ),
+        ),
+    ),
+);
