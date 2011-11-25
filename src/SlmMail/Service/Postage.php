@@ -42,9 +42,7 @@ class Postage
             throw new RuntimeException('Postage does not support BCC addresses');
         }
         
-        $args['headers'] = array(
-            'subject' => $message->getSubject()
-        );
+        $args['headers'] = array('subject' => $message->getSubject());
         
         $from = $message->from();
         if (1 > count($from)) {

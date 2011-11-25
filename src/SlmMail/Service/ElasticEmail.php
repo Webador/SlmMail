@@ -69,7 +69,7 @@ class ElasticEmail
         }
         
         if ($message instanceof ElasticEmailMessage 
-            && null !== ($channel = $message->Channel())
+            && null !== ($channel = $message->getChannel())
         ) {
             $data['channel'] = $channel;
         }
