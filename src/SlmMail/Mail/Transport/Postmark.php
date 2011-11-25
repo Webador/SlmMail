@@ -13,7 +13,6 @@ class Postmark implements Transport
     public function setService (Service $service)
     {
         $this->service = $service;
-        return $this;
     }
     
     public function send (Message $message)

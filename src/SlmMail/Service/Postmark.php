@@ -39,7 +39,6 @@ class Postmark
     public function setApiKey ($api_key)
     {
         $this->apiKey = $api_key;
-        return $this;
     }
     
     public function sendEmail (Message $message)
