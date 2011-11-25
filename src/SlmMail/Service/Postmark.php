@@ -1,6 +1,6 @@
 <?php
 
-namespace SlmMail\Service
+namespace SlmMail\Service;
 
 use Zend\Mail\Message,
     Zend\Http\Client,
@@ -84,23 +84,23 @@ class Postmark
         }
         
         // @todo implement from and tags
-        $data = array(
-            'From'     => implode( ',', $from),
-            'tag'      => implode(',', $tags)
-        );
+//        $data = array(
+//            'From'     => implode( ',', $from),
+//            'tag'      => implode(',', $tags)
+//        );
         
         // @todo already handling attachments?
-        if ($hasAttachment) {
-            $attachments = array();
-            foreach ($message->getAttachmentCollection() as $attachment) {
-                $attachments[] = array(
-                    'ContentType' => $attachment->getContentType(),
-                    'Name'        => $attachment->getName(),
-                    'Content'     => $attachment->getContent(),
-                );
-            }
-            $data['Attachments'] = $attachments;
-        }
+//        if ($hasAttachment) {
+//            $attachments = array();
+//            foreach ($message->getAttachmentCollection() as $attachment) {
+//                $attachments[] = array(
+//                    'ContentType' => $attachment->getContentType(),
+//                    'Name'        => $attachment->getName(),
+//                    'Content'     => $attachment->getContent(),
+//                );
+//            }
+//            $data['Attachments'] = $attachments;
+//        }
 
         $response = $this->getHttpClient('/email')
                          ->setRawBody(Json::encode($data))
@@ -119,7 +119,7 @@ class Postmark
     
     public function getBounces ($type = null, $inactive = null, $emailFilter = null, $paging = null)
     {   
-        if (null !== $type &&!in_array($type, $filters)) {
+        if (null !== $type &&!in_array($type, $this->filters)) {
             throw new RuntimeException(sprintf(
                 'Type %s is not a supported filter',
                 $type
@@ -127,7 +127,7 @@ class Postmark
         }
         
         $params   = compact('type', 'inactive', 'emailFilter', 'paging');
-        $response = $this->getHttpClient('/bounces');
+        $response = $this->getHttpClient('/bounces')
                          ->setParameterGet($params)
                          ->send();
                          
@@ -136,7 +136,7 @@ class Postmark
     
     public function getBounce ($id)
     {
-        $response = $this->getHttpClient('/bounces/' . $id);
+        $response = $this->getHttpClient('/bounces/' . $id)
                          ->send();
                                  
         return $this->parseResponse($response);
@@ -144,7 +144,7 @@ class Postmark
     
     public function getBounceDump ($id)
     {
-        $response = $this->getHttpClient('/bounces/' . $id . '/dump');
+        $response = $this->getHttpClient('/bounces/' . $id . '/dump')
                          ->send();
                                  
         return $this->parseResponse($response);
@@ -152,7 +152,7 @@ class Postmark
     
     public function getBounceTags ()
     {
-        $response = $this->getHttpClient('/bounces/tags');
+        $response = $this->getHttpClient('/bounces/tags')
                          ->send();
                                  
         return $this->parseResponse($response);
@@ -161,7 +161,7 @@ class Postmark
     public function activateBounce ($id)
     {
         $response = $this->getHttpClient('/bounces/' . $id . '/activate')
-                         ->setMethod(Request::METHOD_PUT);
+                         ->setMethod(Request::METHOD_PUT)
                          ->send();
                                  
         $response = $this->parseResponse($response);
@@ -174,7 +174,7 @@ class Postmark
             $headers = array(
                 'Accept'                  => 'application/json',
                 'X-Postmark-Server-Token' => $this->apiKey
-            )
+            );
             
             $this->client = new Client();
             $this->client->setUri(self::API_URI)
@@ -190,16 +190,16 @@ class Postmark
     {
         if (!$response->isOk()) {
             switch ($response->getStatusCode()) {
-                401:
+                case 401:
                     throw new RuntimeException('Could not send request: authentication error');
                     break;
-                422:
+                case 422:
                     $error = Json::decode($response->getBody());
                     throw new RuntimeException(sprintf(
                         'Could not send request: api error code %s (%s)', 
                         $error['ErrorCode'], $error['Message']));
                     break;
-                500:
+                case 500:
                     throw new RuntimeException('Could not send request: Postmark server error');
                     break;
                 default:
