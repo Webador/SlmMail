@@ -6,7 +6,7 @@ Installation
 ---
 It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
 
-Copy the `./vendors/SlmMail/config/module.slmmail.postmark.config.php.dist` to your `./config/autoload/module.slmmail.config.php` and update your api key in `./config/autoload/module.slmmail.config.php`.
+Copy the `./vendors/SlmMail/config/module.slmmail.postmark.config.php.dist` to your `./config/autoload/module.postmark.config.php` and update your api key in `./config/autoload/module.postmark.config.php`.
 
 Usage
 ---
