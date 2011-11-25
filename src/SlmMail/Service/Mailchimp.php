@@ -2,8 +2,7 @@
 
 namespace SlmMail\Service;
 
-use Zend\Mail\Message,
-    Zend\Http\Client,
+use Zend\Http\Client,
     Zend\Http\Request,
     Zend\Http\Response,
     Zend\Json\Json,
@@ -11,8 +10,6 @@ use Zend\Mail\Message,
 
 abstract class Mailchimp
 {
-    const API_URI = '';
-    
     protected $apiKey;
     protected $client;
     
