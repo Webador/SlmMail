@@ -1,0 +1,50 @@
+<?php
+/**
+ * SlmMail Amazon SES Configuration
+ *
+ * If you have a ./configs/autoload/ directory set up for your project, you can 
+ * drop this config file in it and change the values as you wish.
+ */
+$amazonSesTransport = array(
+    /**
+     * Hostname for your Amazon SES Email Service Provider server
+     */
+    'host' => '',
+    
+    /**
+     * Access key for Amazon SES Email Service Provider
+     */
+    'access_key' => '',
+);
+
+/**
+ * You do not need to edit below this line
+ */
+$config = array(
+    'di' => array(
+        'instance' => array(
+            'alias' => array(
+                'amazon-ses-transport' => 'SlmMail\Mail\Transport\AmazonSes',
+                'amazon-ses-service'   => 'SlmMail\Service\AmazonSes',
+            ),
+            'amazon-ses-transport' => array(
+                'parameters' => array(
+                    'service' => 'amazon-ses-service',
+                ),
+            ),
+            'amazon-ses-service' => array(
+                'parameters' => array(
+                    'host'       => $amazonSesTransport['host'],
+                    'access_key' => $amazonSesTransport['access_key'],
+                ),
+            ),
+        ),
+    ),
+);
+
+return array(
+    'development' => $config,
+    'production'  => $config,
+    'staging'     => $config,
+    'testing'     => $config,
+);

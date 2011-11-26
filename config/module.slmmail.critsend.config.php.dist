@@ -1,0 +1,44 @@
+<?php
+/**
+ * SlmMail CritSend Configuration
+ *
+ * If you have a ./configs/autoload/ directory set up for your project, you can 
+ * drop this config file in it and change the values as you wish.
+ */
+$critSendTransport = array(
+    /**
+     * Username for CritSend Email Service Provider
+     */
+    'username' => '',
+    
+    /**
+     * Password for CritSend Email Service Provider
+     */
+    'password' => '',
+);
+
+/**
+ * You do not need to edit below this line
+ */
+$config = array(
+    'di' => array(
+        'instance' => array(
+            'alias' => array(
+                'critsend-transport' => 'SlmMail\Mail\Transport\CritSend',
+            ),
+            'critsend-transport' => array(
+                'parameters' => array(
+                    'username' => $critSendTransport['username'],
+                    'password' => $critSendTransport['password'],
+                ),
+            ),
+        ),
+    ),
+);
+
+return array(
+    'development' => $config,
+    'production'  => $config,
+    'staging'     => $config,
+    'testing'     => $config,
+);
