@@ -64,8 +64,8 @@ The transport layer depends on a service class `SlmMail\Service\Postage` which s
 
 The service class is injected into the `SlmMail\Mail\Transport\Postage` but you can get the service class yourself too:
 
-    $postmark = $locator->get('postage-service');
-    $bounce   = $postmark->getMessageReceipt($uid); // Example
+    $postage = $locator->get('postage-service');
+    $bounce  = $postage->getMessageReceipt($uid); // Example
     
 The complete list of methods is:
 

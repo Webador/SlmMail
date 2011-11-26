@@ -412,7 +412,7 @@ class SendGrid
         if (null === $this->client) {
             $this->client = new Client();
             $this->client->setUri(self::API_URI)
-                    ->setMethod(Request::METHOD_GET);
+                         ->setMethod(Request::METHOD_GET);
         }
 
         $this->client->getUri()->setPath('api/' . $path . '.' . $format);
