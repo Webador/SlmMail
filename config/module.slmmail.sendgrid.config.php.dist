@@ -7,14 +7,14 @@
  */
 $sendGridTransport = array(
     /**
-     * API key for SendGrid Email Service Provider
-     */
-    'api_key' => '',
-    
-    /**
      * Username key for SendGrid Email Service Provider
      */
     'username' => '',
+    
+    /**
+     * Password for SendGrid Email Service Provider
+     */
+    'password' => '',
 );
 
 /**
@@ -34,8 +34,8 @@ $config = array(
             ),
             'sendgrid-service' => array(
                 'parameters' => array(
-                    'api_key'  => $sendGridTransport['api_key'],
                     'username' => $sendGridTransport['username'],
+                    'password' => $sendGridTransport['password'],
                 ),
             ),
         ),
