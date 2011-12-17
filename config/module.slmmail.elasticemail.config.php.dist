@@ -44,8 +44,8 @@ return array(
         ),
         'instance' => array(
             'alias' => array(
-                'elasticemail-transport' => 'SlmMail\Mail\Transport\Postmark',
-                'elasticemail-service'   => 'SlmMail\Service\Postmark',
+                'elasticemail-transport' => 'SlmMail\Mail\Transport\ElasticEmail',
+                'elasticemail-service'   => 'SlmMail\Service\ElasticEmail',
             ),
             'elasticemail-transport' => array(
                 'parameters' => array(
