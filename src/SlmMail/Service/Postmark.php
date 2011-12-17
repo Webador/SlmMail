@@ -214,7 +214,7 @@ class Postmark
                     $error = Json::decode($response->getBody());
                     throw new RuntimeException(sprintf(
                         'Could not send request: api error code %s (%s)', 
-                        $error['ErrorCode'], $error['Message']));
+                        $error->ErrorCode, $error->Message));
                     break;
                 case 500:
                     throw new RuntimeException('Could not send request: Postmark server error');
