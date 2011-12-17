@@ -143,7 +143,8 @@ class Postmark
             ));
         }
         
-        $params   = compact('count', 'offset', 'type', 'inactive', 'emailFilter');        
+        $params   = compact('count', 'offset', 'type', 'inactive', 'emailFilter');
+        $params   = $this->filterNullParams($params);
         $response = $this->getHttpClient('/bounces')
                          ->setParameterGet($params)
                          ->send();
@@ -183,6 +184,18 @@ class Postmark
                                  
         $response = $this->parseResponse($response);
         return $response['Body'];
+    }
+    
+    protected function filterNullParams (array $params, array $exceptions = array())
+    {
+        $return = array();
+        foreach ($params as $key => $value) {
+            if (null !== $value || in_array($key, $exceptions)) {
+                $return[$key] = $value;
+            }
+        }
+        
+        return $return;
     }
     
     protected function getHttpClient ($path)
