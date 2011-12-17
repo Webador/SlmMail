@@ -38,11 +38,23 @@ class Postmark
         'Blocked'
     );
     
+    /**
+     * Set api key for this service instance
+     * 
+     * @param string $api_key 
+     */
     public function setApiKey ($api_key)
     {
         $this->apiKey = $api_key;
     }
     
+    /**
+     * Send message to Postmark service
+     * 
+     * @link http://developer.postmarkapp.com/developer-build.html
+     * @param Message $message
+     * @return stdClass
+     */
     public function sendEmail (Message $message)
     {
         $data = array(
@@ -126,6 +138,12 @@ class Postmark
         return $this->parseResponse($response);
     }
     
+    /**
+     * Get a summary of inactive emails and bounces by type
+     * 
+     * @link http://developer.postmarkapp.com/developer-bounces.html#get-delivery-stats
+     * @return StdClass
+     */
     public function getDeliveryStats ()
     {
         $response = $this->getHttpClient('/deliverystats')
@@ -134,6 +152,21 @@ class Postmark
         return $this->parseResponse($response);
     }
     
+    /**
+     * Get a portion of bounces according to the specified input criteria
+     * 
+     * The $count and $offset are mandatory. For type, a specific set of types
+     * are available, defined as filter.
+     * 
+     * @see $filters
+     * @link http://developer.postmarkapp.com/developer-bounces.html#get-bounces
+     * @param int $count
+     * @param int $offset
+     * @param string $type
+     * @param string $inactive
+     * @param string $emailFilter
+     * @return StdClass
+     */
     public function getBounces ($count, $offset, $type = null, $inactive = null, $emailFilter = null)
     {   
         if (null !== $type &&!in_array($type, $this->filters)) {
@@ -152,6 +185,13 @@ class Postmark
         return $this->parseResponse($response);
     }
     
+    /**
+     * Get details about a single bounce
+     * 
+     * @link http://developer.postmarkapp.com/developer-bounces.html#get-a-single-bounce
+     * @param int $id
+     * @return stdClass
+     */
     public function getBounce ($id)
     {
         $response = $this->getHttpClient('/bounces/' . $id)
@@ -160,14 +200,28 @@ class Postmark
         return $this->parseResponse($response);
     }
     
+    /**
+     * Get the raw source of the bounce Postmark accepted
+     * 
+     * @link http://developer.postmarkapp.com/developer-bounces.html#get-bounce-dump
+     * @param int $id
+     * @return string
+     */
     public function getBounceDump ($id)
     {
         $response = $this->getHttpClient('/bounces/' . $id . '/dump')
                          ->send();
                                  
-        return $this->parseResponse($response);
+        $response = $this->parseResponse($response);
+        return $response->Body;
     }
     
+    /**
+     * Get a list of tags used for the current Postmark server
+     * 
+     * @link http://developer.postmarkapp.com/developer-bounces.html#get-bounce-tags
+     * @return array
+     */
     public function getBounceTags ()
     {
         $response = $this->getHttpClient('/bounces/tags')
@@ -176,16 +230,32 @@ class Postmark
         return $this->parseResponse($response);
     }
     
+    /**
+     * Activates a deactivated bounce
+     * 
+     * @link http://developer.postmarkapp.com/developer-bounces.html#activate-a-bounce
+     * @param int $id
+     * @return StdClass
+     */
     public function activateBounce ($id)
     {
         $response = $this->getHttpClient('/bounces/' . $id . '/activate')
                          ->setMethod(Request::METHOD_PUT)
                          ->send();
                                  
-        $response = $this->parseResponse($response);
-        return $response['Body'];
+        return $this->parseResponse($response);
     }
     
+    /**
+     * Filter null values from the array
+     * 
+     * Because parameters get interpreted when they are send, remove them 
+     * from the list before the request is sent.
+     * 
+     * @param array $params
+     * @param array $exceptions
+     * @return array
+     */
     protected function filterNullParams (array $params, array $exceptions = array())
     {
         $return = array();
@@ -198,9 +268,19 @@ class Postmark
         return $return;
     }
     
+    /**
+     * Get a http client instance
+     * 
+     * @param string $path
+     * @return Client
+     */
     protected function getHttpClient ($path)
     {
         if (null === $this->client) {
+            if (null === $this->apiKey) {
+                throw new RuntimeException('Required api key not set');
+            }
+            
             $headers = array(
                 'Accept'                  => 'application/json',
                 'X-Postmark-Server-Token' => $this->apiKey
@@ -216,6 +296,12 @@ class Postmark
         return $this->client;
     }
     
+    /**
+     * Parse a Reponse object and check for errors
+     * 
+     * @param Response $response
+     * @return StdClass
+     */
     protected function parseResponse (Response $response)
     {
         if (!$response->isOk()) {
