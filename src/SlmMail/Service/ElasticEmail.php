@@ -68,19 +68,18 @@ class ElasticEmail
         $data['to'] = implode(';', $to);        
         
         $from = $message->from();
-        if (1 > count($from)) {
-            throw new RuntimeException('Elastic Email has only support for one from address');
-        } elseif (count($from)) {
-            $from = current($from);
-            $data['from']      = $from->getEmail();
-            $data['from_name'] = $from->getName();
+        if (1 !== count($from)) {
+            throw new RuntimeException('Elastic Email requires exactly one from address');
         }
+        $from = current(reset($from));
+        $data['from']      = $from->getEmail();
+        $data['from_name'] = $from->getName();
         
         $replyTo = $message->replyTo();
-        if (1 > count($replyTo)) {
+        if (1 < count($replyTo)) {
             throw new RuntimeException('Elastic Email has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $replyTo = current($replyTo);
+            $from = current(reset($from));
             $data['reply_to']      = $replyTo->getEmail();
             $data['reply_to_name'] = $replyTo->getName();
         }
