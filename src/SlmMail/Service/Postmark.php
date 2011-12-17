@@ -134,7 +134,7 @@ class Postmark
         return $this->parseResponse($response);
     }
     
-    public function getBounces ($type = null, $inactive = null, $emailFilter = null, $paging = null)
+    public function getBounces ($count, $offset, $type = null, $inactive = null, $emailFilter = null)
     {   
         if (null !== $type &&!in_array($type, $this->filters)) {
             throw new RuntimeException(sprintf(
@@ -143,7 +143,7 @@ class Postmark
             ));
         }
         
-        $params   = compact('type', 'inactive', 'emailFilter', 'paging');
+        $params   = compact('count', 'offset', 'type', 'inactive', 'emailFilter');        
         $response = $this->getHttpClient('/bounces')
                          ->setParameterGet($params)
                          ->send();
