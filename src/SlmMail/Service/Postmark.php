@@ -90,19 +90,19 @@ class Postmark
         }
         
         $from = $message->from();
-        if (1 > count($from)) {
-            throw new RuntimeException('Postmark has only support for one from address');
+        if (1 !== count($from)) {
+            throw new RuntimeException('Postmark requires a registered and confirmed from address');
         } elseif (count($from)) {
-            $from = current($from);
-            $data['From'] = $from->toString();
+            $from->rewind();
+            $data['From'] = $from->current()->toString();
         }
         
         $replyTo = $message->replyTo();
-        if (1 > count($replyTo)) {
+        if (1 < count($replyTo)) {
             throw new RuntimeException('Postmark has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $replyTo = current($replyTo);
-            $data['ReplyTo'] = $replyTo->toString();
+            $from->rewind();
+            $data['ReplyTo'] = $replyTo->current()->toString();
         }
         
         if ($message instanceof PostmarkMessage 
