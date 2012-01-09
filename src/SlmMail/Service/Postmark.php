@@ -132,6 +132,7 @@ class Postmark
          */
 
         $response = $this->getHttpClient('/email')
+                         ->setMethod(Request::METHOD_POST)
                          ->setRawBody(Json::encode($data))
                          ->send();
         
