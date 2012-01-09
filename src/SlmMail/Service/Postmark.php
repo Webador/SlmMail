@@ -92,10 +92,9 @@ class Postmark
         $from = $message->from();
         if (1 !== count($from)) {
             throw new RuntimeException('Postmark requires a registered and confirmed from address');
-        } elseif (count($from)) {
-            $from->rewind();
-            $data['From'] = $from->current()->toString();
         }
+        $from->rewind();
+        $data['From'] = $from->current()->toString();
         
         $replyTo = $message->replyTo();
         if (1 < count($replyTo)) {
