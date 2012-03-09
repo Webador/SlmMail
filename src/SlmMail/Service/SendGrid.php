@@ -27,9 +27,11 @@ class SendGrid
     public function sendMail (Message $message)
     {
         $data = array(
-            'subject' => $message->getSubject(),
-            'html'    => $message->getBody(),
-            'text'    => $message->getBodyText(),
+            'api_user' => $this->username,
+            'api_key'  => $this->password,
+            'subject'  => $message->getSubject(),
+            'html'     => $message->getBody(),
+            'text'     => $message->getBodyText(),
         );
         
         foreach ($message->to() as $address) {
@@ -48,20 +50,22 @@ class SendGrid
         }
         
         $from = $message->from();
-        if (1 > count($from)) {
-            throw new RuntimeException('SendGrid has only support for one from address');
-        } elseif (count($from)) {
-            $from = current($from);
-            $data['from']     = $from->getEmail();
-            $data['fromname'] = $from->getName();
+        if (1 !== count($from)) {
+            throw new RuntimeException('SendGrid requires exactly one from address');
         }
+        $from->rewind();
+        $from = $from->current();
+        $data['from']      = $from->getEmail();
+        $data['fromname'] = $from->getName();
         
         $replyTo = $message->replyTo();
-        if (1 > count($replyTo)) {
+        if (1 < count($replyTo)) {
             throw new RuntimeException('SendGrid has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $replyTo = current($replyTo);
-            $data['replyto'] = $replyTo->getEmail();
+            $replyTo->rewind();
+            $replyTo = $replyTo->current();
+            
+            $data['replyto']      = $replyTo->getEmail();
         }
         
         /**
@@ -250,25 +254,30 @@ class SendGrid
         return $this->parseResponse($response);
     }
 
-    public function setUsername ($username)
-    {
-        $params   = compact($username);
-        $response = $this->getHttpClient('profile.setUsername')
-                         ->setParameterGet($params)
-                         ->send();
-        
-        return $this->parseResponse($response);
-    }
-
-    public function setPassword ($password)
-    {
-        $params   = array('password' => $password, 'confirm_password' => $password);
-        $response = $this->getHttpClient('password.set')
-                         ->setParameterGet($params)
-                         ->send();
-        
-        return $this->parseResponse($response);
-    }
+    /**
+     * This is disabled for now because of potential problems with Zend\Di
+     * 
+     * @todo Fix method call
+     */
+//    public function setUsername ($username)
+//    {
+//        $params   = compact($username);
+//        $response = $this->getHttpClient('profile.setUsername')
+//                         ->setParameterGet($params)
+//                         ->send();
+//        
+//        return $this->parseResponse($response);
+//    }
+//
+//    public function setPassword ($password)
+//    {
+//        $params   = array('password' => $password, 'confirm_password' => $password);
+//        $response = $this->getHttpClient('password.set')
+//                         ->setParameterGet($params)
+//                         ->send();
+//        
+//        return $this->parseResponse($response);
+//    }
 
     public function setEmail ($email)
     {
@@ -411,17 +420,17 @@ class SendGrid
                          ->setMethod(Request::METHOD_GET);
         }
 
-        $this->client->getUri()->setPath('api/' . $path . '.' . $format);
+        $this->client->getUri()->setPath('/api/' . $path . '.' . $format);
         return $this->client;
     }
 
-    protected function parseJsonResponse (Response $response)
+    protected function parseResponse (Response $response)
     {
         if (!$response->isSuccess()) {
             if ($response->isClientError()) {
                 $error = Json::decode($response->getBody());
                 throw new RuntimeException(sprintf(
-                                'Could not send request: api errors (%s)', implode(', ', $error['errors'])));
+                                'Could not send request: api errors (%s)', implode(', ', $error->errors)));
             } elseif ($response->isServerError()) {
                 throw new RuntimeException('Could not send request: Sendgrid server error');
             } else {
