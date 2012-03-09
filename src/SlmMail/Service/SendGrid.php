@@ -429,8 +429,16 @@ class SendGrid
         if (!$response->isSuccess()) {
             if ($response->isClientError()) {
                 $error = Json::decode($response->getBody());
+                
+                if (isset($error->errors) && is_array($error->errors)) {
+                    $message = implode(', ', $error->errors);
+                } else {
+                    $message = $error->error;
+                }
+                
                 throw new RuntimeException(sprintf(
-                                'Could not send request: api errors (%s)', implode(', ', $error->errors)));
+                                'Could not send request: api errors (%s)',
+                                $message));
             } elseif ($response->isServerError()) {
                 throw new RuntimeException('Could not send request: Sendgrid server error');
             } else {
