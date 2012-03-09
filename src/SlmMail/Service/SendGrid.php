@@ -17,13 +17,9 @@ class SendGrid
     protected $password;
     protected $client;
 
-    public function setUsername ($username)
+    public function __construct ($username, $password)
     {
         $this->username = $username;
-    }
-
-    public function setPassword ($password)
-    {
         $this->password = $password;
     }
 
@@ -410,7 +406,7 @@ class SendGrid
     protected function getHttpClient ($path, $format = 'json')
     {
         if (null === $this->client) {
-            $this->client = new Client();
+            $this->client = new Client;
             $this->client->setUri(self::API_URI)
                          ->setMethod(Request::METHOD_GET);
         }

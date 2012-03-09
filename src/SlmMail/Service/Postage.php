@@ -19,7 +19,12 @@ class Postage
     protected $apiKey;
     protected $client;
 
-    public function setApiKey ($api_key)
+    /**
+     * Constructor
+     * 
+     * @param string $api_key 
+     */
+    public function __construct ($api_key)
     {
         $this->apiKey = $api_key;
     }

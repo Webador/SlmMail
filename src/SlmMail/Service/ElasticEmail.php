@@ -19,23 +19,15 @@ class ElasticEmail
     protected $statuses = array(0, 1, 2, 4, 5, 6, 7, 8, 9);
 
     /**
-     * Set api key for this service instance
-     * 
-     * @param string $api_key 
-     */
-    public function setApiKey ($api_key)
-    {
-        $this->apiKey = $api_key;
-    }
-
-    /**
-     * Set username for this service instance
+     * Constructor
      * 
      * @param string $username
+     * @param string $api_key 
      */
-    public function setUsername ($username)
+    public function __construct ($username, $api_key)
     {
         $this->username = $username;
+        $this->apiKey = $api_key;
     }
 
     /**

@@ -39,11 +39,11 @@ class Postmark
     );
     
     /**
-     * Set api key for this service instance
+     * Constructor
      * 
      * @param string $api_key 
      */
-    public function setApiKey ($api_key)
+    public function __construct ($api_key)
     {
         $this->apiKey = $api_key;
     }
