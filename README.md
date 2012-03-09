@@ -21,3 +21,11 @@ Requirements
 Installation
 ---
 Clone this project into your `./vendors/` directory and enable it in your `application.config.php`. To use one of the transport layers, see the documentation in the [docs](https://github.com/juriansluiman/SlmMail/tree/master/docs) folder.
+
+TODO
+---
+ 1. Amazon SES & Mailchimp: complete implementation
+ 2. ElasticEmail & Postage & Postmark & SendGrid: send attachments with email
+ 3. ElasticEmail & Postage: better error detection for API calls
+ 4. Postage & SendGrid: set some arguments as optional
+ 5. SendGrid: implementation filter API calls
