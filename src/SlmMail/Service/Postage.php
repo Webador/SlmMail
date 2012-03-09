@@ -45,19 +45,18 @@ class Postage
         $args['headers'] = array('subject' => $message->getSubject());
         
         $from = $message->from();
-        if (1 > count($from)) {
-            throw new RuntimeException('Postage has only support for one from address');
-        } elseif (count($from)) {
-            $from = current($from);
-            $args['headers']['from'] = $from->toString();
+        if (1 !== count($from)) {
+            throw new RuntimeException('Postage requires exactly one from address');
         }
+        $from->rewind();
+        $args['headers']['from'] = $from->current()->toString();
         
         $replyTo = $message->replyTo();
-        if (1 > count($replyTo)) {
+        if (1 < count($replyTo)) {
             throw new RuntimeException('Postage has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $replyTo = current($replyTo);
-            $args['headers']['reply-to'] = $replyTo->toString();
+            $from->rewind();
+            $args['headers']['reply-to'] = $from->current()->toString();
         }
         
         /**
@@ -137,7 +136,7 @@ class Postage
     protected function getHttpClient ($path)
     {
         if (null === $this->client) {
-            $this->client = new Client();
+            $this->client = new Client;
             $this->client->setUri(self::API_URI)
                          ->setMethod(Request::METHOD_GET);
         }
@@ -149,7 +148,10 @@ class Postage
     protected function parseResponse (Response $response)
     {
         // @todo look for errors
-
+        if (!$response->isOk()) {
+            throw new RuntimeException('Unknown error during request to Postage server');
+        }
+        
         return Json::decode($response->getBody());
     }
 }

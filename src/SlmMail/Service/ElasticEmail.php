@@ -71,7 +71,8 @@ class ElasticEmail
         if (1 !== count($from)) {
             throw new RuntimeException('Elastic Email requires exactly one from address');
         }
-        $from = current(reset($from));
+        $from->rewind();
+        $from = $from->current();
         $data['from']      = $from->getEmail();
         $data['from_name'] = $from->getName();
         
@@ -79,7 +80,9 @@ class ElasticEmail
         if (1 < count($replyTo)) {
             throw new RuntimeException('Elastic Email has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $from = current(reset($from));
+            $replyTo->rewind();
+            $replyTo = $replyTo->current();
+            
             $data['reply_to']      = $replyTo->getEmail();
             $data['reply_to_name'] = $replyTo->getName();
         }
@@ -303,7 +306,7 @@ class ElasticEmail
     protected function parseResponse (Response $response)
     {
         if (!$response->isOk()) {
-            throw new RuntimeException('Unknown error during request to Postmark server');
+            throw new RuntimeException('Unknown error during request to Elastic Email server');
         }
         
         return $response->getBody();
