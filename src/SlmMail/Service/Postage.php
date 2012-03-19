@@ -87,6 +87,16 @@ class Postage
          *  }
          * </code>
          */
+         
+        if ($message instanceof PostageMessage) {
+            if (null !== ($template = $message->getTemplate())) {
+                $args['template'] = $template;
+            }
+            
+            if (null !== ($variables = $message->getVariables())) {
+                $args['variables'] = $variables;
+            }
+        }
         
         $data = array(
             'arguments' => $args,
