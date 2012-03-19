@@ -238,11 +238,6 @@ class SendGrid
         return $this->parseResponse($response);
     }
 
-    /**
-     * This is disabled for now because of potential problems with Zend\Di
-     * 
-     * @todo Fix method call
-     */
     public function setUsername ($new_username)
     {
         $params   = array('username' => $new_username);
