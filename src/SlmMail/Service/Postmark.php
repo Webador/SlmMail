@@ -130,7 +130,7 @@ class Postmark
          * </code>
          */
 
-        $response = $this->getHttpClient('/email')
+        $response = $this->prepareHttpClient('/email')
                          ->setMethod(Request::METHOD_POST)
                          ->setRawBody(Json::encode($data))
                          ->send();
@@ -146,7 +146,7 @@ class Postmark
      */
     public function getDeliveryStats ()
     {
-        $response = $this->getHttpClient('/deliverystats')
+        $response = $this->prepareHttpClient('/deliverystats')
                          ->send();
         
         return $this->parseResponse($response);
@@ -178,7 +178,7 @@ class Postmark
         
         $params   = compact('count', 'offset', 'type', 'inactive', 'emailFilter');
         $params   = $this->filterNullParams($params);
-        $response = $this->getHttpClient('/bounces')
+        $response = $this->prepareHttpClient('/bounces')
                          ->setParameterGet($params)
                          ->send();
                          
@@ -194,7 +194,7 @@ class Postmark
      */
     public function getBounce ($id)
     {
-        $response = $this->getHttpClient('/bounces/' . $id)
+        $response = $this->prepareHttpClient('/bounces/' . $id)
                          ->send();
                                  
         return $this->parseResponse($response);
@@ -209,7 +209,7 @@ class Postmark
      */
     public function getBounceDump ($id)
     {
-        $response = $this->getHttpClient('/bounces/' . $id . '/dump')
+        $response = $this->prepareHttpClient('/bounces/' . $id . '/dump')
                          ->send();
                                  
         $response = $this->parseResponse($response);
@@ -224,7 +224,7 @@ class Postmark
      */
     public function getBounceTags ()
     {
-        $response = $this->getHttpClient('/bounces/tags')
+        $response = $this->prepareHttpClient('/bounces/tags')
                          ->send();
                                  
         return $this->parseResponse($response);
@@ -239,11 +239,43 @@ class Postmark
      */
     public function activateBounce ($id)
     {
-        $response = $this->getHttpClient('/bounces/' . $id . '/activate')
+        $response = $this->prepareHttpClient('/bounces/' . $id . '/activate')
                          ->setMethod(Request::METHOD_PUT)
                          ->send();
                                  
         return $this->parseResponse($response);
+    }
+    
+    public function getHttpClient ()
+    {
+        if (null === $this->client) {
+            $this->client = new Client;
+            
+            $headers = array(
+                'Accept'                  => 'application/json',
+                'X-Postmark-Server-Token' => $this->apiKey
+            );
+            $this->client->setMethod(Request::METHOD_GET)
+                         ->setHeaders($headers);
+        }
+        
+        return $this->client;
+    }
+    
+    public function setHttpClient (Client $client)
+    {
+        $this->client = $client;
+    }
+    
+    /**
+     * Get a http client instance
+     * 
+     * @param string $path
+     * @return Client
+     */
+    protected function prepareHttpClient ($path)
+    {
+        return $this->getHttpClient()->setUri(self::API_URI . $path);
     }
     
     /**
@@ -266,34 +298,6 @@ class Postmark
         }
         
         return $return;
-    }
-    
-    /**
-     * Get a http client instance
-     * 
-     * @param string $path
-     * @return Client
-     */
-    protected function getHttpClient ($path)
-    {
-        if (null === $this->client) {
-            if (null === $this->apiKey) {
-                throw new RuntimeException('Required api key not set');
-            }
-            
-            $headers = array(
-                'Accept'                  => 'application/json',
-                'X-Postmark-Server-Token' => $this->apiKey
-            );
-            
-            $this->client = new Client();
-            $this->client->setUri(self::API_URI)
-                         ->setMethod(Request::METHOD_GET)
-                         ->setHeaders($headers);
-        }
-        
-        $this->client->getUri()->setPath($path);
-        return $this->client;
     }
     
     /**

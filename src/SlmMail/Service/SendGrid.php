@@ -11,7 +11,7 @@ use Zend\Mail\Message,
 
 class SendGrid
 {
-    const API_URI = 'https://sendgrid.com/';
+    const API_URI = 'https://sendgrid.com/api/';
 
     protected $username;
     protected $password;
@@ -26,26 +26,24 @@ class SendGrid
     /** Mail */
     public function sendMail (Message $message)
     {
-        $data = array(
-            'api_user' => $this->username,
-            'api_key'  => $this->password,
+        $params = array(
             'subject'  => $message->getSubject(),
             'html'     => $message->getBody(),
             'text'     => $message->getBodyText(),
         );
         
         foreach ($message->to() as $address) {
-            $data['to'][]    = $address->getEmail();
-            $data['names'][] = $address->getName();
+            $params['to'][]    = $address->getEmail();
+            $params['names'][] = $address->getName();
         }
         foreach ($message->cc() as $address) {
-            $data['to'][]    = $address->getEmail();
-            $data['names'][] = $address->getName();
+            $params['to'][]    = $address->getEmail();
+            $params['names'][] = $address->getName();
         }
         
         if (count($message->bcc())) {
             foreach ($message->bcc() as $address) {
-                $data['bcc'][] = $address->getEmail();
+                $params['bcc'][] = $address->getEmail();
             }
         }
         
@@ -55,8 +53,8 @@ class SendGrid
         }
         $from->rewind();
         $from = $from->current();
-        $data['from']      = $from->getEmail();
-        $data['fromname'] = $from->getName();
+        $params['from']     = $from->getEmail();
+        $params['fromname'] = $from->getName();
         
         $replyTo = $message->replyTo();
         if (1 < count($replyTo)) {
@@ -65,15 +63,14 @@ class SendGrid
             $replyTo->rewind();
             $replyTo = $replyTo->current();
             
-            $data['replyto']      = $replyTo->getEmail();
+            $params['replyto'] = $replyTo->getEmail();
         }
         
         /**
          * @todo Handling attachments for emails
          */
         
-        $response = $this->getHttpClient('mail.send')
-                         ->setParameterGet($data)
+        $response = $this->prepareHttpClient('mail.send', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -83,8 +80,7 @@ class SendGrid
     public function getBlocks ($date, $days, $start_date, $end_date)
     {
         $params   = compact($date, $days, $start_date, $end_date);
-        $response = $this->getHttpClient('blocks.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('blocks.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -93,8 +89,7 @@ class SendGrid
     public function deleteBlock ($email)
     {
         $params   = compact($email);
-        $response = $this->getHttpClient('blocks.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('blocks.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -104,8 +99,7 @@ class SendGrid
     public function getBounces ($date, $days, $start_date, $end_date, $limit, $offset, $type, $email)
     {
         $params   = compact($date, $days, $start_date, $end_date, $limit, $offset, $type, $email);
-        $response = $this->getHttpClient('bounces.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('bounces.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -114,8 +108,7 @@ class SendGrid
     public function deleteBounces ($start_date, $end_date, $type, $email)
     {
         $params   = compact($start_date, $end_date, $type, $email);
-        $response = $this->getHttpClient('bounces.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('bounces.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -124,8 +117,7 @@ class SendGrid
     public function countBounces ($start_date, $end_date, $type)
     {
         $params   = compact($start_date, $end_date, $type);
-        $response = $this->getHttpClient('bounces.count')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('bounces.count', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -134,7 +126,7 @@ class SendGrid
     /** Email parse settings */
     public function getParseSettings ()
     {
-        $response = $this->getHttpClient('parse.get')
+        $response = $this->prepareHttpClient('parse.get')
                          ->send();
         
         return $this->parseResponse($response);
@@ -143,8 +135,7 @@ class SendGrid
     public function addParseSetting ($hostname, $url, $spam_check)
     {
         $params   = compact($hostname, $url, $spam_check);
-        $response = $this->getHttpClient('parse.set')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('parse.set', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -153,8 +144,7 @@ class SendGrid
     public function editParseSetting ($hostname, $url, $spam_check)
     {
         $params   = compact($hostname, $url, $spam_check);
-        $response = $this->getHttpClient('parse.set')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('parse.set', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -163,8 +153,7 @@ class SendGrid
     public function deleteParseSetting ($hostname)
     {
         $params   = compact($hostname);
-        $response = $this->getHttpClient('parse.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('parse.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -173,7 +162,7 @@ class SendGrid
     /** Events */
     public function getEventPostUrl ()
     {
-        $response = $this->getHttpClient('eventposturl.get')
+        $response = $this->prepareHttpClient('eventposturl.get')
                          ->send();
         
         return $this->parseResponse($response);
@@ -182,8 +171,7 @@ class SendGrid
     public function setEventPostUrl ($url)
     {
         $params   = compact($url);
-        $response = $this->getHttpClient('eventposturl.set')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('eventposturl.set', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -191,7 +179,7 @@ class SendGrid
 
     public function deleteEventPostUrl ()
     {
-        $response = $this->getHttpClient('eventposturl.delete')
+        $response = $this->prepareHttpClient('eventposturl.delete')
                          ->send();
         
         return $this->parseResponse($response);
@@ -208,8 +196,7 @@ class SendGrid
     public function getInvalidEmails ($date, $days, $start_date, $end_date, $limit, $offset, $email)
     {
         $params   = compact($date, $days, $start_date, $end_date, $limit, $offset, $email);
-        $response = $this->getHttpClient('invalidemails.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('invalidemails.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -218,8 +205,7 @@ class SendGrid
     public function deleteInvalidEmails ($start_date, $end_date, $email)
     {
         $params   = compact($start_date, $end_date, $email);
-        $response = $this->getHttpClient('invalidemails.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('invalidemails.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -228,8 +214,7 @@ class SendGrid
     public function countInvalidEmails ($start_date, $end_date)
     {
         $params   = compact($start_date, $end_date);
-        $response = $this->getHttpClient('invalidemails.count')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('invalidemails.count', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -238,7 +223,7 @@ class SendGrid
     /** Profile */
     public function getProfile ()
     {
-        $response = $this->getHttpClient('profile.get')
+        $response = $this->prepareHttpClient('profile.get')
                          ->send();
         
         return $this->parseResponse($response);
@@ -247,8 +232,7 @@ class SendGrid
     public function updateProfile ($firstname, $lastname, $address, $city, $state, $country, $zip, $phone, $website)
     {
         $params   = compact($firstname, $lastname, $address, $city, $state, $country, $zip, $phone, $website);
-        $response = $this->getHttpClient('profile.set')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('profile.set', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -282,8 +266,7 @@ class SendGrid
     public function setEmail ($email)
     {
         $params   = compact($email);
-        $response = $this->getHttpClient('profile.setEmail')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('profile.setEmail', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -293,8 +276,7 @@ class SendGrid
     public function getSpamReports ($date, $days, $start_date, $end_date, $limit, $offset, $email)
     {
         $params   = compact($date, $days, $start_date, $end_date, $limit, $offset, $email);
-        $response = $this->getHttpClient('spamreports.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('spamreports.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -303,8 +285,7 @@ class SendGrid
     public function deleteSpamReports ($start_date, $end_date, $email)
     {
         $params   = compact($start_date, $end_date, $email);
-        $response = $this->getHttpClient('spamreports.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('spamreports.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -313,8 +294,7 @@ class SendGrid
     public function countSpamReports ($start_date, $end_date)
     {
         $params   = compact($start_date, $end_date);
-        $response = $this->getHttpClient('spamreports.count')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('spamreports.count', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -324,8 +304,7 @@ class SendGrid
     public function getStats ($days, $start_date, $end_date)
     {
         $params   = compact($days, $start_date, $end_date);
-        $response = $this->getHttpClient('stats.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('stats.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -334,8 +313,7 @@ class SendGrid
     public function getStatsAggregate ()
     {
         $params   = array('aggregate' => '1');
-        $response = $this->getHttpClient('stats.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('stats.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -344,8 +322,7 @@ class SendGrid
     public function getCategoryList ()
     {
         $params   = array('list' => 'true');
-        $response = $this->getHttpClient('stats.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('stats.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -354,8 +331,7 @@ class SendGrid
     public function getCategoryStats ($category, $days, $start_date, $end_date)
     {    
         $params   = compact($category, $days, $start_date, $end_date);
-        $response = $this->getHttpClient('stats.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('stats.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -364,8 +340,7 @@ class SendGrid
     public function getCategoryAggregate ($category, $days, $start_date)
     {
         $params   = compact($category, $days, $start_date) + array('aggregate' => '1');
-        $response = $this->getHttpClient('stats.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('stats.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -375,8 +350,7 @@ class SendGrid
     public function getUnsubscribes ($date, $days, $start_date, $end_date, $limit, $offset, $email)
     {
         $params   = compact($date, $days, $start_date, $end_date, $limit, $offset, $email);
-        $response = $this->getHttpClient('unsubscribes.get')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('unsubscribes.get', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -385,8 +359,7 @@ class SendGrid
     public function addUnsubscribes ($email)
     {
         $params   = compact($email);
-        $response = $this->getHttpClient('unsubscribes.add')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('unsubscribes.add', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -395,8 +368,7 @@ class SendGrid
     public function deleteUnsubscribes ($start_date, $end_date, $email)
     {
         $params   = compact($start_date, $end_date, $email);
-        $response = $this->getHttpClient('unsubscribes.delete')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('unsubscribes.delete', $params)
                          ->send();
         
         return $this->parseResponse($response);
@@ -405,23 +377,62 @@ class SendGrid
     public function countUnsubscribes ($start_date, $end_date)
     {
         $params   = compact($start_date, $end_date);
-        $response = $this->getHttpClient('unsubscribes.count')
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('unsubscribes.count', $params)
                          ->send();
         
         return $this->parseResponse($response);
     }
-
-    protected function getHttpClient ($path, $format = 'json')
+    
+    public function getHttpClient ()
     {
         if (null === $this->client) {
             $this->client = new Client;
-            $this->client->setUri(self::API_URI)
-                         ->setMethod(Request::METHOD_GET);
         }
-
-        $this->client->getUri()->setPath('/api/' . $path . '.' . $format);
+        
         return $this->client;
+    }
+    
+    public function setHttpClient (Client $client)
+    {
+        $this->client = $client;
+    }
+    
+    /**
+     * Get a http client instance
+     * 
+     * @param string $path
+     * @return Client
+     */
+    protected function prepareHttpClient ($path, array $params = array())
+    {
+        $params = $params + array('api_user' => $this->username, 'api_key'  => $this->password);
+        
+        return $this->getHttpClient()
+                    ->setMethod(Request::METHOD_GET)
+                    ->setUri(self::API_URI . $path . '.json')
+                    ->setParameterGet($params);
+    }
+    
+    /**
+     * Filter null values from the array
+     * 
+     * Because parameters get interpreted when they are send, remove them 
+     * from the list before the request is sent.
+     * 
+     * @param array $params
+     * @param array $exceptions
+     * @return array
+     */
+    protected function filterNullParams (array $params, array $exceptions = array())
+    {
+        $return = array();
+        foreach ($params as $key => $value) {
+            if (null !== $value || in_array($key, $exceptions)) {
+                $return[$key] = $value;
+            }
+        }
+        
+        return $return;
     }
 
     protected function parseResponse (Response $response)
@@ -432,8 +443,10 @@ class SendGrid
                 
                 if (isset($error->errors) && is_array($error->errors)) {
                     $message = implode(', ', $error->errors);
-                } else {
+                } elseif (isset($error->error)) {
                     $message = $error->error;
+                } else {
+                    $message = 'Unknown error';
                 }
                 
                 throw new RuntimeException(sprintf(

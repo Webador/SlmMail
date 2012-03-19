@@ -40,8 +40,6 @@ class ElasticEmail
     public function send (Message $message)
     {
         $data = array(
-            'username'  => $this->username,
-            'api_key'   => $this->apiKey,
             'subject'   => $message->getSubject(),
             'body_html' => $message->getBody(),
             'body_text' => $message->getBodyText(),
@@ -101,9 +99,8 @@ class ElasticEmail
          * </code>
          */
         
-        $response = $this->getHttpClient('/mailer/send')
+        $response = $this->prepareHttpClient('/mailer/send', $data)
                          ->setMethod(Request::METHOD_POST)
-                         ->setParameterPost($data)
                          ->send();
         return $this->parseResponse($response);
     }
@@ -123,14 +120,15 @@ class ElasticEmail
      */
     public function getStatus ($id)
     {
-        $response = $this->getHttpClient('/mailer/status/' . $id)
-                         ->setMethod(Request::METHOD_GET)
+        $response = $this->prepareHttpClient('/mailer/status/' . $id)
                          ->send();
         return $this->parseResponse($response);
     }
 
     /**
      * Get detailed information from activity log on the emails that have been sent
+     * 
+     * @todo Accept $from and $to as \DateTime objects 
      * 
      * @link http://elasticemail.com/api-documentation/log
      * @param string $format 'xml'|'csv'
@@ -155,13 +153,10 @@ class ElasticEmail
             ));
         }
         
-        $params   = compact('format', 'compress', 'status', 'channel', 'from', 'to')
-                  + array('username' => $this->username, 'api_key' => $this->apiKey);
+        $params   = compact('format', 'compress', 'status', 'channel', 'from', 'to');
         $params   = $this->filterNullParams($params);
         
-        $response = $this->getHttpClient('/mailer/status/log')
-                         ->setMethod(Request::METHOD_GET)
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('/mailer/status/log', $params)
                          ->send();
         return $this->parseResponse($response);
     }
@@ -181,11 +176,7 @@ class ElasticEmail
      */
     public function getAccountDetails ()
     {
-        $params = array('username'  => $this->username, 'api_key'   => $this->apiKey);
-        
-        $response = $this->getHttpClient('/mailer/account-details')
-                         ->setMethod(Request::METHOD_GET)
-                         ->setParameterGet($params)
+        $response = $this->prepareHttpClient('/mailer/account-details')
                          ->send();
         return $this->parseResponse($response);
     }
@@ -208,14 +199,12 @@ class ElasticEmail
      */
     public function getBounced ($detailed = false)
     {
-        $params = array('username' => $this->username, 'api_key' => $this->apiKey);
+        $params = array();
         if ($detailed) {
             $params['detailed'] = true;
         }
         
-        $response = $this->getHttpClient('/mailer/list/bounced')
-                         ->setMethod(Request::METHOD_GET)
-                         ->setParameterGet($params)
+        $response = $this->getHttpClient('/mailer/list/bounced', $params)
                          ->send();
         return $this->parseResponse($response);
     }
@@ -238,16 +227,44 @@ class ElasticEmail
      */
     public function getUnsubscribed ($detailed = false)
     {
-        $params = array('username' => $this->username, 'api_key' => $this->apiKey);
+        $params = array();
         if ($detailed) {
             $params['detailed'] = true;
         }
         
-        $response = $this->getHttpClient('/mailer/list/unsubscribed')
-                         ->setMethod(Request::METHOD_GET)
-                         ->setParameterGet($params)
+        $response = $this->getHttpClient('/mailer/list/unsubscribed', $params)
                          ->send();
         return $this->parseResponse($response);
+    }   
+   
+    public function getHttpClient ()
+    {
+        if (null === $this->client) {
+            $this->client = new Client;
+        }
+        
+        return $this->client;
+    }
+    
+    public function setHttpClient (Client $client)
+    {
+        $this->client = $client;
+    }
+    
+    /**
+     * Get a http client instance
+     * 
+     * @param string $path
+     * @return Client
+     */
+    protected function prepareHttpClient ($path, array $params = array())
+    {
+        $params = $params + array('username' => $this->username, 'api_key' => $this->apiKey);
+        
+        return $this->getHttpClient()
+                    ->setMethod(Request::METHOD_GET)
+                    ->setUri(self::API_URI . $path)
+                    ->setParameterGet($params);
     }
     
     /**
@@ -270,23 +287,6 @@ class ElasticEmail
         }
         
         return $return;
-    }
-
-    /**
-     * Get a http client instance
-     * 
-     * @param string $path
-     * @return Client
-     */
-    protected function getHttpClient ($path)
-    {
-        if (null === $this->client) {
-            $this->client = new Client();
-            $this->client->setUri(self::API_URI);
-        }
-
-        $this->client->getUri()->setPath($path);
-        return $this->client;
     }
     
     /**
