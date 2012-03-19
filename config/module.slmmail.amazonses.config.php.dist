@@ -20,7 +20,7 @@ $amazonSesTransport = array(
 /**
  * You do not need to edit below this line
  */
-$config = array(
+return array(
     'di' => array(
         'instance' => array(
             'alias' => array(
@@ -40,11 +40,4 @@ $config = array(
             ),
         ),
     ),
-);
-
-return array(
-    'development' => $config,
-    'production'  => $config,
-    'staging'     => $config,
-    'testing'     => $config,
 );

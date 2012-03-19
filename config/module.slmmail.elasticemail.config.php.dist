@@ -22,26 +22,26 @@ $elasticEmailTransport = array(
  */
 return array(
     'di' => array(
-        'definition' => array(
-            'elasticemail-service' => array(
-                'methods' => array(
-                    'setApiKey' => array(
-                        'api_key' => array(
-                            'type'        => null,
-                            'is-required' => true,
-                        ),
-                        'is-required' => true,
-                    ),
-                    'setUsername' => array(
-                        'username' => array(
-                            'type'        => null,
-                            'is-required' => true,
-                        ),
-                        'is-required' => true,
-                    ),
-                ),
-            ),
-        ),
+//        'definition' => array(
+//            'elasticemail-service' => array(
+//                'methods' => array(
+//                    'setApiKey' => array(
+//                        'api_key' => array(
+//                            'type'        => null,
+//                            'is-required' => true,
+//                        ),
+//                        'is-required' => true,
+//                    ),
+//                    'setUsername' => array(
+//                        'username' => array(
+//                            'type'        => null,
+//                            'is-required' => true,
+//                        ),
+//                        'is-required' => true,
+//                    ),
+//                ),
+//            ),
+//        ),
         'instance' => array(
             'alias' => array(
                 'elasticemail-transport' => 'SlmMail\Mail\Transport\ElasticEmail',
