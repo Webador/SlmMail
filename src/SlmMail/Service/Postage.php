@@ -63,8 +63,8 @@ class Postage
         if (1 < count($replyTo)) {
             throw new RuntimeException('Postage has only support for one reply-to address');
         } elseif (count($replyTo)) {
-            $from->rewind();
-            $args['headers']['reply-to'] = $from->current()->toString();
+            $replyTo->rewind();
+            $args['headers']['reply-to'] = $replyTo->current()->toString();
         }        
         
         /**
@@ -158,8 +158,8 @@ class Postage
     protected function prepareHttpClient ($path, array $data = array())
     {
         $data = Json::encode($data + array('api_key' => $this->apiKey));
-        
-        return $this->getClient()
+
+        return $this->getHttpClient()
                     ->setMethod(Request::METHOD_GET)
                     ->setUri(self::API_URI . $path . '.json')
                     ->setRawBody($data);
