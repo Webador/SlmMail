@@ -15,7 +15,7 @@ class ElasticEmail implements Transport
      */
     protected $service;
     
-    public function setService (Service $service)
+    public function __construct (Service $service)
     {
         $this->service = $service;
     }
