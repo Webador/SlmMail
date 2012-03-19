@@ -243,25 +243,25 @@ class SendGrid
      * 
      * @todo Fix method call
      */
-//    public function setUsername ($username)
-//    {
-//        $params   = compact($username);
-//        $response = $this->getHttpClient('profile.setUsername')
-//                         ->setParameterGet($params)
-//                         ->send();
-//        
-//        return $this->parseResponse($response);
-//    }
-//
-//    public function setPassword ($password)
-//    {
-//        $params   = array('password' => $password, 'confirm_password' => $password);
-//        $response = $this->getHttpClient('password.set')
-//                         ->setParameterGet($params)
-//                         ->send();
-//        
-//        return $this->parseResponse($response);
-//    }
+    public function setUsername ($new_username)
+    {
+        $params   = array('username' => $new_username);
+        $response = $this->getHttpClient('profile.setUsername')
+                         ->setParameterGet($params)
+                         ->send();
+        
+        return $this->parseResponse($response);
+    }
+
+    public function setPassword ($new_password)
+    {
+        $params   = array('password' => $new_password, 'confirm_password' => $new_password);
+        $response = $this->getHttpClient('password.set')
+                         ->setParameterGet($params)
+                         ->send();
+        
+        return $this->parseResponse($response);
+    }
 
     public function setEmail ($email)
     {
