@@ -29,4 +29,3 @@ TODO
  4. SendGrid: set some arguments as optional
  5. SendGrid: implementation filter API calls
  6. SendGrid: create accessor/mutator for http client
- 7. Postage: test api implementation
