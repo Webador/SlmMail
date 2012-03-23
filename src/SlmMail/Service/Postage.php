@@ -145,6 +145,12 @@ class Postage
     {
         if (null === $this->client) {
             $this->client = new Client;
+            
+            $this->client->setMethod(Request::METHOD_POST);
+            
+            $this->client->getRequest()
+                         ->headers()
+                         ->addHeaderLine('Content-Type', 'application/json');
         }
         
         return $this->client;
@@ -160,7 +166,6 @@ class Postage
         $data = Json::encode($data + array('api_key' => $this->apiKey));
 
         return $this->getHttpClient()
-                    ->setMethod(Request::METHOD_GET)
                     ->setUri(self::API_URI . $path . '.json')
                     ->setRawBody($data);
     }
