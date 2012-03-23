@@ -29,6 +29,13 @@ class Postage
         $this->apiKey = $api_key;
     }
 
+    /**
+     * Sends message to Postage server
+     * 
+     * @link http://help.postageapp.com/kb/api/send_message
+     * @param Message $message
+     * @return string Id of the message
+     */
     public function sendMessage (Message $message)
     {
         $args = array();
@@ -103,42 +110,77 @@ class Postage
             'uid'       => sha1(Json::encode($args + array(new DateTime)))
         );
         
-        $response = $this->prepareHttpClient('send_message', $data)
-                         ->send();
+        $response =  $this->prepareHttpClient('send_message', $data)
+                          ->send();
+        $messageId = $this->parseResponse($response)->message->id;
         
-        return $this->parseResponse($response);
+        return array(
+            'uid' => $data['uid'],
+            'id'  => $messageId
+        );
     }
 
+    /**
+     * Get receipt of message by its uid
+     * 
+     * The Postage apps lets verify message if they are known in the project.
+     * This is done with the uid. When the message is known, it returns its
+     * message id (independant from the uid). If not, an exception is thrown 
+     * because of an invalid message uid.
+     * 
+     * @link http://help.postageapp.com/kb/api/get_message_receipt
+     * @param string $uid
+     * @return string Id of the message
+     */
     public function getMessageReceipt ($uid)
     {
         $response = $this->prepareHttpClient('get_message_receipt', array('uid' => $uid))
                          ->send();
         
-        return $this->parseResponse($response);
+        return $this->parseResponse($response)->message->id;
     }
 
+    /**
+     * Get a list of all api methods
+     * 
+     * @link http://help.postageapp.com/kb/api/get_method_list
+     * @return array List of all methods
+     */
     public function getMethodList ()
     {
         $response = $this->prepareHttpClient('get_method_list')
                          ->send();
         
-        return $this->parseResponse($response);
+        $methods = $this->parseResponse($response)->methods;
+        return explode(', ', $methods);
     }
 
+    /**
+     * Get info of the account for this API key
+     * 
+     * @link http://help.postageapp.com/kb/api/get_account_info
+     * @return stdClass Object with account info
+     */
     public function getAccountInfo ()
     {
         $response = $this->prepareHttpClient('get_account_info')
                          ->send();
         
-        return $this->parseResponse($response);
+        return $this->parseResponse($response)->account;
     }
 
+    /**
+     * Get info of the project for this API key
+     * 
+     * @link http://help.postageapp.com/kb/api/get_project_info
+     * @return stdClass Object with project info
+     */
     public function getProjectInfo ()
     {
         $response = $this->prepareHttpClient('get_project_info')
                          ->send();
         
-        return $this->parseResponse($response);
+        return $this->parseResponse($response)->project;
     }
     
     public function getHttpClient ()
@@ -172,13 +214,19 @@ class Postage
 
     protected function parseResponse (Response $response)
     {
-        /**
-         * @todo Add a more fine-grained error response check
-         */
+        $body = Json::decode($response->getBody());
+
         if (!$response->isOk()) {
-            throw new RuntimeException('Unknown error during request to Postage server');
+            if ('ok' !== $body->response->status) {
+                throw new RuntimeException(sprintf(
+                    'Could not send request: api error "%s" (%s)',
+                    $body->response->status,
+                    $body->response->message));
+            } else {
+                throw new RuntimeException('Unknown error during request to Postage server');
+            }
         }
         
-        return Json::decode($response->getBody());
+        return $body->data;
     }
 }
