@@ -15,6 +15,7 @@ class Sts extends Amazon
     
     protected $apiKey;
     protected $client;
+    protected $host;
     
     public function __construct ($api_key)
     {
@@ -132,11 +133,10 @@ class Sts extends Amazon
     protected function prepareHttpClient ($path, array $data = array())
     {
         $data = $data + array('apikey' => $this->apiKey);
-        $host = sprintf(self::API_URI, substr($this->apiKey, strpos($this->apiKey, '-') + 1));
-
+        
         return $this->getHttpClient()
                     ->setMethod(Request::METHOD_POST)
-                    ->setUri($host . $path . '.php')
+                    ->setUri($this->getHost() . $path . '.php')
                     ->setParameterGet($data);
     }           
     
@@ -156,6 +156,15 @@ class Sts extends Amazon
             }
         }
         
-        return unserialize($response->getBody());
+        return $body;
+    }
+    
+    protected function getHost ()
+    {
+        if (null === $this->host) {
+            $this->host = sprintf(self::API_URI, substr($this->apiKey, strpos($this->apiKey, '-') + 1));
+        }
+        
+        return $this->host;
     }
 }
