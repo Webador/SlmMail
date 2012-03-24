@@ -8,37 +8,31 @@ use Zend\Mail\Message,
     Zend\Http\Response,
     Zend\Mail\Exception\RuntimeException;
 
-class AmazonSes
+class AmazonSes extends Amazon
 {
     protected $host;
     protected $accessKey;
     protected $client;
     
-    public function setHost ($host)
+    public function __construct ($host, $access_key)
     {
+        throw new \RuntimeException('This implementation is not finished, DO NOT USE IT!');
         $this->host = $host;
-    }
-    
-    public function setAccessKey ($access_key)
-    {
         $this->accessKey = $access_key;
     }
     
-    public function sendEmail (Message $message) {}
-    public function verifyEmailAddress () {}
-    public function listVerifiedEmailAddresses () {}
-    public function deleteVerifiedEmailAddresses () {}
-    public function getSendQuota () {}
-    public function getSendStatistics () {}
-    
-    protected function getHttpClient ()
+    public function sendEmail (Message $message)
     {
-        if (null === $this->client) {
-            $this->client = new Client();
-            $this->client->setUri($this->host)
-                         ->setMethod(Request::METHOD_GET);
-        }
         
-        return $this->client;
+    }
+
+    protected function prepareHttpClient ($path, array $data = array())
+    {
+        
+    }
+    
+    protected function parseResponse (Response $response)
+    {
+        
     }
 }

@@ -8,6 +8,15 @@ class Campaign extends Mailchimp
 {
     const API_URI = 'http://%s.mailchimp.com/1.3/';
     
+    protected $apiKey;
+    protected $client;
+    
+    public function __construct ($api_key)
+    {
+        throw new \RuntimeException('This implementation is not finished, DO NOT USE IT!');
+        $this->apiKey = $api_key;
+    }
+    
     /** Campaign */
     // A lot here to be done
     public function getCampainsForEmail () {}
