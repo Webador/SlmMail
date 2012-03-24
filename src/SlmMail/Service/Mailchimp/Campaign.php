@@ -6,7 +6,7 @@ use \InvalidArgumentException,
     \RuntimeException,
     Zend\Http\Client,
     Zend\Http\Request,
-    Zend\Http\Response
+    Zend\Http\Response,
     Zend\Uri\Uri;
 
 class Campaign
@@ -22,7 +22,9 @@ class Campaign
         $this->apiKey = $api_key;
     }
 
-    /** Campaign */
+    /********************************
+     *  Campaign
+     ********************************/
 
     /**
      * @todo add a lot more campaign stuff
@@ -31,24 +33,100 @@ class Campaign
     {
         
     }
+    
+    /********************************
+     *  eCommerce
+     ********************************/
 
-    /** eCommerce */
-    public function getEcommerceOrders ()
+    /**
+     * Retrieve the Ecommerce Orders for an account
+     * 
+     * @todo Accept DateTime for $since
+     * 
+     * @link http://apidocs.mailchimp.com/api/1.3/ecommorders.func.php
+     * @param string|int $start
+     * @param string|int $limit
+     * @param string $since
+     * @return array 
+     */
+    public function getEcommerceOrders ($start, $limit, $since)
     {
-        
+        $params   = compact('start', 'limit', 'since');
+        $params   = $this->filterNullParams($params);
+        $response = $this->prepareHttpClient('ecommOrders', $params)
+                         ->send();
+
+        return $this->parseResponse($response);
     }
 
-    public function deleteEcommerceOrder ()
+    /**
+     * Import Ecommerce Order Information to be used for Segmentation
+     * 
+     * This will generally be used by ecommerce package plugins that we provide
+     * or by 3rd part system developers. The order parameter is according the
+     * api:
+     * 
+     * <code>
+     * $order = array(
+     *   'id'       => 12,
+     *   'total'    => 12.78,
+     *   'store_id' => 15,
+     *   'items' => array(
+     *     'product_id'    => 16,
+     *     'product_name'  => 'T-shirt',
+     *     'category_id'   => 19,
+     *     'category_name' => 'Fashion',
+     *     'qty'           => 1,
+     *     'cost'          => 12.78
+     *   ),
+     * );
+     * </code>
+     * 
+     * More parameters can be added, above code sample shows only the required
+     * parameters for the eCommerce transaction.
+     * 
+     * @link http://apidocs.mailchimp.com/api/1.3/ecommorderadd.func.php
+     * @param array $order
+     * @return bool
+     */
+    public function addEcommerceOrder (array $order)
     {
-        
+        $params   = compact('order');
+        $response = $this->prepareHttpClient('ecommOrderAdd', $params)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+    
+    /**
+     * Delete Ecommerce Order Information used for segmentation
+     * 
+     * This will generally be used by ecommerce package plugins that we provide
+     * or by 3rd part system developers
+     * 
+     * @link http://apidocs.mailchimp.com/api/1.3/ecommorderdel.func.php
+     * @param string|int $store_id
+     * @param string|int $order_id
+     * @return bool
+     */
+    public function deleteEcommerceOrder ($store_id, $order_id)
+    {
+        $params   = compact('store_id', 'order_id');
+        $response = $this->prepareHttpClient('ecommOrderDel', $params)
+                         ->send();
+
+        return $this->parseResponse($response);
     }
 
-    public function addEcommerceOrder ()
-    {
-        
-    }
-
-    /** Folder */
+    /********************************
+     *  Folder
+     ********************************/
+    
+    /**
+     *
+     * @param type $type
+     * @return type 
+     */
     public function getFolders ($type = null)
     {
         $params = array();
@@ -68,6 +146,12 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $name
+     * @param type $type
+     * @return type 
+     */
     public function addFolder ($name, $type = null)
     {
         $params   = compact('name', 'type');
@@ -77,6 +161,12 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $id
+     * @param type $name
+     * @return type 
+     */
     public function updateFolder ($id, $name)
     {
         $params   = compact('id', 'name');
@@ -86,6 +176,11 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $id
+     * @return type 
+     */
     public function deleteFolder ($id)
     {
         $params   = compact('id');
@@ -95,38 +190,65 @@ class Campaign
         return $this->parseResponse($response);
     }
 
-    /** Golden monkeys */
+    /********************************
+     *  Golden Monkeys
+     ********************************/
+    
+    /**
+     * 
+     */
     public function getGoldenMonkeys ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function addGoldenMonkeys ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function deleteGoldenMonkeys ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function getGoldenMonkeysActivity ()
     {
         
     }
 
-    /** Lists */
+    /********************************
+     *  Lists
+     ********************************/
 
     /**
      * @todo add a lot more list stuff
+     */
+    
+    /**
+     * 
      */
     public function getListsForEmail ()
     {
         
     }
 
-    /** Security */
+    /********************************
+     *  Security
+     ********************************/
+    
+    /**
+     * 
+     */
     public function getApiKeys ($username, $password, $expired = null)
     {
         $params   = compact('username', 'password', 'expired');
@@ -137,6 +259,12 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $username
+     * @param type $password
+     * @return type 
+     */
     public function addApiKey ($username, $password)
     {
         $params   = compact('username', 'password');
@@ -146,6 +274,12 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $username
+     * @param type $password
+     * @return type 
+     */
     public function expireApiKey ($username, $password)
     {
         $params   = compact('username', 'password');
@@ -155,38 +289,68 @@ class Campaign
         return $this->parseResponse($response);
     }
 
-    /** Templates */
+    /********************************
+     *  Templates
+     ********************************/
+    
+    /**
+     * 
+     */
     public function getTemplates ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function getTemplate ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function addTemplate ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function updateTemplate ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function deleteTemplate ()
     {
         
     }
 
+    /**
+     * 
+     */
     public function undeleteTemplate ()
     {
         
     }
 
-    /** Miscellaneous */
+    /********************************
+     *  Helpers
+     ********************************/
+    
+    /**
+     *
+     * @param type $type
+     * @param type $content
+     * @return type 
+     */
     public function generateText ($type, $content)
     {
         if (!in_array($type, array('html', 'template', 'url', 'cid', 'tid'))) {
@@ -220,6 +384,10 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function getAccountDetails ()
     {
         $response = $this->prepareHttpClient('getAccountDetails')
@@ -228,6 +396,12 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @param type $html
+     * @param type $strip_css
+     * @return type 
+     */
     public function inlineCss ($html, $strip_css)
     {
         $params   = compact('html', 'strip_css');
@@ -238,6 +412,10 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function ping ()
     {
         $response = $this->prepareHttpClient('ping')
@@ -246,6 +424,10 @@ class Campaign
         return $this->parseResponse($response);
     }
 
+    /**
+     *
+     * @return type 
+     */
     public function chimpChatter ()
     {
         $response = $this->prepareHttpClient('chimpChatter')
