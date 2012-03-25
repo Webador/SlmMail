@@ -25,7 +25,54 @@ class AmazonSes extends Amazon
     
     public function sendEmail (Message $message)
     {
+        $params = array(
+            'Message.Subject.Data'   => $message->getSubject(),
+            'Message.Body.Html.Data' => $message->getBody(),
+            'Message.Body.Text.Data' => $message->getBodyText(),
+        );
         
+        $i = 1;
+        foreach ($message->to() as $address) {
+            $params['Destination.ToAddresses.member.' . $i] = $address->getEmail();
+            $i++;
+        }
+        $i = 1;
+        foreach ($message->cc() as $address) {
+            $params['Destination.CcAddresses.member.' . $i] = $address->getEmail();
+            $i++;
+        }
+        $i = 1;
+        foreach ($message->bcc() as $address) {
+            $params['Destination.BccAddresses.member.' . $i] = $address->getEmail();
+            $i++;
+        }
+        
+        $from = $message->from();
+        if (1 !== count($from)) {
+            throw new RuntimeException('Amazon SES requires exactly one from address');
+        }
+        $from->rewind();
+        $from = $from->current();
+        $params['Source'] = $from->getEmail();
+        
+        $i = 1;
+        foreach ($message->replyTo() as $address) {
+            $params['ReplyToAddresses.member.' . $i] = $address->getEmail();
+            $i++;
+        }
+        
+        /**
+         * @todo Set return path
+         * 
+         * <code>
+         * $params['ReturnPath'] = $address->getEmail();
+         * </code>
+         */
+        
+        $response = $this->prepareHttpClient('SendEmail', $params)
+                         ->send();
+        
+        return $this->parseResponse($response);
     }
 
     protected function prepareHttpClient ($action, array $data = array())
