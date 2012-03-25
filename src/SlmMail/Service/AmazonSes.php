@@ -77,6 +77,11 @@ class AmazonSes extends Amazon
 
     protected function prepareHttpClient ($action, array $data = array())
     {
+        // SES has another naming convention, correct email into EmaiLAddress
+        if (isset($data['email'])) {
+            $data['EmailAddress'] = $data['email'];
+            unset($data['email']);
+        }
         $data   = $data + array('Action' => $action);
         
         $client = $this->getHttpClient()
