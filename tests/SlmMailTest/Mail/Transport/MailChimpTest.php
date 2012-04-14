@@ -40,7 +40,7 @@ use SlmMail\Mail\Transport\Mailchimp;
 
 class MailchimpTest extends TestCase
 {
-    public function testMailUsesPostmarkService ()
+    public function testMailUsesMailchimpService ()
     {
         $message = new Message;
         $service = $this->getMock('SlmMail\Service\Mailchimp\Sts', array(), array('test_api_key'));

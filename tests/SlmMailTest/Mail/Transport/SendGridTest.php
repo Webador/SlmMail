@@ -40,7 +40,7 @@ use SlmMail\Mail\Transport\SendGrid;
 
 class SendGridTest extends TestCase
 {
-    public function testMailUsesPostmarkService ()
+    public function testMailUsesSendGridService ()
     {
         $message = new Message;
         $service = $this->getMock('SlmMail\Service\SendGrid', array(), array('test_username', 'test_password'));

@@ -40,7 +40,7 @@ use SlmMail\Mail\Transport\ElasticEmail;
 
 class ElasticEmailTest extends TestCase
 {
-    public function testMailUsesPostmarkService ()
+    public function testMailUsesElasticEmailService ()
     {
         $message = new Message;
         $service = $this->getMock('SlmMail\Service\ElasticEmail', array(), array('test_username', 'test_api_key'));

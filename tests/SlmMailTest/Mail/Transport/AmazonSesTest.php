@@ -40,7 +40,7 @@ use SlmMail\Mail\Transport\AmazonSes;
 
 class AmazonSesTest extends TestCase
 {
-    public function testMailUsesPostmarkService ()
+    public function testMailUsesAmazonService ()
     {
         $message = new Message;
         $service = $this->getMock('SlmMail\Service\AmazonSes', array(), array('test_host', 'test_access_key', 'test_secret_key'));

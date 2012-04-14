@@ -40,7 +40,7 @@ use SlmMail\Mail\Transport\Postage;
 
 class PostageTest extends TestCase
 {
-    public function testMailUsesPostmarkService ()
+    public function testMailUsesPostageService ()
     {
         $message = new Message;
         $service = $this->getMock('SlmMail\Service\Postage', array(), array('test_api_key'));
