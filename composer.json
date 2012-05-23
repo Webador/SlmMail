@@ -1,6 +1,6 @@
 {
     "name": "juriansluiman/slm-mail",
-    "description": "Integration of various email service providers in the Zend Framework Zend\Mail",
+    "description": "Integration of various email service providers in the Zend Framework Zend\\Mail",
     "type": "library",
     "keywords": [
         "zf2"
