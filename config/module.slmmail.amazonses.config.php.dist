@@ -8,13 +8,20 @@
 $amazonSesTransport = array(
     /**
      * Hostname for your Amazon SES Email Service Provider server
+     * 
+     * Normally, " https://email.us-east-1.amazonaws.com" should be good
      */
-    'host' => '',
+    'host' => 'https://email.us-east-1.amazonaws.com',
     
     /**
      * Access key for Amazon SES Email Service Provider
      */
     'access_key' => '',
+    
+    /**
+     * Security key for Amazon SES Email Service Provider
+     */
+    'secret_key' => '',
 );
 
 /**
@@ -36,6 +43,7 @@ return array(
                 'parameters' => array(
                     'host'       => $amazonSesTransport['host'],
                     'access_key' => $amazonSesTransport['access_key'],
+                    'secret_key' => $amazonSesTransport['secret_key'],
                 ),
             ),
         ),
