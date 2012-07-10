@@ -71,22 +71,22 @@ class SendGrid
             'text'     => $message->getBodyText(),
         );
 
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $params['to'][]    = $address->getEmail();
             $params['names'][] = $address->getName();
         }
-        foreach ($message->cc() as $address) {
+        foreach ($message->getCc() as $address) {
             $params['to'][]    = $address->getEmail();
             $params['names'][] = $address->getName();
         }
 
-        if (count($message->bcc())) {
-            foreach ($message->bcc() as $address) {
+        if (count($message->getBcc())) {
+            foreach ($message->getBcc() as $address) {
                 $params['bcc'][] = $address->getEmail();
             }
         }
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('SendGrid requires exactly one from address');
         }
@@ -95,7 +95,7 @@ class SendGrid
         $params['from']     = $from->getEmail();
         $params['fromname'] = $from->getName();
 
-        $replyTo = $message->replyTo();
+        $replyTo = $message->getReplyTo();
         if (1 < count($replyTo)) {
             throw new RuntimeException('SendGrid has only support for one reply-to address');
         } elseif (count($replyTo)) {

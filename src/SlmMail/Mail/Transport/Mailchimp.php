@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\Mailchimp\Sts as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\Mailchimp\Sts as Service;
 
-class Mailchimp implements Transport
+class Mailchimp implements TransportInterface
 {
     /**
      * Mailchimp service for api calls

@@ -78,22 +78,22 @@ class AmazonSes extends Amazon
         );
 
         $i = 1;
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $params['Destination.ToAddresses.member.' . $i] = $address->getEmail();
             $i++;
         }
         $i = 1;
-        foreach ($message->cc() as $address) {
+        foreach ($message->getCc() as $address) {
             $params['Destination.CcAddresses.member.' . $i] = $address->getEmail();
             $i++;
         }
         $i = 1;
-        foreach ($message->bcc() as $address) {
+        foreach ($message->getBcc() as $address) {
             $params['Destination.BccAddresses.member.' . $i] = $address->getEmail();
             $i++;
         }
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('Amazon SES requires exactly one from address');
         }
@@ -102,7 +102,7 @@ class AmazonSes extends Amazon
         $params['Source'] = $from->getEmail();
 
         $i = 1;
-        foreach ($message->replyTo() as $address) {
+        foreach ($message->getReplyTo() as $address) {
             $params['ReplyToAddresses.member.' . $i] = $address->getEmail();
             $i++;
         }
@@ -146,7 +146,7 @@ class AmazonSes extends Amazon
               . ',Algorithm=HmacSHA256,Signature=' . $this->sign($date)
               . ',SignedHeaders=Date';
 
-        $client->getRequest()->headers()
+        $client->getRequest()->getHeaders()
                ->addHeaderLine('Content-Type', 'application/x-www-form-urlencoded')
                ->addHeaderLine('Date', $date)
                ->addHeaderLine('X-Amzn-Authorization', $auth);

@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\Postmark as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\Postmark as Service;
 
-class Postmark implements Transport
+class Postmark implements TransportInterface
 {
     /**
      * Postmark service for api calls

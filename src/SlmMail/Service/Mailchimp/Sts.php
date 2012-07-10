@@ -71,21 +71,21 @@ class Sts extends Amazon
             )
         );
 
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $params['message']['to_email'][] = $address->getEmail();
             $params['message']['to_name'][]  = $address->getName();
         }
-        foreach ($message->cc() as $address) {
+        foreach ($message->getCc() as $address) {
             $params['message']['cc_email'][] = $address->getEmail();
             $params['message']['cc_name'][]  = $address->getName();
         }
-        foreach ($message->bcc() as $address) {
+        foreach ($message->getBcc() as $address) {
             $params['message']['bcc_email'][] = $address->getEmail();
             $params['message']['bcc_name'][]  = $address->getName();
         }
 
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('Mailchimp requires exactly one from address');
         }
@@ -94,7 +94,7 @@ class Sts extends Amazon
         $data['message']['from_email']      = $from->getEmail();
         $data['message']['from_name'] = $from->getName();
 
-        foreach ($message->replyTo() as $address) {
+        foreach ($message->getReplyTo() as $address) {
             $params['message']['reply_to'][] = $address->getEmail();
         }
 

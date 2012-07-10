@@ -80,15 +80,15 @@ class Postage
         $args = array();
 
         $to = array();
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
         $args['recipients'] = array(implode(',', $to));
 
-        if (count($message->cc())) {
+        if (count($message->getCc())) {
             throw new RuntimeException('Postage does not support CC addresses');
         }
-        if (count($message->bcc())) {
+        if (count($message->getBcc())) {
             throw new RuntimeException('Postage does not support BCC addresses');
         }
 
@@ -98,14 +98,14 @@ class Postage
             'text/html'  => $message->getBody(),
         );
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('Postage requires exactly one from address');
         }
         $from->rewind();
         $args['headers']['from'] = $from->current()->toString();
 
-        $replyTo = $message->replyTo();
+        $replyTo = $message->getReplyTo();
         if (1 < count($replyTo)) {
             throw new RuntimeException('Postage has only support for one reply-to address');
         } elseif (count($replyTo)) {
@@ -230,7 +230,7 @@ class Postage
             $this->client->setMethod(Request::METHOD_POST);
 
             $this->client->getRequest()
-                         ->headers()
+                         ->getHeaders()
                          ->addHeaderLine('Content-Type', 'application/json');
         }
 

@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\AmazonSes as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\AmazonSes as Service;
 
-class AmazonSes implements Transport
+class AmazonSes implements TransportInterface
 {
     /**
      * AmazonSes service for api calls

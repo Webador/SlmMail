@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\Postage as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\Postage as Service;
 
-class Postage implements Transport
+class Postage implements TransportInterface
 {
     /**
      * Postage service for api calls

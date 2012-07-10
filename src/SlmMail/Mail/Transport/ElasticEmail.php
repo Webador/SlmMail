@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\ElasticEmail as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\ElasticEmail as Service;
 
-class ElasticEmail implements Transport
+class ElasticEmail implements TransportInterface
 {
     /**
      * ElasticEmail service for api calls

@@ -103,13 +103,13 @@ class Postmark
         );
 
         $to = array();
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
         $data['To'] = implode(',', $to);
 
         $cc = array();
-        foreach ($message->cc() as $address) {
+        foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();
         }
         if (self::RECIPIENT_LIMIT < count($cc)) {
@@ -119,7 +119,7 @@ class Postmark
         }
 
         $bcc = array();
-        foreach ($message->bcc() as $address) {
+        foreach ($message->getBcc() as $address) {
             $bcc[] = $address->toString();
         }
         if (self::RECIPIENT_LIMIT < count($bcc)) {
@@ -128,14 +128,14 @@ class Postmark
             $data['Bcc'] = implode(',', $bcc);
         }
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('Postmark requires a registered and confirmed from address');
         }
         $from->rewind();
         $data['From'] = $from->current()->toString();
 
-        $replyTo = $message->replyTo();
+        $replyTo = $message->getReplyTo();
         if (1 < count($replyTo)) {
             throw new RuntimeException('Postmark has only support for one reply-to address');
         } elseif (count($replyTo)) {

@@ -41,11 +41,11 @@
  */
 namespace SlmMail\Mail\Transport;
 
-use Zend\Mail\Transport,
-    Zend\Mail\Message,
-    SlmMail\Service\SendGrid as Service;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\Mail\Message;
+use SlmMail\Service\SendGrid as Service;
 
-class SendGrid implements Transport
+class SendGrid implements TransportInterface
 {
     /**
      * SendGrid service for api calls

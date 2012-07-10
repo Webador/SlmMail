@@ -85,18 +85,18 @@ class ElasticEmail
         );
 
         $to = array();
-        foreach ($message->to() as $address) {
+        foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
-        foreach ($message->cc() as $address) {
+        foreach ($message->getCc() as $address) {
             $to[] = $address->toString();
         }
-        foreach ($message->bcc() as $address) {
+        foreach ($message->getBcc() as $address) {
             $to[] = $address->toString();
         }
         $data['to'] = implode(';', $to);
 
-        $from = $message->from();
+        $from = $message->getFrom();
         if (1 !== count($from)) {
             throw new RuntimeException('Elastic Email requires exactly one from address');
         }
@@ -105,7 +105,7 @@ class ElasticEmail
         $data['from']      = $from->getEmail();
         $data['from_name'] = $from->getName();
 
-        $replyTo = $message->replyTo();
+        $replyTo = $message->getReplyTo();
         if (1 < count($replyTo)) {
             throw new RuntimeException('Elastic Email has only support for one reply-to address');
         } elseif (count($replyTo)) {
@@ -337,6 +337,7 @@ class ElasticEmail
     protected function parseResponse (Response $response)
     {
         if (!$response->isOk()) {
+            var_dump($response);exit;
             throw new RuntimeException('Unknown error during request to Elastic Email server');
         }
 
