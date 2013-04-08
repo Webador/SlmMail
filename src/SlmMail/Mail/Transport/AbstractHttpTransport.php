@@ -26,6 +26,13 @@ abstract class AbstractHttpTransport
      */
     protected $endpoint;
 
+    /**
+     * Define valid options. This must be specified in each subclass to define custom options
+     *
+     * @var array
+     */
+    protected $validOptions = array();
+
 
     /**
      * Get the HTTP client
@@ -112,7 +119,7 @@ abstract class AbstractHttpTransport
      */
     protected function prepareParameters(Message $message)
     {
-
+        $params = array();
     }
 
     /**

@@ -14,6 +14,28 @@ class Mandrill extends AbstractHttpTransport
     protected $endpoint = 'https://mandrillapp.com/api/1.0';
 
     /**
+     * @var array
+     */
+    protected $validOptions = array(
+        'track_opens',
+        'track_clicks',
+        'auto_text',
+        'auto_html',
+        'inline_css',
+        'url_strip_qs',
+        'preserve_recipients',
+        'tracking_domain',
+        'signing_domain',
+        'merge',
+        'global_merge_vars',
+        'merge_vars',
+        'google_analytics_domains',
+        'google_analytics_campaign',
+        'metadata',
+        'recipient_metadata'
+    );
+
+    /**
      * @var string
      */
     protected $key;
@@ -62,15 +84,15 @@ class Mandrill extends AbstractHttpTransport
 
         $from = $from->current();
 
-        $params['from_email'] = $from->getName();
-        $params['from_name']  = $from->getEmail();
+        $params['message']['from_email'] = $from->getName();
+        $params['message']['from_name']  = $from->getEmail();
 
         /**
          * TO part
          */
 
         foreach ($message->getTo() as $to) {
-            $params['to'][] = array(
+            $params['message']['to'][] = array(
                 'email' => $to->getEmail(),
                 'name'  => $to->getName()
             );
@@ -85,14 +107,20 @@ class Mandrill extends AbstractHttpTransport
             throw new Exception\RuntimeException('Mandrill expects a subject, none given');
         }
 
-        $params['subject'] = $subject;
+        $params['message']['subject'] = $subject;
+
+        /**
+         * Content
+         */
+
+        $params['message']['html'] = $message->getBodyText();
 
         /**
          * Headers
          */
 
         foreach ($message->getHeaders() as $header) {
-            $params['headers'][$header->getFieldName()] = $header->getFieldValue();
+            $params['message']['headers'][$header->getFieldName()] = $header->getFieldValue();
         }
 
         /**
@@ -100,7 +128,7 @@ class Mandrill extends AbstractHttpTransport
          */
 
         foreach ($message->getTags() as $tag) {
-            $params['tags'][] = $tag;
+            $params['message']['tags'][] = $tag;
         }
 
         /**
@@ -108,7 +136,7 @@ class Mandrill extends AbstractHttpTransport
          */
 
         foreach ($message->getAttachments() as $attachment) {
-            $params['attachments'][] = array(
+            $params['message']['attachments'][] = array(
                 'type'    => $attachment->getContentType(),
                 'name'    => $attachment->getName(),
                 'content' => $attachment->getContent()
@@ -119,8 +147,27 @@ class Mandrill extends AbstractHttpTransport
          * Optional options specific
          */
 
+        foreach ($message->getOptions() as $key => $value) {
+            if (array_key_exists($key, $this->validOptions)) {
+                $params['message'][$key] = $value;
+            }
+        }
 
         $this->prepareHttpClient('/messages/send.json', $params);
+    }
+
+    /**
+     * @param  string $path
+     * @param  array $params
+     * @return \Zend\Http\Client
+     */
+    protected function prepareHttpClient($path, array $params)
+    {
+        $client = parent::prepareHttpClient($path, $params);
+
+        $client->getRequest()
+               ->getHeaders()
+               ->addHeaderLine('Content-Type', 'application/json');
     }
 
     /**
