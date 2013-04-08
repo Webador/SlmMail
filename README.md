@@ -1,20 +1,20 @@
 SlmMail
-===
-Version 0.0.2 Created by Jurian Sluiman
+=======
+Version 0.2.0 Created by Jurian Sluiman
 
 Introduction
----
-SlmMail is an extension to the available Zend\Mail component of the Zend Framework 2. The Zend\Mail component allows different transports to send the email and SlmMail provides the transport layer for the following email services:
+------------
 
- 1. [Amazon SES](https://github.com/juriansluiman/SlmMail/blob/master/docs/AmazonSes.md) (*implementation not completed*)
- 2. [Elastic Email](https://github.com/juriansluiman/SlmMail/blob/master/docs/ElasticEmail.md)
- 3. [Mailchimp STS](https://github.com/juriansluiman/SlmMail/blob/master/docs/Mailchimp.md) (*implementation not completed*)
- 4. [Postage](https://github.com/juriansluiman/SlmMail/blob/master/docs/Postage.md)
- 5. [Postmark](https://github.com/juriansluiman/SlmMail/blob/master/docs/Postmark.md)
- 6. [SendGrid](https://github.com/juriansluiman/SlmMail/blob/master/docs/SendGrid.md)
+SlmMail is a module that integrates with various third-parties API to send mails. Integration is provided with the
+API of those services. It does not handle SMTP.
+
+Here are the currently supported services:
+
+* Mandrill
 
 Requirements
----
+------------
+* PHP 5.4: SlmMail makes use of traits (hence we dropped PHP 5.3 support)
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 
 Installation

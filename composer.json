@@ -3,7 +3,9 @@
     "description": "Integration of various email service providers in the Zend Framework Zend\\Mail",
     "type": "library",
     "keywords": [
-        "zf2"
+        "zf2",
+        "email",
+        "mandrill"
     ],
     "homepage": "https://github.com/juriansluiman/SlmMail",
     "authors": [
@@ -14,8 +16,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3.",
-        "zendframework/zendframework": "dev-master"
+        "php": ">=5.4",
+        "zendframework/zend-mail": "2.*"
     },
     "autoload": {
         "classmap": [
