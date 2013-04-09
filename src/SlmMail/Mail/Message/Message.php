@@ -12,8 +12,7 @@ class Message extends BaseMessage
     /**
      * @var array
      */
-    protected $options;
-
+    protected $options = array();
 
     /**
      * Set options
@@ -21,12 +20,9 @@ class Message extends BaseMessage
      * @param  array $options
      * @return Message
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
-        foreach ($options as $key => $value) {
-            $this->setOption($key, $value);
-        }
-
+        $this->options = $options;
         return $this;
     }
 

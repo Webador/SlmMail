@@ -40,7 +40,6 @@ class Mandrill extends AbstractHttpTransport
      */
     protected $key;
 
-
     /**
      * Constructor
      *

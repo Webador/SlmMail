@@ -12,7 +12,7 @@ use Zend\Mail\Message;
 abstract class AbstractHttpTransport
 {
     /**
-     * @var HttpClient
+     * @var HttpClient|null
      */
     protected $client;
 
@@ -22,7 +22,7 @@ abstract class AbstractHttpTransport
     protected $method = HttpRequest::METHOD_POST;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $endpoint;
 
@@ -32,7 +32,6 @@ abstract class AbstractHttpTransport
      * @var array
      */
     protected $validOptions = array();
-
 
     /**
      * Get the HTTP client
@@ -52,12 +51,11 @@ abstract class AbstractHttpTransport
      * Set the HTTP method to use
      *
      * @param  string $method
-     * @return AbstractHttpTransport
+     * @return void
      */
     public function setMethod($method)
     {
         $this->method = $method;
-        return $this;
     }
 
     /**
@@ -77,7 +75,7 @@ abstract class AbstractHttpTransport
      */
     public function setEndpoint($endpoint)
     {
-        $this->endpoint = $endpoint;
+        $this->endpoint = (string) $endpoint;
     }
 
     /**

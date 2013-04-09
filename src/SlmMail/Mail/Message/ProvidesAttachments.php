@@ -28,12 +28,11 @@ trait ProvidesAttachments
      */
     protected $attachments;
 
-
     /**
      * Set attachments to the message
      *
      * @param  Attachment[]|array $attachments
-     * @return ProvidesAttachments
+     * @return self
      */
     public function setAttachments($attachments)
     {
@@ -45,7 +44,7 @@ trait ProvidesAttachments
      * Add attachment to the message
      *
      * @param  Attachment $attachment
-     * @return ProvidesAttachments
+     * @return self
      */
     public function addAttachment(Attachment $attachment)
     {

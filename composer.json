@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "zendframework/zend-mail": "2.*"
+        "zendframework/zend-mail": ">=2.0,<2.3"
     },
     "autoload": {
         "classmap": [

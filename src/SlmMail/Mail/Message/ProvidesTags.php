@@ -8,18 +8,17 @@ namespace SlmMail\Mail\Message;
 trait ProvidesTags
 {
     /**
-     * @var array
+     * @var string[]
      */
-    protected $tags;
-
+    protected $tags = array();
 
     /**
      * Add tags to the message
      *
      * @param  array $tags
-     * @return ProvidesTags
+     * @return self
      */
-    public function setTags($tags)
+    public function setTags(array $tags)
     {
         $this->tags = $tags;
         return $this;
@@ -29,18 +28,18 @@ trait ProvidesTags
      * Add a tag to the message
      *
      * @param  string $tag
-     * @return ProvidesTags
+     * @return self
      */
     public function addTag($tag)
     {
-        $this->tags[] = $tag;
+        $this->tags[] = (string) $tag;
         return $this;
     }
 
     /**
      * Get all the tags of the message
      *
-     * @return array
+     * @return string[]
      */
     public function getTags()
     {

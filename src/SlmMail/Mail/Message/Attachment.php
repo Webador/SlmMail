@@ -24,31 +24,16 @@ class Attachment
      */
     protected $contentType;
 
-
     /**
-     * Constructor
-     *
      * @param string $name
      * @param string $content
      * @param string $contentType
      */
     public function __construct($name, $content, $contentType = '')
     {
-        $this->name        = $name;
-        $this->content     = $contentType;
-        $this->contentType = $contentType;
-    }
-
-    /**
-     * Set name of the attachment
-     *
-     * @param  string $name
-     * @return Attachment
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
+        $this->name        = (string) $name;
+        $this->content     = (string) $contentType;
+        $this->contentType = (string) $contentType;
     }
 
     /**
@@ -62,30 +47,11 @@ class Attachment
     }
 
     /**
-     * @param  string $content
-     * @return Attachment
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * @param  string $contentType
-     * @return Attachment
-     */
-    public function setContentType($contentType)
-    {
-        $this->contentType = $contentType;
     }
 
     /**
