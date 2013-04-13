@@ -3,10 +3,10 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\Message;
 use SlmMail\Mail\Message\ProvidesAttachments;
 use SlmMail\Mail\Message\ProvidesImages;
 use SlmMail\Mail\Message\ProvidesTags;
+use Zend\Mail\Message;
 
 class Mandrill extends Message
 {
