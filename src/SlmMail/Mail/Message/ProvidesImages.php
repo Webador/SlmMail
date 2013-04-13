@@ -19,46 +19,46 @@
 namespace SlmMail\Mail\Message;
 
 /**
- * Trait for messages that allow to have attachments
+ * Trait for messages that allow to have images as attachments
  */
-trait ProvidesAttachments
+trait ProvidesImages
 {
     /**
      * @var Attachment[]|array
      */
-    protected $attachments = array();
+    protected $images = array();
 
     /**
      * Set attachments to the message
      *
-     * @param  Attachment[]|array $attachments
+     * @param  Attachment[]|array $images
      * @return self
      */
-    public function setAttachments(array $attachments)
+    public function setImages(array $images)
     {
-        $this->attachments = $attachments;
+        $this->images = $images;
         return $this;
     }
 
     /**
-     * Add attachment to the message
+     * Add image to the message
      *
-     * @param  Attachment $attachment
+     * @param  Attachment $image
      * @return self
      */
-    public function addAttachment(Attachment $attachment)
+    public function addImage(Attachment $image)
     {
-        $this->attachments[] = $attachment;
+        $this->images[] = $image;
         return $this;
     }
 
     /**
-     * Get attachments of the message
+     * Get images of the message
      *
      * @return array|Attachment[]
      */
-    public function getAttachments()
+    public function getImages()
     {
-        return $this->attachments;
+        return $this->images;
     }
 }
