@@ -525,8 +525,14 @@ class MandrillService extends AbstractMailService
 
         if ($message instanceof MandrillMessage) {
             if ($isTemplate) {
-                $parameters['template_name']    = $message->getTemplate();
-                $parameters['template_content'] = $message->getTemplateContent();
+                $parameters['template_name'] = $message->getTemplate();
+
+                foreach ($message->getTemplateContent() as $key => $value) {
+                    $parameters['template_content'] = array(
+                        'name'    => $key,
+                        'content' => $value
+                    );
+                }
 
                 foreach ($message->getGlobalVariables() as $key => $value) {
                     $parameters['message']['global_merge_vars'][] = array(
