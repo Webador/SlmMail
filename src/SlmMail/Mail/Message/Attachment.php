@@ -25,6 +25,9 @@ class Attachment
     protected $contentType;
 
     /**
+     * Constructor. Note that most API require the content to be encoded in base64. Check the documentation of
+     * the API you plan to use to how to use it correctly
+     *
      * @param string $name
      * @param string $content
      * @param string $contentType
