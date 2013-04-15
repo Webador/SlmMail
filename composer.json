@@ -5,7 +5,8 @@
     "keywords": [
         "zf2",
         "email",
-        "mandrill"
+        "mandrill",
+        "ses"
     ],
     "homepage": "https://github.com/juriansluiman/SlmMail",
     "authors": [

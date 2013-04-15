@@ -38,6 +38,7 @@ class MandrillService extends AbstractMailService
      */
 
     /**
+     * @link https://mandrillapp.com/api/docs/messages.html#method=send
      * {@inheritDoc}
      */
     public function send(Message $message)
@@ -55,9 +56,10 @@ class MandrillService extends AbstractMailService
     /**
      * Set a message from a template stored at Mandrill
      *
+     * @link https://mandrillapp.com/api/docs/messages.html#method=send-template
      * @param  MandrillMessage $message
-     * @return array
      * @throws Exception\RuntimeException
+     * @return array
      */
     public function sendTemplate(MandrillMessage $message)
     {
@@ -76,6 +78,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get the information about the API-connected user
      *
+     * @link https://mandrillapp.com/api/docs/users.html#method=info
      * @return array
      */
     public function getUserInfo()
@@ -89,6 +92,7 @@ class MandrillService extends AbstractMailService
     /**
      * Validate an API key and respond to a ping
      *
+     * @link https://mandrillapp.com/api/docs/users.html#method=ping
      * @return array
      */
     public function pingUser()
@@ -108,6 +112,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get the senders that have tried to use this account, both verified and unverified
      *
+     * @link https://mandrillapp.com/api/docs/senders.html#method=list
      * @return array
      */
     public function getSenders()
@@ -121,6 +126,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get the sender domains that have been added to this account
      *
+     * @link https://mandrillapp.com/api/docs/senders.html#method=domains
      * @return array
      */
     public function getSenderDomains()
@@ -134,6 +140,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get more detailed information about a single sender, including aggregates of recent stats
      *
+     * @link https://mandrillapp.com/api/docs/senders.html#method=info
      * @param  string $address
      * @return array
      */
@@ -148,6 +155,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get recent detailed information (last 30 days) about a single sender
      *
+     * @link https://mandrillapp.com/api/docs/senders.html#method=time-series
      * @param  string $address
      * @return array
      */
@@ -168,6 +176,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get all of the user-defined tag information
      *
+     * @link https://mandrillapp.com/api/docs/tags.html#method=list
      * @return array
      */
     public function getTags()
@@ -181,6 +190,7 @@ class MandrillService extends AbstractMailService
     /**
      * Delete a tag permanently
      *
+     * @link https://mandrillapp.com/api/docs/tags.html#method=delete
      * @param  string $tag
      * @return array
      */
@@ -195,6 +205,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get more detailed information about a single tag, including aggregates of recent stats
      *
+     * @link https://mandrillapp.com/api/docs/tags.html#method=info
      * @param string $tag
      * @return array
      */
@@ -209,6 +220,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get recent detailed information (last 30 days) about a single tag, including aggregates of recent stats
      *
+     * @link https://mandrillapp.com/api/docs/tags.html#method=time-series
      * @param string $tag
      * @return array
      */
@@ -229,6 +241,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get all the email rejection blacklist
      *
+     * @link https://mandrillapp.com/api/docs/rejects.html#method=list
      * @param  string $email
      * @param  bool $includeExpired
      * @return array
@@ -245,6 +258,7 @@ class MandrillService extends AbstractMailService
      * Deletes an email rejection. There is no limit to how many rejections you can remove from your blacklist,
      * but keep in mind that each deletion has an affect on your reputation
      *
+     * @link https://mandrillapp.com/api/docs/rejects.html#method=delete
      * @param  string $email
      * @return array
      */
@@ -265,6 +279,8 @@ class MandrillService extends AbstractMailService
     /**
      * Get the 100 most clicked URLs optionally filtered by search query
      *
+     * @link https://mandrillapp.com/api/docs/urls.html#method=list
+     * @link https://mandrillapp.com/api/docs/urls.html#method=search
      * @param  string $query
      * @return array
      */
@@ -284,6 +300,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get the recent history (hourly stats for the last 30 days) for a url
      *
+     * @link https://mandrillapp.com/api/docs/urls.html#method=time-series
      * @param  string $url
      * @return array
      */
@@ -304,6 +321,7 @@ class MandrillService extends AbstractMailService
     /**
      * Add a new template to Mandrill
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=add
      * @param  string       $name
      * @param  Address|null $address
      * @param  string       $subject
@@ -331,6 +349,7 @@ class MandrillService extends AbstractMailService
     /**
      * Update an existing template
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=update
      * @param  string  $name
      * @param  Address $address
      * @param  string  $subject
@@ -358,6 +377,7 @@ class MandrillService extends AbstractMailService
     /**
      * Delete a template
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=delete
      * @param  string $name
      * @return array
      */
@@ -372,6 +392,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get all registered templates on Mandrill
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=list
      * @return array
      */
     public function getTemplates()
@@ -385,6 +406,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get template info
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=info
      * @param  string $name
      * @return array
      */
@@ -399,6 +421,7 @@ class MandrillService extends AbstractMailService
     /**
      * Get recent template info (last 30 days)
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=time-series
      * @param  string $name
      * @return array
      */
@@ -413,6 +436,7 @@ class MandrillService extends AbstractMailService
     /**
      * Render an existing template stored on Mandrill
      *
+     * @link https://mandrillapp.com/api/docs/templates.html#method=render
      * @param  string $name
      * @param  array $content
      * @param  array $variables
@@ -443,11 +467,19 @@ class MandrillService extends AbstractMailService
         $from = $message->getFrom();
         if (($isTemplate && count($from) > 1) || (!$isTemplate && count($from) !== 1)) {
             throw new Exception\RuntimeException(
-                'Mandrill API requires only one from sender (or none if send with a template)'
+                'Mandrill API requires exactly one from sender (or none if send with a template)'
             );
         }
 
-        $from = $from->current();
+        if (count($message->getCc())) {
+            throw new Exception\RuntimeException('Mandrill does not support CC addresses');
+        }
+
+        if (count($message->getBcc())) {
+            throw new Exception\RuntimeException('Mandrill does not support BCC addresses');
+        }
+
+        $from = $from->rewind();
 
         $parameters['message'] = array(
             'subject'    => $message->getSubject(),
@@ -464,8 +496,11 @@ class MandrillService extends AbstractMailService
             );
         }
 
-        foreach ($message->getHeaders() as $header) {
-            $parameters['message']['headers'][] = $header->toString();
+        $replyTo = $message->getReplyTo();
+        if (count($replyTo) > 1) {
+            throw new Exception\RuntimeException('Mandrill has only support for one Reply-To address');
+        } elseif (count($replyTo)) {
+            $parameters['message']['headers']['Reply-To'] = $replyTo->rewind()->toString();
         }
 
         if ($message instanceof MandrillMessage) {
@@ -516,10 +551,17 @@ class MandrillService extends AbstractMailService
     {
         $parameters = array_merge(array('key' => $this->apiKey), $parameters);
 
-        return $this->getClient()
-                    ->setMethod(HttpRequest::METHOD_POST)
-                    ->setUri(self::API_ENDPOINT . $uri)
-                    ->setParameterPost(array_filter($parameters));
+        $client = $this->getClient();
+        $client->getRequest()
+               ->getHeaders()
+               ->addHeaderLine('Content-Type', 'application/json');
+
+        // Note : do not use setParameterPost for now, there is a bug in Mandrill API that I reported
+        // on 15th April 2013. Please set the content body directly as it is done hre
+
+        return $client->setMethod(HttpRequest::METHOD_POST)
+                      ->setUri(self::API_ENDPOINT . $uri)
+                      ->setRawBody(json_encode($this->filterParameters($parameters)));
     }
 
     /**

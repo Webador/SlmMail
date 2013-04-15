@@ -1,6 +1,5 @@
 <?php
 
-
 namespace SlmMail\Mail\Message\Provider;
 
 use SlmMail\Mail\Message\ProvidesAttachments;
@@ -101,8 +100,8 @@ class Mandrill extends Message
     /**
      * Set the template parameters for a given recipient address
      *
-     * @param  $recipient
-     * @param  array $variables
+     * @param  string $recipient
+     * @param  array  $variables
      * @return Mandrill
      */
     public function setVariables($recipient, $variables)

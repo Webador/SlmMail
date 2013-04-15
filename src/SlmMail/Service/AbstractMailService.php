@@ -82,4 +82,17 @@ abstract class AbstractMailService
 
         return $this->client;
     }
+
+    /**
+     * Filter parameters (for now, only null parameters)
+     *
+     * @param  array $parameters
+     * @return array
+     */
+    protected function filterParameters(array $parameters)
+    {
+        return array_filter($parameters, function($value) {
+            return $value !== null;
+        });
+    }
 }
