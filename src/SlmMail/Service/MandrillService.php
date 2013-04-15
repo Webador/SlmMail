@@ -24,6 +24,27 @@ class MandrillService extends AbstractMailService
     protected $apiKey;
 
     /**
+     * Valid Mandrill options
+     *
+     * @var array
+     */
+    protected $validOptions = array(
+        'important',
+        'track_opens',
+        'track_clicks',
+        'auto_text',
+        'auto_html',
+        'inline_css',
+        'url_strip_qs',
+        'preserve_recipients',
+        'tracking_domain',
+        'signing_domain',
+        'merge',
+        'google_analytics_domains',
+        'google_analytics_campaign'
+    );
+
+    /**
      * @param string $apiKey
      */
     public function __construct($apiKey)
@@ -58,7 +79,6 @@ class MandrillService extends AbstractMailService
      *
      * @link https://mandrillapp.com/api/docs/messages.html#method=send-template
      * @param  MandrillMessage $message
-     * @throws Exception\RuntimeException
      * @return array
      */
     public function sendTemplate(MandrillMessage $message)
@@ -442,7 +462,7 @@ class MandrillService extends AbstractMailService
      * @param  array $variables
      * @return array
      */
-    public function renderTemplate($name, array $content, array $variables = array())
+    public function renderTemplate($name, array $content = array(), array $variables = array())
     {
         $parameters = array(
             'template_name'    => $name,
@@ -515,6 +535,12 @@ class MandrillService extends AbstractMailService
                         'rcpt' => $recipient,
                         'vars' => $variables
                     );
+                }
+            }
+
+            foreach ($message->getOptions() as $key => $value) {
+                if (in_array($key, $this->validOptions)) {
+                    $parameters['message'][$key] = $value;
                 }
             }
 

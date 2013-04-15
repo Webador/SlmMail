@@ -252,11 +252,7 @@ class PostageService extends AbstractMailService
         }
 
         if ($result['response']['status'] !== 'ok') {
-            throw new Exception\RuntimeException(sprintf(
-                'Could not send request: api error "%s" (%s)',
-                $result['response']['status'],
-                $result['response']['message']
-            ));
+            throw new Exception\RuntimeException($result['response']['message'], $result['response']['status']);
         }
 
         // We need to return an array and not throw an exception because of the poor Postage API

@@ -6,7 +6,8 @@
         "zf2",
         "email",
         "mandrill",
-        "ses"
+        "postage",
+        "postmark"
     ],
     "homepage": "https://github.com/juriansluiman/SlmMail",
     "authors": [
@@ -18,7 +19,8 @@
     ],
     "require": {
         "php": ">=5.4",
-        "zendframework/zend-mail": ">=2.0,<2.3"
+        "zendframework/zend-mail": ">=2.0,<2.3",
+        "zendframework/zend-mime": ">=2.0,<2.3"
     },
     "autoload": {
         "classmap": [

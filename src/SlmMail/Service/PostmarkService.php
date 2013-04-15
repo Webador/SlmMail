@@ -166,7 +166,7 @@ class PostmarkService extends AbstractMailService
      * @link http://developer.postmarkapp.com/developer-bounces.html#get-delivery-stats
      * @return array
      */
-    public function getDeliveryStats ()
+    public function getDeliveryStats()
     {
         $response = $this->prepareHttpClient('/deliverystats')
                          ->send();
@@ -189,7 +189,7 @@ class PostmarkService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    public function getBounces ($count, $offset, $type = null, $inactive = null, $emailFilter = null)
+    public function getBounces($count, $offset, $type = null, $inactive = null, $emailFilter = null)
     {
         if (null !== $type && !in_array($type, $this->filters)) {
             throw new Exception\RuntimeException(sprintf(
@@ -302,10 +302,7 @@ class PostmarkService extends AbstractMailService
             case 401:
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect API Key header');
             case 422:
-                throw new Exception\ValidationErrorException(sprintf(
-                    'An error occurred: %s (code: %s)',
-                    $result['Message'], $result['ErrorCode']
-                ), $result['ErrorCode']);
+                throw new Exception\ValidationErrorException($result['Message'], $result['ErrorCode']);
             case 500:
                 throw new Exception\RuntimeException('Postmark server error, please try again');
             default:
