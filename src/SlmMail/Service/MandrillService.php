@@ -64,7 +64,7 @@ class MandrillService extends AbstractMailService
      */
     public function send(Message $message)
     {
-        if ($message instanceof MandrillMessage && $message->getTemplate()) {
+        if ($message instanceof MandrillMessage && $message->getTemplate() !== '') {
             return $this->sendTemplate($message);
         }
 

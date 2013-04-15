@@ -23,6 +23,10 @@
         "zendframework/zend-mime": ">=2.0,<2.3"
     },
     "autoload": {
+        "psr-0": {
+            "SlmMail\\": "src/",
+            "SlmMailTest\\": "tests/"
+        },
         "classmap": [
             "./"
         ]

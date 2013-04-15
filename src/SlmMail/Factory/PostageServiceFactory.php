@@ -15,7 +15,6 @@ class PostageServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('Config');
-
         if (!isset($config['slm_mail']['postage'])) {
             throw new RuntimeException(
                 'Config for Postage is not set, did you copy config file into your config/autoload folder ?'
