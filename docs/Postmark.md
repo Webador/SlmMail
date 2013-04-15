@@ -45,13 +45,13 @@ $message->setTag('registration-mail');
 If you have access to the service locator, you can retrieve the Postmark transport:
 
 ```php
-    // As stated above, you can also create a specialized Postmark message for more features
-    $message = new \Zend\Mail\Message();
+// As stated above, you can also create a specialized Postmark message for more features
+$message = new \Zend\Mail\Message();
 
-    // set up Message here
+// set up Message here
 
-    $transport = $locator->get('SlmMail\Mail\Transport\PostmarkTransport');
-    $transport->send($message);
+$transport = $locator->get('SlmMail\Mail\Transport\PostmarkTransport');
+$transport->send($message);
 ```
 
 Of course, you are encouraged to inject this transport object whenever you need to send an email.

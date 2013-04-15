@@ -57,7 +57,7 @@ $message = new \SlmMail\Mail\Message\Provider\Mandrill();
 $message->setOption('auto_html', true);
 
 // Or multiple:
-$message->addOptions(array('auto_html' => true, 'inline_css' => true));
+$message->setOptions(array('auto_html' => true, 'inline_css' => true));
 ```
 
 Mandrill service will automatically filter unknown options. Here are the currently supported options:
@@ -118,13 +118,13 @@ $message->setTemplate('foo')
 If you have access to the service locator, you can retrieve the Mandrill transport:
 
 ```php
-    // As stated above, you can also create a specialized Mandrill message for more features
-    $message = new \Zend\Mail\Message();
+// As stated above, you can also create a specialized Mandrill message for more features
+$message = new \Zend\Mail\Message();
 
-    // set up Message here
+// set up Message here
 
-    $transport = $locator->get('SlmMail\Mail\Transport\MandrillTransport');
-    $transport->send($message);
+$transport = $locator->get('SlmMail\Mail\Transport\MandrillTransport');
+$transport->send($message);
 ```
 
 Of course, you are encouraged to inject this transport object whenever you need to send an email. Note that if you

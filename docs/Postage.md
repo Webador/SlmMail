@@ -48,13 +48,13 @@ $message->setTemplate('foo')
 If you have access to the service locator, you can retrieve the Postage transport:
 
 ```php
-    // As stated above, you can also create a specialized Postage message for more features
-    $message = new \Zend\Mail\Message();
+// As stated above, you can also create a specialized Postage message for more features
+$message = new \Zend\Mail\Message();
 
-    // set up Message here
+// set up Message here
 
-    $transport = $locator->get('SlmMail\Mail\Transport\PostageTransport');
-    $transport->send($message);
+$transport = $locator->get('SlmMail\Mail\Transport\PostageTransport');
+$transport->send($message);
 ```
 
 Of course, you are encouraged to inject this transport object whenever you need to send an email.
