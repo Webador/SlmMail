@@ -64,7 +64,7 @@ class MandrillService extends AbstractMailService
      */
     public function send(Message $message)
     {
-        if ($message instanceof MandrillMessage && $message->getTemplate() !== '') {
+        if ($message instanceof MandrillMessage && $message->getTemplate()) {
             return $this->sendTemplate($message);
         }
 
@@ -528,12 +528,26 @@ class MandrillService extends AbstractMailService
                 $parameters['template_name']    = $message->getTemplate();
                 $parameters['template_content'] = $message->getTemplateContent();
 
-                $parameters['message']['global_merge_vars'] = $message->getGlobalVariables();
+                foreach ($message->getGlobalVariables() as $key => $value) {
+                    $parameters['message']['global_merge_vars'][] = array(
+                        'name'    => $key,
+                        'content' => $value
+                    );
+                }
 
                 foreach ($message->getVariables() as $recipient => $variables) {
+                    $recipientVariables = array();
+
+                    foreach ($variables as $key => $value) {
+                        $recipientVariables[] = array(
+                            'name'    => $key,
+                            'content' => $value
+                        );
+                    }
+
                     $parameters['message']['merge_vars'][] = array(
                         'rcpt' => $recipient,
-                        'vars' => $variables
+                        'vars' => $recipientVariables
                     );
                 }
             }
