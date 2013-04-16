@@ -534,6 +534,12 @@ class MandrillService extends AbstractMailService
                     );
                 }
 
+                // Currently, Mandrill API requires a content for template_content, even if it is an
+                // empty array
+                if (!isset($parameters['template_content'])) {
+                    $parameters['template_content'] = array();
+                }
+
                 foreach ($message->getGlobalVariables() as $key => $value) {
                     $parameters['message']['global_merge_vars'][] = array(
                         'name'    => $key,
@@ -601,9 +607,6 @@ class MandrillService extends AbstractMailService
         $client->getRequest()
                ->getHeaders()
                ->addHeaderLine('Content-Type', 'application/json');
-
-        // Note : do not use setParameterPost for now, there is a bug in Mandrill API that I reported
-        // on 15th April 2013. Please set the content body directly as it is done hre
 
         return $client->setMethod(HttpRequest::METHOD_POST)
                       ->setUri(self::API_ENDPOINT . $uri)
