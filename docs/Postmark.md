@@ -64,8 +64,10 @@ state of the sent email and act upon a bounced message.
 
 The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
 
+```php
 $postageService = $locator->get('SlmMail\Service\PostmarkService');
 $bounce         = $postage->getMessageReceipt($uid); // Example
+```
 
 The complete list of methods is:
 

@@ -13,5 +13,15 @@ return array(
         'postmark' => array(
             'key' => 'my-secret-key'
         )
+    ),
+
+    'aws' => array(
+        'services' => array(
+            'ses' => array(
+                'params' => array(
+                    'region' => 'us-east-1'
+                )
+            )
+        )
     )
 );

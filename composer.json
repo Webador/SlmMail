@@ -22,6 +22,9 @@
         "zendframework/zend-mail": ">=2.0,<2.3",
         "zendframework/zend-mime": ">=2.0,<2.3"
     },
+    "require-dev": {
+        "aws/aws-sdk-php-zf2": ">=1.0.1"
+    },
     "autoload": {
         "psr-0": {
             "SlmMail\\": "src/",

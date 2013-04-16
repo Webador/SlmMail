@@ -13,6 +13,7 @@ or MailJet) are out-of-the scope of this module.
 
 Here are the currently supported services:
 
+* Amazon SES (complete)
 * Mandrill (complete)
 * Postmark (complete)
 * Postage (complete)
@@ -21,6 +22,7 @@ Requirements
 ------------
 * PHP 5.4: SlmMail makes use of traits (hence we dropped PHP 5.3 support)
 * [Zend Framework 2](https://github.com/zendframework/zf2)
+* [Amazon AWS ZF 2 Module]: only if you plan to use Amazon SES service
 
 Installation
 ------------
@@ -49,8 +51,49 @@ php composer.phar install
 Now you should have a `vendor` directory, including a `juriansluiman/slm-mail`. In your bootstrap code, make sure
 you include the `vendor/autoload.php` file to properly load the SlmMail module.
 
+### Amazon SES
+
+If you want to use Amazon SES, you need to install the official AWS ZF 2 module. Please refer to the documentation
+of Amazon SES in the [docs](https://github.com/juriansluiman/SlmMail/tree/master/docs) folder.
+
+Cook-book
+---------
+
+### How to send an HTML email ?
+
+Every email providers used in SlmMail allow to send HTML emails. However, by default, if you set the mail's content
+using the `setBody` content, this content will be considered as the plain text version as shown above:
+
+```php
+$message = new \Zend\Mail\Message();
+
+// This will be considered as plain text message, even if the string is valid HTML code
+$message->setBody('Hello world');
+```
+
+To send a HTML version, you must specify the body as a MimeMessage, and add the HTML version as a MIME part, as
+shown above:
+
+```php
+$message = new \Zend\Mail\Message();
+
+$htmlPart = new \Zend\Mime\Part('<html><body><h1>Hello world</h1></body></html>');
+$htmlPart->type = "text/html";
+
+$textPart = new \Zend\Mime\Part('Hello world');
+$textPart->type = "text/plain";
+
+$body = new \Zend\Mime\Message();
+$body->setParts(array($textPart, $htmlPart));
+
+$message->setBody($body);
+```
+
+> For accessibility purposes, you should *always* provide both a text and HTML version of your mails.
+
 TODO
 ----
  1. ElasticEmail
  2. SendGrid
- 3. Amazon SES (you can use AWS SDK for that)
+ 3. Better exception handling for Amazon SES to work the same as other services
+ 4. More tests

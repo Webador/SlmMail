@@ -138,8 +138,10 @@ server. However, this service implements also a major part of the Mandrill API.
 
 The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
 
+```php
 $mandrillService = $locator->get('SlmMail\Service\MandrillService');
 $ping            = $mandrillService->pingUser(); // Example
+```
 
 Messages functions:
 
