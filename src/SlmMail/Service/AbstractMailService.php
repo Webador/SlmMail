@@ -84,15 +84,21 @@ abstract class AbstractMailService
     }
 
     /**
-     * Filter parameters (for now, only null parameters)
+     * Filter parameters recursively (for now, only null parameters and empty strings)
      *
      * @param  array $parameters
      * @return array
      */
     protected function filterParameters(array $parameters)
     {
+        foreach ($parameters as &$value) {
+            if (is_array($value)) {
+                $value = $this->filterParameters($value);
+            }
+        }
+
         return array_filter($parameters, function($value) {
-            return $value !== null;
+            return $value !== null && $value !== '';
         });
     }
 }
