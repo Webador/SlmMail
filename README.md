@@ -14,6 +14,8 @@ or MailJet) are out-of-the scope of this module.
 Here are the currently supported services:
 
 * Amazon SES (complete)
+* Elastic Email (complete)
+* Mailgun (complete)
 * Mandrill (complete)
 * Postmark (complete)
 * Postage (complete)
@@ -93,7 +95,6 @@ $message->setBody($body);
 
 TODO
 ----
- 1. ElasticEmail
- 2. SendGrid
- 3. Better exception handling for Amazon SES to work the same as other services
- 4. More tests
+ 1. SendGrid support
+ 2. Better exception handling for Amazon SES to work the same as other services
+ 3. More tests

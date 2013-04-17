@@ -5,6 +5,7 @@
     "keywords": [
         "zf2",
         "email",
+        "elastic email",
         "mandrill",
         "postage",
         "postmark"
@@ -24,6 +25,9 @@
     },
     "require-dev": {
         "aws/aws-sdk-php-zf2": ">=1.0.1"
+    },
+    "suggest": {
+        "aws/aws-sdk-php-zf2": "If you need to use Amazon SES"
     },
     "autoload": {
         "psr-0": {

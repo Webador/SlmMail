@@ -35,7 +35,7 @@ class Attachment
     public function __construct($name, $content, $contentType = '')
     {
         $this->name        = (string) $name;
-        $this->content     = (string) $contentType;
+        $this->content     = (string) $content;
         $this->contentType = (string) $contentType;
     }
 
