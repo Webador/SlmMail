@@ -14,7 +14,7 @@ class PostageService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.postageapp.com/v.1.0/';
+    const API_ENDPOINT = 'https://api.postageapp.com/v.1.0';
 
     /**
      * Postage API key
@@ -121,14 +121,14 @@ class PostageService extends AbstractMailService
      *
      * @link   http://help.postageapp.com/kb/api/get_message_receipt
      * @param  string $uid
-     * @return string Id of the message
+     * @return array Id and url of message
      */
     public function getMessageReceipt($uid)
     {
         $response = $this->prepareHttpClient('/get_message_receipt.json', array('uid' => $uid))
                          ->send();
 
-        return $this->parseResponse($response)['message']['id'];
+        return $this->parseResponse($response)['message'];
     }
 
     /**
@@ -226,7 +226,7 @@ class PostageService extends AbstractMailService
      */
     private function prepareHttpClient($uri, array $parameters = array())
     {
-        $parameters = array_merge(array('key' => $this->apiKey), $parameters);
+        $parameters = array_merge(array('api_key' => $this->apiKey), $parameters);
 
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -248,11 +248,15 @@ class PostageService extends AbstractMailService
         $result = json_decode($response->getBody(), true);
 
         if ($response->isSuccess()) {
-            return $result['data'];
+            return isset($result['data']) ? $result['data'] : array();
         }
 
         if ($result['response']['status'] !== 'ok') {
-            throw new Exception\RuntimeException($result['response']['message'], $result['response']['status']);
+            if (isset($result['response']['message'])) {
+                throw new Exception\RuntimeException($result['response']['message']);
+            } else {
+                throw new Exception\RuntimeException('An error occurred on Postage: ' . $result['response']['status']);
+            }
         }
 
         // We need to return an array and not throw an exception because of the poor Postage API

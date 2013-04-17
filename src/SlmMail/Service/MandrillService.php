@@ -14,7 +14,7 @@ class MandrillService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://mandrillapp.com/api/1.0/';
+    const API_ENDPOINT = 'https://mandrillapp.com/api/1.0';
 
     /**
      * Mandrill API key

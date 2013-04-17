@@ -14,7 +14,7 @@ class MailgunService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.mailgun.net/v2/';
+    const API_ENDPOINT = 'https://api.mailgun.net/v2';
 
     /**
      * Mailgun domain to use

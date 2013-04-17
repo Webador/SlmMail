@@ -22,6 +22,11 @@ return array(
         'mailgun' => array(
             'domain' => 'my-domain',
             'key'    => 'my-key'
+        ),
+
+        'send_grid' => array(
+            'username' => 'my-username',
+            'key'      => 'my-key'
         )
     ),
 

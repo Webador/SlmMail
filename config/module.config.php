@@ -11,6 +11,7 @@ return array(
             'SlmMail\Mail\Transport\MandrillTransport'     => 'SlmMail\Factory\MandrillTransportFactory',
             'SlmMail\Mail\Transport\PostageTransport'      => 'SlmMail\Factory\PostageTransportFactory',
             'SlmMail\Mail\Transport\PostmarkTransport'     => 'SlmMail\Factory\PostmarkTransportFactory',
+            'SlmMail\Mail\Transport\SendGridTransport'     => 'SlmMail\Factory\SendGridTransportFactory',
             'SlmMail\Mail\Transport\SesTransport'          => 'SlmMail\Factory\SesTransportFactory',
 
             /**
@@ -21,6 +22,7 @@ return array(
             'SlmMail\Service\MandrillService'     => 'SlmMail\Factory\MandrillServiceFactory',
             'SlmMail\Service\PostageService'      => 'SlmMail\Factory\PostageServiceFactory',
             'SlmMail\Service\PostmarkService'     => 'SlmMail\Factory\PostmarkServiceFactory',
+            'SlmMail\Service\SendGridService'     => 'SlmMail\Factory\SendGridServiceFactory',
             'SlmMail\Service\SesService'          => 'SlmMail\Factory\SesServiceFactory'
         )
     )

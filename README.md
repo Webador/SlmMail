@@ -19,6 +19,7 @@ Here are the currently supported services:
 * Mandrill (complete)
 * Postmark (complete)
 * Postage (complete)
+* Send Grid (nearly complete)
 
 Requirements
 ------------
@@ -95,6 +96,5 @@ $message->setBody($body);
 
 TODO
 ----
- 1. SendGrid support
- 2. Better exception handling for Amazon SES to work the same as other services
- 3. More tests
+ 1. Better exception handling for Amazon SES to work the same as other services
+ 2. More tests

@@ -14,7 +14,7 @@ class PostmarkService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'http://api.postmarkapp.com/';
+    const API_ENDPOINT = 'http://api.postmarkapp.com';
 
     /**
      * Postmark supports a maximum of 20 recipients per messages
@@ -70,7 +70,7 @@ class PostmarkService extends AbstractMailService
 
     /**
      * {@inheritDoc}
-     * @link http://help.postageapp.com/kb/api/send_message
+     * @link http://developer.postmarkapp.com/developer-build.html
      * @throws Exception\RuntimeException if the mail is sent to more than 20 recipients (Postmark limit)
      * @return array The id and UID of the sent message (if sent correctly)
      */
