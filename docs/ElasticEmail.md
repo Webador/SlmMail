@@ -22,7 +22,7 @@ specific Elastic Email features. Here are a list of supported features.
 
 #### Attachments
 
-You can add any attachment to Elastic Email message. Contrary to most other providers, the content MUST NOT be a base64
+You can add any attachment to Elastic Email message. Contrary to most other providers, the content **MUST NOT** be a base64
 encoded string of your content (you can omit the content type - third parameter of Attachment constructor - because
 Elastic Email does not use it):
 

@@ -224,7 +224,8 @@ class ElasticEmailService extends AbstractMailService
 
         $parameters = array_merge(array('username' => $this->username, 'api_key' => $this->apiKey), $parameters);
 
-        return $this->getClient()->setMethod(HttpRequest::METHOD_GET)
+        return $this->getClient()->resetParameters()
+                                 ->setMethod(HttpRequest::METHOD_GET)
                                  ->setUri(self::API_ENDPOINT . $uri)
                                  ->setParameterGet($this->filterParameters($parameters));
     }

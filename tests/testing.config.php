@@ -17,6 +17,11 @@ return array(
         'elastic_email' => array(
             'username' => 'my-username',
             'key'      => 'my-secret-key'
+        ),
+
+        'mailgun' => array(
+            'domain' => 'my-domain',
+            'key'    => 'my-key'
         )
     ),
 

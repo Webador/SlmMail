@@ -146,11 +146,10 @@ class PostmarkService extends AbstractMailService
             }
         }
 
-        $response =  $this->prepareHttpClient('/email')
-                          ->setMethod(HttpRequest::METHOD_POST)
-                          ->setRawBody(json_encode($this->filterParameters($parameters)))
-                          ->send();
-
+        $response = $this->prepareHttpClient('/email')
+                         ->setMethod(HttpRequest::METHOD_POST)
+                         ->setRawBody(json_encode($this->filterParameters($parameters)))
+                         ->send();
 
         return $this->parseResponse($response);
     }
@@ -273,7 +272,7 @@ class PostmarkService extends AbstractMailService
      */
     private function prepareHttpClient($uri, array $parameters = array())
     {
-        $client = $this->getClient();
+        $client = $this->getClient()->resetParameters();
         $client->getRequest()
                ->getHeaders()
                ->addHeaderLine('Accept', 'application/json')

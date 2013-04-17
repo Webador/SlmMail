@@ -603,7 +603,7 @@ class MandrillService extends AbstractMailService
     {
         $parameters = array_merge(array('key' => $this->apiKey), $parameters);
 
-        $client = $this->getClient();
+        $client = $this->getClient()->resetParameters();
         $client->getRequest()
                ->getHeaders()
                ->addHeaderLine('Content-Type', 'application/json');

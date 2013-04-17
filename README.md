@@ -15,7 +15,7 @@ Here are the currently supported services:
 
 * Amazon SES (complete)
 * Elastic Email (complete)
-* Mailgun (complete)
+* Mailgun (nearly complete - advanced features like Routes are not supported -)
 * Mandrill (complete)
 * Postmark (complete)
 * Postage (complete)

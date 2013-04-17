@@ -22,7 +22,7 @@ specific Postmark features. Here are a list of supported features.
 
 #### Attachments
 
-You can add any attachment to Postmark message. The content must be a base64 encoded string of your content:
+You can add any attachment to Postmark message. The content **MUST BE** a base64 encoded string of your content:
 
 ```php
 $message    = new \SlmMail\Mail\Message\Provider\Postmark();
