@@ -43,7 +43,7 @@ Note that the MIME-Type of images must start by image/.
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\Mandrill();
-$image   = new \SlmMail\Mail\Message\Attachment('my-file.txt', base64_encode($file), 'image/png');
+$image   = new \SlmMail\Mail\Message\Attachment('my-image.png', base64_encode($file), 'image/png');
 $message->addImage($image);
 ```
 
