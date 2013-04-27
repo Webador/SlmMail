@@ -105,7 +105,7 @@ class Mandrill extends Message
      * @param  array  $variables
      * @return Mandrill
      */
-    public function setVariables($recipient, $variables)
+    public function setVariables($recipient, array $variables)
     {
         $this->variables[$recipient] = $variables;
         return $this;
