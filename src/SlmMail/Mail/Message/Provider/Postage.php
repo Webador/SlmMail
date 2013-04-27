@@ -47,7 +47,7 @@ class Postage extends Message
      * @param  array $variables
      * @return Mandrill
      */
-    public function setVariables($variables)
+    public function setVariables(array $variables)
     {
         $this->variables = $variables;
         return $this;
