@@ -55,7 +55,7 @@ Mailgun service will automatically filter unknown options. Here are the currentl
 #### Tags
 
 To simplify statistics on your account, you can add one or several tags (up to 3) to sent messages, so that you
-can more easily filter your messages on Mandrill dashboard.
+can more easily filter your messages on Mailgun dashboard.
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\Mailgun();
