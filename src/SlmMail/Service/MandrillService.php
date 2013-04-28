@@ -254,9 +254,40 @@ class MandrillService extends AbstractMailService
 
     /**
      * ----------------------------------------------------------------------------------------------------
-     * REJECTION
+     * REJECTION (BLACKLIST)
      * ----------------------------------------------------------------------------------------------------
      */
+
+    /**
+     * Add an email to the rejection blacklist
+     *
+     * @link https://mandrillapp.com/api/docs/rejects.html#method=add
+     * @param string $email
+     * @return array
+     */
+    public function addRejectionBlacklist($email)
+    {
+        $response = $this->prepareHttpClient('/rejects/add.json', array('email' => $email))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Deletes an email rejection blacklist. There is no limit to how many rejections you can remove from your
+     * blacklist, but keep in mind that each deletion has an affect on your reputation
+     *
+     * @link https://mandrillapp.com/api/docs/rejects.html#method=delete
+     * @param  string $email
+     * @return array
+     */
+    public function deleteRejectionBlacklist($email)
+    {
+        $response = $this->prepareHttpClient('/rejects/delete.json', array('email' => $email))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
 
     /**
      * Get all the email rejection blacklist
@@ -266,7 +297,7 @@ class MandrillService extends AbstractMailService
      * @param  bool $includeExpired
      * @return array
      */
-    public function getRejectionBlacklist($email, $includeExpired = false)
+    public function getRejectionBlacklist($email = '', $includeExpired = false)
     {
         $response = $this->prepareHttpClient('/rejects/list.json', array('email' => $email, 'include_expired' => $includeExpired))
                          ->send();
@@ -275,16 +306,51 @@ class MandrillService extends AbstractMailService
     }
 
     /**
-     * Deletes an email rejection. There is no limit to how many rejections you can remove from your blacklist,
-     * but keep in mind that each deletion has an affect on your reputation
+     * ----------------------------------------------------------------------------------------------------
+     * REJECTION (WHITELIST)
+     * ----------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * Add an email to the rejection whitelist
      *
-     * @link https://mandrillapp.com/api/docs/rejects.html#method=delete
+     * @link https://mandrillapp.com/api/docs/whitelists.html#method=add
+     * @param string $email
+     * @return array
+     */
+    public function addRejectionWhitelist($email)
+    {
+        $response = $this->prepareHttpClient('/whitelists/add.json', array('email' => $email))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Deletes an email rejection whitelist
+     *
+     * @link https://mandrillapp.com/api/docs/whitelists.html#method=delete
      * @param  string $email
      * @return array
      */
-    public function deleteRejection($email)
+    public function deleteRejectionWhitelist($email)
     {
-        $response = $this->prepareHttpClient('/rejects/list.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/whitelists/delete.json', array('email' => $email))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get all the email rejection whitelist
+     *
+     * @link https://mandrillapp.com/api/docs/whitelists.html#method=list
+     * @param  string $email
+     * @return array
+     */
+    public function getRejectionWhitelist($email = '')
+    {
+        $response = $this->prepareHttpClient('/whitelists/list.json', array('email' => $email))
                          ->send();
 
         return $this->parseResponse($response);

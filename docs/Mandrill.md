@@ -167,10 +167,17 @@ Tags functions:
 * `getTagInfo($tag)`: get more detailed information about a single tag, including aggregates of recent stats ([docs](https://mandrillapp.com/api/docs/tags.html#method=info))
 * `getRecentTagInfo($tag)`: get recent detailed information (last 30 days) about a single tag, including aggregates of recent stats ([docs](https://mandrillapp.com/api/docs/tags.html#method=time-series))
 
-Rejection functions:
+Rejection blacklist functions:
 
+* `addRejectionBlacklist($email)`: add an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=add))
+* `deleteRejectionBlacklist($email)`: delete an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=delete))
 * `getRejectionBlacklist($email, $includeExpired = false)`: get all the email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=list))
-* `deleteRejection($email)`: deletes an email rejection ([docs](https://mandrillapp.com/api/docs/rejects.html#method=delete))
+
+Rejection whitelist functions:
+
+* `addRejectionWhitelist($email)`: add an email rejection whitelist ([docs](https://mandrillapp.com/api/docs/whitelists.html#method=add))
+* `deleteRejectionWhitelist($email)`: delete an email rejection whitelist ([docs](https://mandrillapp.com/api/docs/whitelists.html#method=delete))
+* `getRejectionWhitelist($email)`: get all the email rejection whitelist ([docs](https://mandrillapp.com/api/docs/whitelists.html#method=list))
 
 URLs functions:
 
