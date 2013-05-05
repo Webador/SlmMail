@@ -128,7 +128,8 @@ class PostageService extends AbstractMailService
         $response = $this->prepareHttpClient('/get_message_receipt.json', array('uid' => $uid))
                          ->send();
 
-        return $this->parseResponse($response)['message'];
+        $result = $this->parseResponse($response);
+        return $result['message'];
     }
 
     /**
@@ -157,7 +158,8 @@ class PostageService extends AbstractMailService
         $response = $this->prepareHttpClient('/get_metrics.json')
                          ->send();
 
-        return $this->parseResponse($response)['metrics'];
+        $result = $this->parseResponse($response);
+        return $result['metrics'];
     }
 
     /**

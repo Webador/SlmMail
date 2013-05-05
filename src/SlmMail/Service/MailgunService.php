@@ -126,7 +126,8 @@ class MailgunService extends AbstractMailService
 
         $response = $client->send();
 
-        return $this->parseResponse($response)['id'];
+        $result = $this->parseResponse($response);
+        return $result['id'];
     }
 
     /**
