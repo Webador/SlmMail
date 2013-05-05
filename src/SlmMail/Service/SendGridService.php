@@ -297,8 +297,6 @@ class SendGridService extends AbstractMailService
 
     /**
      * @param  HttpResponse $response
-     * @throws Exception\InvalidCredentialsException
-     * @throws Exception\ValidationErrorException
      * @throws Exception\RuntimeException
      * @return array
      */
@@ -310,16 +308,22 @@ class SendGridService extends AbstractMailService
             return $result;
         }
 
-        switch ($response->getStatusCode()) {
-            case 401:
-                throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect API Key header');
-            case 422:
-                throw new Exception\ValidationErrorException($result['Message'], $result['ErrorCode']);
-            case 500:
-                throw new Exception\RuntimeException('SendGrid server error, please try again');
-            default:
-                var_dump($response);exit;
-                throw new Exception\RuntimeException('Unknown error during request to SendGrid server');
+        // There is a 4xx error
+        if ($response->isClientError()) {
+            if (isset($result->errors) && is_array($result->errors)) {
+                $message = implode(', ', $result->errors);
+            } elseif (isset($result->error)) {
+                $message = $result->error;
+            } else {
+                $message = 'Unknown error';
+            }
+
+            throw new Exception\RuntimeException(sprintf(
+                'An error occured on SendGrid (http code %s), message: %s', $response->getStatusCode(), $message
+            ));
         }
+
+        // There is a 5xx error
+        throw new Exception\RuntimeException('SendGrid server error, please try again');
     }
 }
