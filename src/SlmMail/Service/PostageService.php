@@ -104,7 +104,7 @@ class PostageService extends AbstractMailService
         $response =  $this->prepareHttpClient('/send_message.json', $parameters)
                           ->send();
 
-        $data = $this->parseResponse($response)['message']['id'];
+        $data = $this->parseResponse($response);
 
         return array(
             'uid' => $parameters['uid'],
