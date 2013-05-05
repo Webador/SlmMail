@@ -316,9 +316,9 @@ class SendGridService extends AbstractMailService
             case 422:
                 throw new Exception\ValidationErrorException($result['Message'], $result['ErrorCode']);
             case 500:
-                throw new Exception\RuntimeException('Postmark server error, please try again');
+                throw new Exception\RuntimeException('SendGrid server error, please try again');
             default:
-                throw new Exception\RuntimeException('Unknown error during request to Postmark server');
+                throw new Exception\RuntimeException('Unknown error during request to SendGrid server');
         }
     }
 }
