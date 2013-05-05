@@ -2,7 +2,7 @@
 
 namespace SlmMail\Mail\Transport;
 
-use SlmMail\Service\AbstractMailService;
+use SlmMail\Service\MailServiceInterface;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\Mail\Message;
 
@@ -16,7 +16,7 @@ class HttpTransport implements TransportInterface
     /**
      * @param AbstractMailService $service
      */
-    public function __construct(AbstractMailService $service)
+    public function __construct(MailServiceInterface $service)
     {
         $this->service = $service;
     }

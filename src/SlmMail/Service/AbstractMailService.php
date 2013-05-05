@@ -9,20 +9,12 @@ use Zend\Mime\Message as MimeMessage;
 /**
  * Class AbstractMailService
  */
-abstract class AbstractMailService
+abstract class AbstractMailService implements MailServiceInterface
 {
     /**
      * @var HttpClient
      */
     protected $client;
-
-    /**
-     * Send a message
-     *
-     * @param  Message $message
-     * @return mixed
-     */
-    abstract public function send(Message $message);
 
     /**
      * Extract text part from a message
