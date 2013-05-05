@@ -14,7 +14,7 @@ class SendGridService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://sendgrid.com/api';
+    const API_ENDPOINT = 'https://sendgrid.com/api/';
 
     /**
      * SendGrid username
@@ -74,18 +74,18 @@ class SendGridService extends AbstractMailService
         );
 
         foreach ($message->getTo() as $address) {
-            $parameters['to'][] = $address->toString();
+            $parameters['to'][] = $address->getEmail();
         }
 
         foreach ($message->getBcc() as $address) {
-            $parameters['bcc'][] = $address->toString();
+            $parameters['bcc'][] = $address->getEmail();
         }
 
         $replyTo = $message->getReplyTo();
         if (count($replyTo) > 1) {
             throw new Exception\RuntimeException('SendGrid has only support for one Reply-To address');
         } elseif (count($replyTo)) {
-            $parameters['replyto'] = $replyTo->rewind()->toString();
+            $parameters['replyto'] = $replyTo->rewind()->getEmail();
         }
 
         if ($message instanceof SendGridMessage) {
@@ -94,7 +94,7 @@ class SendGridService extends AbstractMailService
             }
         }
 
-        $client = $this->prepareHttpClient('/messages', $parameters);
+        $client = $this->prepareHttpClient('mail.send.json', $parameters);
 
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
@@ -318,6 +318,7 @@ class SendGridService extends AbstractMailService
             case 500:
                 throw new Exception\RuntimeException('SendGrid server error, please try again');
             default:
+                var_dump($response);exit;
                 throw new Exception\RuntimeException('Unknown error during request to SendGrid server');
         }
     }
