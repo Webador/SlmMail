@@ -255,9 +255,13 @@ class PostageService extends AbstractMailService
 
         if ($result['response']['status'] !== 'ok') {
             if (isset($result['response']['message'])) {
-                throw new Exception\RuntimeException($result['response']['message']);
+                throw new Exception\RuntimeException(sprintf(
+                    'An error occurred on Postage, message: %s', $result['response']['message']
+                ));
             } else {
-                throw new Exception\RuntimeException('An error occurred on Postage: ' . $result['response']['status']);
+                throw new Exception\RuntimeException(sprintf(
+                    'An error occurred on Postage, status code: %s', $result['response']['status']
+                ));
             }
         }
 
