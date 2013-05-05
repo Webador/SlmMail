@@ -129,7 +129,7 @@ class ElasticEmailService extends AbstractMailService
 
         $result = $this->parseResponse($response);
 
-        // ElasticEmail has a stange error handling method: mailer status
+        // ElasticEmail has a strange error handling method: mailer status
         // returns an XML format for a valid call, otherwise a simple message
         // is returned. So check if the message could be XML, if not: exception
         if (strpos($result, '<') !== 0) {
