@@ -9,6 +9,8 @@ use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mail\Address;
 use Zend\Mail\Message;
+use SimpleXMLElement;
+use DateTime;
 
 class ElasticEmailService extends AbstractMailService
 {
@@ -125,7 +127,26 @@ class ElasticEmailService extends AbstractMailService
         $response = $this->prepareHttpClient('/mailer/status/' . $id)
                          ->send();
 
-        return $this->parseResponse($response);
+        $result = $this->parseResponse($response);
+
+        // ElasticEmail has a stange error handling method: mailer status
+        // returns an XML format for a valid call, otherwise a simple message
+        // is returned. So check if the message could be XML, if not: exception
+        if (strpos($result, '<') !== 0) {
+            throw new Exception\RuntimeException(sprintf(
+                'An error occurred on ElasticEmail: %s', $result
+            ));
+        }
+
+        $xml = new SimpleXMLElement($result);
+        return array(
+            'id'         => (string) $xml->attributes()->id,
+            'status'     => (string) $xml->status,
+            'recipients' => (int)    $xml->recipients,
+            'failed'     => (int)    $xml->failed,
+            'delivered'  => (int)    $xml->delivered,
+            'pending'    => (int)    $xml->pending,
+        );
     }
 
     /**
@@ -167,7 +188,11 @@ class ElasticEmailService extends AbstractMailService
         $response = $this->prepareHttpClient('/mailer/account-details')
                          ->send();
 
-        return $this->parseResponse($response);
+        $xml = new SimpleXMLElement($this->parseResponse($response));
+        return array(
+            'id'     => (string) $xml->attributes()->id,
+            'credit' => (float)  $xml->credit,
+        );
     }
 
     /**
@@ -188,7 +213,22 @@ class ElasticEmailService extends AbstractMailService
         $response = $this->prepareHttpClient('/mailer/channel/list', array('format' => $format))
                          ->send();
 
-        return $this->parseResponse($response);
+        if ($format === 'csv') {
+            return $this->parseResponse($response);
+        }
+
+        $xml = new SimpleXMLElement($this->parseResponse($response));
+
+        $channels = array();
+        foreach ($xml->children() as $channel) {
+            $channels[] = array(
+                'date' => new DateTime((string) $channel->attributes()->date),
+                'name' => (string) $channel->attributes()->name,
+                'info' => (string) $channel->attributes()->info,
+            );
+        }
+
+        return $channels;
     }
 
     /**
@@ -240,6 +280,14 @@ class ElasticEmailService extends AbstractMailService
      */
     private function parseResponse(HttpResponse $response)
     {
-        return $response->getBody();
+        $result = $response->getBody();
+
+        if ($result !== 'Unauthorized: ') {
+            return $result;
+        }
+
+        throw new Exception\InvalidCredentialsException(
+            'Authentication error: missing or incorrect Elastic Email API key'
+        );
     }
 }
