@@ -232,7 +232,8 @@ class PostmarkService extends AbstractMailService
         $response = $this->prepareHttpClient('/bounces/' . $id . '/dump')
                          ->send();
 
-        return $this->parseResponse($response)['Body'];
+        $result = $this->parseResponse($response);
+        return $result['Body'];
     }
 
     /**
