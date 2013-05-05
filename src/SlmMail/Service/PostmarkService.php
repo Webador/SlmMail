@@ -14,7 +14,7 @@ class PostmarkService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'http://api.postmarkapp.com';
+    const API_ENDPOINT = 'https://api.postmarkapp.com';
 
     /**
      * Postmark supports a maximum of 20 recipients per messages
