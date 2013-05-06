@@ -15,7 +15,7 @@ forget to remove the .dist extension !) and update your username and API key.
 Usage
 -----
 
-### Supported functionnalities
+### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\ElasticEmail`, that you can use to take advantage of
 specific Elastic Email features. Here are a list of supported features.

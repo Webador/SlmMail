@@ -27,7 +27,7 @@ It is also assumed that SlmMail is already installed and enabled in your Zend Fr
 Usage
 -----
 
-### Supported functionnalities
+### Supported functionalities
 
 Amazon SES scope is very basic and does not support more feature than what is provided by default by `Zend\Mail\Message` class.
 Therefore, contrary to other email providers, no message class was defined for SES.
