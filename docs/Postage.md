@@ -8,7 +8,7 @@ addresses.
 Installation
 ------------
 
-It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
+It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.postage.local.php.dist` to your `./config/autoload` folder (don't
 forget to remove the .dist extension !) and update your API key.

@@ -7,7 +7,7 @@ The transport is a drop-in component and can be used to send email messages incl
 Installation
 ------------
 
-It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
+It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.elastic_email.local.php.dist` to your `./config/autoload` folder (don't
 forget to remove the .dist extension !) and update your username and API key.
