@@ -22,8 +22,12 @@ class SendGridServiceFactory implements FactoryInterface
             );
         }
 
-        $config = $config['slm_mail']['send_grid'];
+        $config  = $config['slm_mail']['send_grid'];
+        $service = new SendGridService($config['username'], $config['key']);
 
-        return new SendGridService($config['username'], $config['key']);
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }

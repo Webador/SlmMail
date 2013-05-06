@@ -22,8 +22,12 @@ class MailgunServiceFactory implements FactoryInterface
             );
         }
 
-        $config = $config['slm_mail']['mailgun'];
+        $config  = $config['slm_mail']['mailgun'];
+        $service = new MailgunService($config['domain'], $config['key']);
 
-        return new MailgunService($config['domain'], $config['key']);
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }

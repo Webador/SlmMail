@@ -64,15 +64,28 @@ abstract class AbstractMailService implements MailServiceInterface
     }
 
     /**
+     * Get HTTP client
+     *
      * @return HttpClient
      */
     protected function getClient()
     {
         if (null === $this->client) {
-            $this->client = new HttpClient();
+            $this->setClient(new HttpClient);
         }
 
         return $this->client;
+    }
+
+    /**
+     * Set HTTP client
+     *
+     * @param HttpClient $client
+     * @return void
+     */
+    public function setClient(HttpClient $client)
+    {
+        $this->client = $client;
     }
 
     /**

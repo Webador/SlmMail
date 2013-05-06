@@ -23,7 +23,12 @@ return array(
             'SlmMail\Service\PostageService'      => 'SlmMail\Factory\PostageServiceFactory',
             'SlmMail\Service\PostmarkService'     => 'SlmMail\Factory\PostmarkServiceFactory',
             'SlmMail\Service\SendGridService'     => 'SlmMail\Factory\SendGridServiceFactory',
-            'SlmMail\Service\SesService'          => 'SlmMail\Factory\SesServiceFactory'
-        )
-    )
+            'SlmMail\Service\SesService'          => 'SlmMail\Factory\SesServiceFactory',
+
+            /**
+             * HTTP client
+             */
+            'SlmMail\Http\Client' => 'SlmMail\Factory\HttpClientFactory',
+        ),
+    ),
 );

@@ -21,6 +21,11 @@ class PostageServiceFactory implements FactoryInterface
             );
         }
 
-        return new PostageService($config['slm_mail']['postage']['key']);
+        $service = new PostageService($config['slm_mail']['postage']['key']);
+
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }

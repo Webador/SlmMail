@@ -22,6 +22,11 @@ class MandrillServiceFactory implements FactoryInterface
             );
         }
 
-        return new MandrillService($config['slm_mail']['mandrill']['key']);
+        $service = new MandrillService($config['slm_mail']['mandrill']['key']);
+
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }

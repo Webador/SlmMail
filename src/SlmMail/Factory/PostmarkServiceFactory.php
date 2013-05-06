@@ -22,6 +22,11 @@ class PostmarkServiceFactory implements FactoryInterface
             );
         }
 
-        return new PostmarkService($config['slm_mail']['postmark']['key']);
+        $service = new PostmarkService($config['slm_mail']['postmark']['key']);
+
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }
