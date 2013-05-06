@@ -15,7 +15,7 @@ forget to remove the .dist extension !) and update your API key.
 Usage
 -----
 
-### Supported functionnalities
+### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Mailgun`, that you can use to take advantage of
 specific Mailgun features. Here are a list of supported features.
