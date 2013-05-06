@@ -22,8 +22,12 @@ class ElasticEmailServiceFactory implements FactoryInterface
             );
         }
 
-        $config = $config['slm_mail']['elastic_email'];
+        $config  = $config['slm_mail']['elastic_email'];
+        $service = new ElasticEmailService($config['username'], $config['key']);
 
-        return new ElasticEmailService($config['username'], $config['key']);
+        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $service->setClient($client);
+
+        return $service;
     }
 }
