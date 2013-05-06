@@ -22,7 +22,7 @@ The reason for using the official SDK is that the official AWS module allows you
 one single place instead of scattering it into several modules. If you are using AWS services, you are likely using
 it for other services than Amazon SES.
 
-It is also assumed that SlmMail is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
+It is also assumed that SlmMail is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Usage
 -----
