@@ -13,6 +13,7 @@ or MailJet) are out-of-the scope of this module.
 
 Here are the currently supported services:
 
+* AlphaMail (complete)
 * Amazon SES (complete)
 * Elastic Email (complete)
 * Mailgun (nearly complete - advanced features like Routes are not supported -)

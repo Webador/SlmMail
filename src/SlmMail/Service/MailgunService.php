@@ -335,13 +335,13 @@ class MailgunService extends AbstractMailService
             case 400:
                 throw new Exception\ValidationErrorException(sprintf(
                     'An error occured on Mailgun, reason: %s', $response->getReasonPhrase()
-                );
+                ));
             case 401:
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Mailgun authorization');
             case 402:
                 throw new Exception\RuntimeException(sprintf(
                     'An error occured on Mailgun, reason: %s', $response->getReasonPhrase()
-                );
+                ));
             case 500:
             case 502:
             case 503:
