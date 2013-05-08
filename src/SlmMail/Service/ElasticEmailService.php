@@ -120,6 +120,7 @@ class ElasticEmailService extends AbstractMailService
      *
      * @link   http://elasticemail.com/api-documentation/status
      * @param  string $id
+     * @throws Exception\RuntimeException
      * @return array
      */
     public function getEmailStatus($id)
@@ -276,6 +277,7 @@ class ElasticEmailService extends AbstractMailService
      * have any idea to solve this issue, please add a PR.
      *
      * @param  HttpResponse $response
+     * @throws Exception\InvalidCredentialsException
      * @return array
      */
     private function parseResponse(HttpResponse $response)

@@ -2,6 +2,16 @@
 
 return array(
     'slm_mail' => array(
+        'alpha_mail' => array(
+            'username' => 'my-username',
+            'key'      => 'my-secret-key'
+        ),
+
+        'elastic_email' => array(
+            'username' => 'my-username',
+            'key'      => 'my-secret-key'
+        ),
+
         'mandrill' => array(
             'key' => 'my-secret-key'
         ),
@@ -12,11 +22,6 @@ return array(
 
         'postmark' => array(
             'key' => 'my-secret-key'
-        ),
-
-        'elastic_email' => array(
-            'username' => 'my-username',
-            'key'      => 'my-secret-key'
         ),
 
         'mailgun' => array(
