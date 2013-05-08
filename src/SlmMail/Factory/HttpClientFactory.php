@@ -18,10 +18,10 @@ class HttpClientFactory implements FactoryInterface
         if (!isset($config['slm_mail']['http_adapter'])
          || !isset($config['slm_mail']['http_options'])
         ) {
-            return new HttpClient;
+            return new HttpClient();
         }
 
-        $client = new HttpClient;
+        $client = new HttpClient();
         $client->setAdapter($config['slm_mail']['http_adapter']);
         $client->getAdapter()->setOptions($config['slm_mail']['http_options']);
 
