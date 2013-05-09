@@ -2,7 +2,6 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Mail\Message\Provider\SendGrid as SendGridMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
@@ -88,20 +87,23 @@ class SendGridService extends AbstractMailService
             $parameters['replyto'] = $replyTo->rewind()->getEmail();
         }
 
-        if ($message instanceof SendGridMessage) {
-            foreach ($message->getAttachments() as $attachment) {
-                $parameters['files'][] = $attachment->getName();
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['files'][$attachment->filename] = '';
         }
 
-        $client = $this->prepareHttpClient('/mail.send.json', $parameters);
+        $client = $this->prepareHttpClient('/mail.send.json', $parameters, array('files'));
 
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
-        if ($message instanceof SendGridMessage) {
-            foreach ($message->getAttachments() as $attachment) {
-                $this->getClient()->setFileUpload($attachment->getName(), 'files', $attachment->getContent(), $attachment->getContentType());
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $client->setFileUpload(
+                $attachment->filename,
+                'files',
+                $attachment->getRawContent(),
+                $attachment->type
+            );
         }
 
         $response = $client->send();
@@ -284,7 +286,7 @@ class SendGridService extends AbstractMailService
      * @param array $parameters
      * @return \Zend\Http\Client
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient($uri, array $parameters = array(), array $whitelist = array())
     {
         $parameters = array_merge(array('api_user' => $this->username, 'api_key' => $this->apiKey), $parameters);
 
@@ -292,7 +294,7 @@ class SendGridService extends AbstractMailService
                     ->resetParameters()
                     ->setMethod(HttpRequest::METHOD_GET)
                     ->setUri(self::API_ENDPOINT . $uri)
-                    ->setParameterGet($this->filterParameters($parameters));
+                    ->setParameterGet($this->filterParameters($parameters, $whitelist));
     }
 
     /**
