@@ -312,7 +312,7 @@ class MailgunService extends AbstractMailService
                ->addHeaderLine('Authorization', 'Basic ' . base64_encode('api:' . $this->apiKey));
 
         return $client->setMethod(HttpRequest::METHOD_POST)
-                      ->setUri(self::API_ENDPOINT . $this->domain . $uri)
+                      ->setUri(self::API_ENDPOINT . '/' . $this->domain . $uri)
                       ->setParameterPost($this->filterParameters($parameters));
     }
 
