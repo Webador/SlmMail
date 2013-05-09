@@ -86,7 +86,7 @@ abstract class AbstractMailService implements MailServiceInterface
         $filter      = array('text/plain', 'text/html');
         $attachments = array();
         foreach ($body->getParts() as $part) {
-            if (!in_array($part->type, $filter) ||  && $part->disposition === Mime::DISPOSITION_ATTACHMENT) {
+            if (!in_array($part->type, $filter) || $part->disposition === Mime::DISPOSITION_ATTACHMENT) {
                 $attachments[] = $part;
             }
         }
