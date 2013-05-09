@@ -79,6 +79,7 @@ class Mailgun extends Message
      * Add options to the message
      *
      * @param  array $options
+     * @throws Exception\InvalidArgumentException
      * @return self
      */
     public function setOptions(array $options)
@@ -99,7 +100,8 @@ class Mailgun extends Message
      * Set an option to the message
      *
      * @param  string $key
-     * @param  mixed   $value
+     * @param  string $value
+     * @throws Exception\InvalidArgumentException
      * @return self
      */
     public function setOption($key, $value)
