@@ -2,18 +2,39 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesOptions;
 use Zend\Mail\Message;
 use Zend\Mime\Part;
 
 class Mandrill extends Message
 {
-    use ProvidesOptions;
-
     /**
      * @var array
      */
     protected $tags = array();
+
+    /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
+     * @var array
+     */
+    protected $validOptions = array(
+        'important',
+        'track_opens',
+        'track_clicks',
+        'auto_text',
+        'auto_html',
+        'inline_css',
+        'url_strip_qs',
+        'preserve_recipients',
+        'tracking_domain',
+        'signing_domain',
+        'merge',
+        'google_analytics_domains',
+        'google_analytics_campaign'
+    );
 
     /**
      * @var string
@@ -72,6 +93,57 @@ class Mandrill extends Message
     {
         $this->tags[] = (string) $tag;
         return $this;
+    }
+
+    /**
+     * Add options to the message
+     *
+     * @param  array $options
+     * @throws Exception\InvalidArgumentException
+     * @return self
+     */
+    public function setOptions(array $options)
+    {
+        foreach ($options as $key => $value) {
+            if (!array_key_exists($key, $this->validOptions)) {
+                throw new Exception\InvalidArgumentException(sprintf(
+                    'Invalid option %s given', $key
+                ));
+            }
+        }
+
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Set an option to the message
+     *
+     * @param  string $key
+     * @param  string $value
+     * @throws Exception\InvalidArgumentException
+     * @return self
+     */
+    public function setOption($key, $value)
+    {
+        if (!array_key_exists($key, $this->validOptions)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid option %s given', $key
+            ));
+        }
+
+        $this->options[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * Get all the options of the message
+     *
+     * @return string[]
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**

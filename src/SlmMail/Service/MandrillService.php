@@ -24,27 +24,6 @@ class MandrillService extends AbstractMailService
     protected $apiKey;
 
     /**
-     * Valid Mandrill options
-     *
-     * @var array
-     */
-    protected $validOptions = array(
-        'important',
-        'track_opens',
-        'track_clicks',
-        'auto_text',
-        'auto_html',
-        'inline_css',
-        'url_strip_qs',
-        'preserve_recipients',
-        'tracking_domain',
-        'signing_domain',
-        'merge',
-        'google_analytics_domains',
-        'google_analytics_campaign'
-    );
-
-    /**
      * @param string $apiKey
      */
     public function __construct($apiKey)
@@ -631,9 +610,7 @@ class MandrillService extends AbstractMailService
             }
 
             foreach ($message->getOptions() as $key => $value) {
-                if (in_array($key, $this->validOptions)) {
-                    $parameters['message'][$key] = $value;
-                }
+                $parameters['message'][$key] = $value;
             }
 
             foreach ($message->getTags() as $tag) {

@@ -76,7 +76,7 @@ $message->setOption('auto_html', true);
 $message->setOptions(array('auto_html' => true, 'inline_css' => true));
 ```
 
-Mandrill service will automatically filter unknown options. Here are the currently supported options:
+Mandrill service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Provider\Exception\InvalidArgumentException`. Here are the currently supported options:
 
 * important: (boolean) whether or not this message is important, and should be delivered ahead of non-important messages
 * track_opens: (boolean) whether or not to turn on open tracking for the message
