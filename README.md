@@ -26,7 +26,7 @@ Requirements
 ------------
 * PHP 5.4: SlmMail makes use of traits (hence we dropped PHP 5.3 support)
 * [Zend Framework 2](https://github.com/zendframework/zf2)
-* [Amazon AWS ZF 2 Module]: only if you plan to use Amazon SES service
+* [Amazon AWS ZF 2 Module](https://github.com/aws/aws-sdk-php-zf2): only if you plan to use Amazon SES service
 
 Installation
 ------------
