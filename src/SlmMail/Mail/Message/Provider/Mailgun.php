@@ -48,6 +48,7 @@ class Mailgun extends Message
      * Add a tag to this message
      *
      * @param string $tag
+     * @return self
      */
     public function addTag($tag)
     {
@@ -58,5 +59,6 @@ class Mailgun extends Message
         }
 
         $this->tags[] = (string) $tag;
+        return $this;
     }
 }
