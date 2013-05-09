@@ -2,7 +2,6 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesAttachments;
 use Zend\Mail\Message;
 
 class AlphaMail extends Message
