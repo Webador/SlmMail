@@ -2,13 +2,10 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesAttachments;
 use Zend\Mail\Message;
 
 class Postage extends Message
 {
-    use ProvidesAttachments;
-
     /**
      * @var string
      */

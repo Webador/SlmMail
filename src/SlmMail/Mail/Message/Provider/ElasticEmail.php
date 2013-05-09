@@ -2,13 +2,10 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesAttachments;
 use Zend\Mail\Message;
 
 class ElasticEmail extends Message
 {
-    use ProvidesAttachments;
-
     /**
      * Channel id for the message
      *

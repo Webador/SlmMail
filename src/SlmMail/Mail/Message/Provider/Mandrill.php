@@ -2,7 +2,6 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesAttachments;
 use SlmMail\Mail\Message\ProvidesImages;
 use SlmMail\Mail\Message\ProvidesOptions;
 use SlmMail\Mail\Message\ProvidesTags;
@@ -11,7 +10,7 @@ use Zend\Mime\Part;
 
 class Mandrill extends Message
 {
-    use ProvidesAttachments, ProvidesOptions, ProvidesTags;
+    use ProvidesOptions, ProvidesTags;
 
     /**
      * @var string

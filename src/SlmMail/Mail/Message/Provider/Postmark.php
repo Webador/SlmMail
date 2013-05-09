@@ -2,7 +2,6 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesAttachments;
 use SlmMail\Mail\Message\ProvidesTags;
 use Zend\Mail\Message;
 
@@ -12,5 +11,5 @@ use Zend\Mail\Message;
  */
 class Postmark extends Message
 {
-    use ProvidesAttachments, ProvidesTags;
+    use ProvidesTags;
 }
