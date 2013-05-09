@@ -47,7 +47,7 @@ $message->setBody($body);
 #### Tag
 
 To simplify statistics on your account, you can add a single tag to sent messages, so that you can more easily
-filter your messages on Postmark dashboard. Note that currently, you can add only one tag per mail.
+filter your messages on Postmark dashboard. Note that you can add only one tag per message.
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\Postmark();

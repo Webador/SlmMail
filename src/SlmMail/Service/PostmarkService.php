@@ -133,8 +133,8 @@ class PostmarkService extends AbstractMailService
         }
 
         if ($message instanceof PostmarkMessage) {
-            if (count($message->getTags()) > 0) {
-                $parameters['Tag'] = reset($message->getTags());
+            if ($message->getTag()) {
+                $parameters['Tag'] = $message->getTag();
             }
         }
 

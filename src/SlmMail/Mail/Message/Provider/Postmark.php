@@ -2,7 +2,6 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesTags;
 use Zend\Mail\Message;
 
 /**
@@ -11,5 +10,27 @@ use Zend\Mail\Message;
  */
 class Postmark extends Message
 {
-    use ProvidesTags;
+    protected $tag;
+
+    /**
+     * Get tag for the message
+     *
+     * @return string
+     */
+    public function getTag()
+    {
+        return $this->tag;
+    }
+
+    /**
+     * Set tag for the message
+     *
+     * @param  string $tag Value to set
+     * @return self
+     */
+    public function setTag($tag)
+    {
+        $this->tag = $tag;
+        return $this;
+    }
 }
