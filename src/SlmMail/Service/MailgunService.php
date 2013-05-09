@@ -113,7 +113,9 @@ class MailgunService extends AbstractMailService
                 }
             }
 
-            $parameters['o:tag'] = $message->getTags();
+            if (count($message->getTags()) > 0) {
+                $parameters['o:tag'] = $message->getTags();
+            }
         }
 
         $client = $this->prepareHttpClient('/messages', $parameters);
