@@ -43,8 +43,24 @@ namespace SlmMail;
 
 use Zend\ModuleManager\Feature;
 
-class Module implements Feature\ConfigProviderInterface
+class Module implements
+    Feature\AutoloaderProviderInterface,
+    Feature\ConfigProviderInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function getAutoloaderConfig()
+    {
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__           => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
+    }
+
     /**
      * {@inheritDoc}
      */
