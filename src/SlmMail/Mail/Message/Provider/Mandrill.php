@@ -7,10 +7,11 @@ use SlmMail\Mail\Message\ProvidesImages;
 use SlmMail\Mail\Message\ProvidesOptions;
 use SlmMail\Mail\Message\ProvidesTags;
 use Zend\Mail\Message;
+use Zend\Mime\Part;
 
 class Mandrill extends Message
 {
-    use ProvidesAttachments, ProvidesImages, ProvidesOptions, ProvidesTags;
+    use ProvidesAttachments, ProvidesOptions, ProvidesTags;
 
     /**
      * @var string
@@ -31,6 +32,11 @@ class Mandrill extends Message
      * @var array
      */
     protected $variables = array();
+
+    /**
+     * @var Part[]|array
+     */
+    protected $images = array();
 
     /**
      * Set Mandrill template name to use
@@ -119,5 +125,39 @@ class Mandrill extends Message
     public function getVariables()
     {
         return $this->variables;
+    }
+
+    /**
+     * Set attachments to the message
+     *
+     * @param  Part[]|array $images
+     * @return self
+     */
+    public function setImages(array $images)
+    {
+        $this->images = $images;
+        return $this;
+    }
+
+    /**
+     * Add image to the message
+     *
+     * @param  Part $image
+     * @return self
+     */
+    public function addImage(Part $image)
+    {
+        $this->images[] = $image;
+        return $this;
+    }
+
+    /**
+     * Get images of the message
+     *
+     * @return array|Part[]
+     */
+    public function getImages()
+    {
+        return $this->images;
     }
 }
