@@ -125,11 +125,11 @@ abstract class AbstractMailService implements MailServiceInterface
      * @param  array $parameters
      * @return array
      */
-    protected function filterParameters(array $parameters, array $whitelist = array())
+    protected function filterParameters(array $parameters)
     {
-        foreach ($parameters as $key => &$value) {
-            if (is_array($value) && !in_array($key, $whitelist)) {
-                $value = $this->filterParameters($value, $whitelist);
+        foreach ($parameters as &$value) {
+            if (is_array($value)) {
+                $value = $this->filterParameters($value);
             }
         }
 
