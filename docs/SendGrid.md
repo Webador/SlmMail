@@ -1,109 +1,102 @@
 SendGrid
-===
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SendGrid](http://sendgrid.com). The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
+=======
+
+This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SendGrid](http://sendgrid.com).
+The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 
 Installation
----
-It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
+------------
 
-Copy the `./vendors/SlmMail/config/module.slmmail.sendgrid.config.php.dist` to your `./config/autoload/module.sendgrid.config.php` and update your api key in `./config/autoload/module.sendgrid.config.php`.
+It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
+
+Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.send_grid.local.php.dist` to your `./config/autoload` folder (don't
+forget to remove the .dist extension!) and update your API key.
 
 Usage
----
-You need access to the `Zend\Di\Di` instance to grab the SendGrid transport layer `SlmMail\Mail\Transport\SendGrid` from there or inject it automatically with your own DI configuration.
+-----
 
-### Use locator
-If you have `$locator` as your `Zend\Di\Di` instance, you can simply do:
+### Supported functionalities
 
-    $message   = new Zend\Mail\Message;
-    // set up Message here
+SlmMail consumes for SendGrid just the standard `Zend\Mail\Message` object.
 
-    $transport = $locator->get('sendgrid-transport');
-    $transport->send($message);
+#### Attachments
 
-### Inject transport
-If you have a class `Foo\Bar` which need the transport injected, create a DI configuration as follows:
+You can add any attachment to a SendGrid message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
-    'di' => array(
-        'instance' => array(
-            'Foo\Bar' => array(
-                'parameters' => array(
-                    'transport' => 'sendgrid-transport'
-                ),
-            ),
-        ),
-    ),
+```php
+$text = new \Zend\Mime\Part($textContent);
+$text->type = "text/plain";
 
-Then you can create your class as follows:
+$html = new \Zend\Mime\Part($htmlMarkup);
+$html->type = "text/html";
 
-    namespace Foo;
-    
-    use Zend\Mail\Transport,
-        Zend\Mail\Message;
-    
-    class Bar
-    {
-        protected $transport;
-        
-        public function setTransport (Transport $transport)
-        {
-            $this->transport = $transport;
-        }
-        
-        public function doSomething ()
-        {
-            $message   = new Message;
-            // set up Message here
+$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf->type     = "application/pdf";
+$pdf->filename = "my-attachment.pdf";
 
-            $this->transport->send($message);
-        }
-    }
+$body = new \Zend\Mime\Message;
+$body->setParts(array($text, $html, $pdf));
+
+$message = new \Zend\Mail\Message;
+$message->setBody($body);
+```
+
+### Use service locator
+
+If you have access to the service locator, you can retrieve the SendGrid transport:
+
+```php
+// As stated above, you can also create a specialized SendGrid message for more features
+$message = new \Zend\Mail\Message();
+
+// set up Message here
+
+$transport = $locator->get('SlmMail\Mail\Transport\SendGridTransport');
+$transport->send($message);
+```
+
+Of course, you are encouraged to inject this transport object whenever you need to send an email.
 
 ### Advanced usage
-The transport layer depends on a service class `SlmMail\Service\SendGrid` which sends the requests to the SendGrid server. However, this service implements also [the web-api](http://docs.sendgrid.com/documentation/api/web-api/) so you can use all features SendGrid exposes through their api.
 
-The service class is injected into the `SlmMail\Mail\Transport\SendGrid` but you can get the service class yourself too:
+The transport layer depends on a service class `SlmMail\Service\SendGridService` which sends the requests to the SendGrid
+server. However, this service implements also [the api](http://sendgrid.com/docs/API_Reference/Web_API/index.html) so you can
+immediately check the state of the sent email and act upon a bounced message.
 
-    $sendgrid = $locator->get('sendgrid-service');
-    $bounce   = $sendgrid->getStats(); // Example
-    
-The complete list of methods needs is:
+The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
 
-1. sendMail()
-2. getBlocks()
-3. deleteBlock()
-4. getBounces()
-5. deleteBounces()
-6. countBounces()
-7. getParseSettings()
-8. addParseSetting()
-9. editParseSetting()
-10. deleteParseSetting()
-11. getEventPostUrl()
-12. setEventPostUrl()
-13. deleteEventPostUrl()
-14. getFilters()
-15. activateFilters()
-16. deactivateFilters()
-17. setupFilters()
-18. getFilterSettings()
-19. getInvalidEmails()
-20. deleteInvalidEmails()
-21. countInvalidEmails()
-22. getProfile()
-23. updateProfile()
-24. setUsername()
-25. setPassword
-26. setEmail()
-27. getSpamReports()
-28. deleteSpamReports()
-29. countSpamReports()
-30. getStats()
-31. getStatsAggregate()
-32. getCategoryList()
-33. getCategoryStats()
-34. getCategoryAggregate()
-35. getUnsubscribes()
-36. addUnsubscribes()
-37. deleteUnsubscribes()
-38. countUnsubscribes()
+```php
+$sendgridService = $locator->get('SlmMail\Service\SendGridService');
+$bounce          = $sendgrid->getStatistics(); // Example
+```
+
+The complete list of methods is:
+
+* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://sendgrid.com/docs/API_Reference/Web_API/mail.html))
+* `getStatistics($date, $startDate, $endDate, $aggregate)`: get statistics of your account ([docs](http://sendgrid.com/docs/API_Reference/Web_API/statistics.html))
+* `getBounces($date, $days, $startDate, $endDate, $email, $limit, $offset)`: get the list of bounces ([docs](http://sendgrid.com/docs/API_Reference/Web_API/bounces.html))
+* `deleteBounces($startDate, $endDate, $email)`: delete an address from the bounce list ([docs](http://sendgrid.com/docs/API_Reference/Web_API/bounces.html))
+* `countBounces($startDate, $endDate)`: count the number of bounces ([docs](http://sendgrid.com/docs/API_Reference/Web_API/bounces.html))
+* `getSpamReports($date, $days, $startDate, $endDate, $email, $limit, $offset)`: get entries from the spam report list ([docs](http://sendgrid.com/docs/API_Reference/Web_API/spam_reports.html))
+* `deleteSpamReport($email)`: delete an address from the spam report list ([docs](http://sendgrid.com/docs/API_Reference/Web_API/spam_reports.html))
+* `getBlocks($date, $days, $startDate, $endDate)`: get the list of blocks ([docs](http://sendgrid.com/docs/API_Reference/Web_API/blocks.html))
+* `deleteBlock($email)`: delete an address from the blocks list ([docs](http://sendgrid.com/docs/API_Reference/Web_API/blocks.html))
+
+### Error handling
+
+If an error occurs when a request is made to the SendGrid API using `SlmMail\Service\SendGridService`, some exceptions
+are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
+exceptions.
+
+SendGrid error handling is rather poor, therefore only one, generic exception is thrown for each error:
+
+* `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.
+
+You can get the exact message and error code the following way:
+
+```php
+catch (\SlmMail\Service\Exception\RuntimeException $e) {
+    $message = $e->getMessage();
+    $code    = $e->getCode();
+}
+```

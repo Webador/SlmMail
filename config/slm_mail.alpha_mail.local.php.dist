@@ -1,0 +1,17 @@
+<?php
+
+return array(
+    'slm_mail' => array(
+        'alpha_mail' => array(
+            /**
+             * Set your AlphaMail username
+             */
+            // 'username' => '',
+
+            /**
+             * Set your AlphaMail API key
+             */
+            // 'key' => ''
+        )
+    )
+);

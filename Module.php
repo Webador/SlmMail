@@ -38,20 +38,21 @@
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://juriansluiman.nl
  */
+
 namespace SlmMail;
 
 use Zend\ModuleManager\Feature;
 
 class Module implements
     Feature\AutoloaderProviderInterface,
-    Feature\ServiceProviderInterface
+    Feature\ConfigProviderInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/autoload_classmap.php',
-            ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
@@ -60,8 +61,11 @@ class Module implements
         );
     }
 
-    public function getServiceConfiguration()
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfig()
     {
-        return include __DIR__ . '/config/services.config.php';
+        return include __DIR__ . '/config/module.config.php';
     }
 }

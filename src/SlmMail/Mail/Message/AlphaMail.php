@@ -4,45 +4,49 @@ namespace SlmMail\Mail\Message;
 
 use Zend\Mail\Message;
 
-class Postage extends Message
+class AlphaMail extends Message
 {
     /**
-     * @var string
+     * Identifier of AlphaMail project id to use
+     *
+     * @var int
      */
-    protected $template;
+    protected $project;
 
     /**
+     * Variables to send to the project (they call it "payload")
+     *
      * @var array
      */
-    protected $variables = array();
+    protected $variables;
 
     /**
-     * Set Postage template name to use
+     * Set the project id to use
      *
-     * @param  string $template
+     * @param  int $project
      * @return self
      */
-    public function setTemplate($template)
+    public function setProject($project)
     {
-        $this->template = (string) $template;
+        $this->project = (int) $project;
         return $this;
     }
 
     /**
-     * Get Postage template name to use
+     * Get the porject id to use
      *
      * @return string
      */
-    public function getTemplate()
+    public function getProject()
     {
-        return $this->template;
+        return $this->project;
     }
 
     /**
-     * Set the template global variables
+     * Set variables
      *
      * @param  array $variables
-     * @return Mandrill
+     * @return self
      */
     public function setVariables(array $variables)
     {
@@ -51,7 +55,7 @@ class Postage extends Message
     }
 
     /**
-     * Get the template global variables
+     * Get variables
      *
      * @return array
      */

@@ -1,0 +1,17 @@
+<?php
+
+return array(
+    'slm_mail' => array(
+        'send_grid' => array(
+            /**
+             * Set your Send Grid username
+             */
+            // 'username' => '',
+
+            /**
+             * Set your Send Grid API key
+             */
+            // 'key' => '',
+        )
+    )
+);

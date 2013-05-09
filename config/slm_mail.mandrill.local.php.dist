@@ -1,0 +1,12 @@
+<?php
+
+return array(
+    'slm_mail' => array(
+        'mandrill' => array(
+            /**
+             * Set your Mandrill API key
+             */
+            // 'key' => ''
+        )
+    )
+);
