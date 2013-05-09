@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.3.3",
         "zendframework/zend-mail": ">=2.0,<2.3",
         "zendframework/zend-mime": ">=2.0,<2.3"
     },
