@@ -20,7 +20,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Mandrill`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\Mandrill`, that you can use to take advantage of
 specific Mandrill features. The Mandrill transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mandrill message class. Here are a list of supported features.
 
 #### Attachments
@@ -69,14 +69,14 @@ Mandrill API allows you to add several options to your mail, to tweak if your ma
 be inline... To add an option:
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mandrill();
+$message = new \SlmMail\Mail\Message\Mandrill();
 $message->setOption('auto_html', true);
 
 // Or multiple:
 $message->setOptions(array('auto_html' => true, 'inline_css' => true));
 ```
 
-Mandrill service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Provider\Exception\InvalidArgumentException`. Here are the currently supported options:
+Mandrill service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Exception\InvalidArgumentException`. Here are the currently supported options:
 
 * important: (boolean) whether or not this message is important, and should be delivered ahead of non-important messages
 * track_opens: (boolean) whether or not to turn on open tracking for the message
@@ -98,7 +98,7 @@ To simplify statistics on your account, you can add one or several tags to sent 
 can more easily filter your messages on Mandrill dashboard.
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mandrill();
+$message = new \SlmMail\Mail\Message\Mandrill();
 $message->setTags(array('registration-mail', 'my-designed-mail'));
 
 // Or add one:
@@ -114,7 +114,7 @@ are indexed per recipient and override the global variables. This is useful when
 at once, while wanting to customize some parts of the mail per recipient (like name...).
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mandrill();
+$message = new \SlmMail\Mail\Message\Mandrill();
 $message->setTemplate('foo')
         ->setGlobalVariables(array('key1' => 'value1', 'key2' => 'value2'))
         ->setVariables('foo@example.com', array('key1' => 'supervalue1'));
@@ -124,7 +124,7 @@ Mandrill also supports template content. Those are placeholder defined on your t
 programatically through SlmMail :
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mandrill();
+$message = new \SlmMail\Mail\Message\Mandrill();
 $message->setTemplate('foo')
         ->setTemplateContent(array('header' => '<header><h1>This is an example</h1></header>'))
 ```

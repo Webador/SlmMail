@@ -2,7 +2,7 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Mail\Message\Provider\Postmark as PostmarkMessage;
+use SlmMail\Mail\Message\Postmark as PostmarkMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;

@@ -2,7 +2,7 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Mail\Message\Provider\Mandrill as MandrillMessage;
+use SlmMail\Mail\Message\Mandrill as MandrillMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;

@@ -17,7 +17,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\ElasticEmail`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\ElasticEmail`, that you can use to take advantage of
 specific Elastic Email features. The Elastic Email transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Elastic Email message class. Here are a list of supported features.
 
 #### Attachments
@@ -55,7 +55,7 @@ Elastic Email has support for templates. Templates are created and stored from y
 you can reuse it by calling the `setTemplate` method:
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\ElasticEmail();
+$message = new \SlmMail\Mail\Message\ElasticEmail();
 $message->setTemplate('registration-mail');
 ```
 
@@ -65,7 +65,7 @@ Elastic Email has support for channels. Channels can be used to group emails sen
 you can set the channel by calling the `setChannel` method:
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\ElasticEmail();
+$message = new \SlmMail\Mail\Message\ElasticEmail();
 $message->setChannel('registration');
 ```
 

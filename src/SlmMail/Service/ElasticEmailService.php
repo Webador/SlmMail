@@ -2,8 +2,7 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Mail\Message\Attachment;
-use SlmMail\Mail\Message\Provider\ElasticEmail as ElasticEmailMessage;
+use SlmMail\Mail\Message\ElasticEmail as ElasticEmailMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;

@@ -22,7 +22,7 @@ to create templates programmatically, please refer to the documentation of this 
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\AlphaMail`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\AlphaMail`, that you can use to take advantage of
 specific AlphaMail features. Here are a list of supported features.
 
 #### Project
@@ -30,7 +30,7 @@ specific AlphaMail features. Here are a list of supported features.
 AlphaMail has a concept of "project". Each sent message MUST be associated with a project id:
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\AlphaMail();
+$message = new \SlmMail\Mail\Message\AlphaMail();
 $message->setProject(2);
 ```
 

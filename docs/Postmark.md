@@ -17,7 +17,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Postmark`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\Postmark`, that you can use to take advantage of
 specific Postmark features. The Postmark transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Postmark message class. Here are a list of supported features.
 
 #### Attachments
@@ -50,7 +50,7 @@ To simplify statistics on your account, you can add a single tag to sent message
 filter your messages on Postmark dashboard. Note that you can add only one tag per message.
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Postmark();
+$message = new \SlmMail\Mail\Message\Postmark();
 $message->setTag('registration-mail');
 ```
 

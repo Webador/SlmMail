@@ -18,7 +18,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Postage`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\Postage`, that you can use to take advantage of
 specific Postage features. The Postage transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Postage message class. Here are a list of supported features.
 
 #### Attachments
@@ -52,7 +52,7 @@ side. You can pass optional variables that get injected (for more information ab
 refer to their official documentation):
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Postage();
+$message = new \SlmMail\Mail\Message\Postage();
 $message->setTemplate('foo')
         ->setVariables(array('key1' => 'value1', 'key2' => 'value2'));
 ```

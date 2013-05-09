@@ -2,7 +2,7 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Mail\Message\Provider\Mailgun as MailgunMessage;
+use SlmMail\Mail\Message\Mailgun as MailgunMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Client   as HttpClient;
 use Zend\Http\Request  as HttpRequest;

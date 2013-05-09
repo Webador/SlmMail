@@ -1,6 +1,6 @@
 <?php
 
-namespace SlmMail\Mail\Message\Provider;
+namespace SlmMail\Mail\Message;
 
 use Zend\Mail\Message;
 

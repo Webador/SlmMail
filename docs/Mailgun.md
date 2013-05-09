@@ -17,7 +17,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Mailgun`, that you can use to take advantage of
+SlmMail defines a new Message class, `SlmMail\Mail\Message\Mailgun`, that you can use to take advantage of
 specific Mailgun features. The Mailgun transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mailgun message class. Here are a list of supported features.
 
 #### Attachments
@@ -49,14 +49,14 @@ $message->setBody($body);
 Mailgun API allows you to add several options to your mail. Possible options are the tracking of mails and further delivery options. To add an option, use the `setOption()` method:
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mailgun();
+$message = new \SlmMail\Mail\Message\Mailgun();
 $message->setOption('tracking_clicks', true);
 
 // Or multiple:
 $message->setOptions(array('tracking_clicks' => true, 'tracking_opens' => true));
 ```
 
-Mailgun service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Provider\Exception\InvalidArgumentException`. Here are the currently supported options:
+Mailgun service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Exception\InvalidArgumentException`. Here are the currently supported options:
 
 * dkim: (string) enables/disables DKIM signatures on per-message basis. Pass *yes* or *no*.
 * delivery_time: (string) desired time of delivery. The date format must be encoded according to RFC 2822.
@@ -72,7 +72,7 @@ can more easily filter your messages on Mailgun dashboard. Note Mailgun only all
 attached.
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mailgun();
+$message = new \SlmMail\Mail\Message\Mailgun();
 $message->setTags(array('registration-mail', 'my-designed-mail'));
 
 // Or add one:
