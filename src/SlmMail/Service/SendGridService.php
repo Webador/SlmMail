@@ -280,7 +280,7 @@ class SendGridService extends AbstractMailService
      * @param array $parameters
      * @return \Zend\Http\Client
      */
-    private function prepareHttpClient($uri, array $parameters = array(), array $whitelist = array())
+    private function prepareHttpClient($uri, array $parameters = array())
     {
         $parameters = array_merge(array('api_user' => $this->username, 'api_key' => $this->apiKey), $parameters);
 
@@ -288,7 +288,7 @@ class SendGridService extends AbstractMailService
                     ->resetParameters()
                     ->setMethod(HttpRequest::METHOD_GET)
                     ->setUri(self::API_ENDPOINT . $uri)
-                    ->setParameterGet($this->filterParameters($parameters, $whitelist));
+                    ->setParameterGet($this->filterParameters($parameters));
     }
 
     /**
