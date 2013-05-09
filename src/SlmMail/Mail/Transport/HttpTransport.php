@@ -9,12 +9,12 @@ use Zend\Mail\Message;
 class HttpTransport implements TransportInterface
 {
     /**
-     * @var AbstractMailService
+     * @var MailServiceInterface
      */
     protected $service;
 
     /**
-     * @param AbstractMailService $service
+     * @param MailServiceInterface $service
      */
     public function __construct(MailServiceInterface $service)
     {
