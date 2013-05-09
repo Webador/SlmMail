@@ -2,15 +2,18 @@
 
 namespace SlmMail\Mail\Message\Provider;
 
-use SlmMail\Mail\Message\ProvidesImages;
 use SlmMail\Mail\Message\ProvidesOptions;
-use SlmMail\Mail\Message\ProvidesTags;
 use Zend\Mail\Message;
 use Zend\Mime\Part;
 
 class Mandrill extends Message
 {
-    use ProvidesOptions, ProvidesTags;
+    use ProvidesOptions;
+
+    /**
+     * @var array
+     */
+    protected $tags = array();
 
     /**
      * @var string
@@ -36,6 +39,40 @@ class Mandrill extends Message
      * @var Part[]|array
      */
     protected $images = array();
+
+    /**
+     * Get all tags for this message
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set all tags for this message
+     *
+     * @param  array $tags
+     * @return self
+     */
+    public function setTags(array $tags)
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * Add a tag to this message
+     *
+     * @param string $tag
+     * @return self
+     */
+    public function addTag($tag)
+    {
+        $this->tags[] = (string) $tag;
+        return $this;
+    }
 
     /**
      * Set Mandrill template name to use

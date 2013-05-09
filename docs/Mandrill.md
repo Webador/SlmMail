@@ -94,15 +94,15 @@ Mandrill service will automatically filter unknown options. Here are the current
 
 #### Tags
 
-To simplify statistics on your account, you can add one or several tags to sent messages, so that you can more easily
-filter your messages on Mandrill dashboard.
+To simplify statistics on your account, you can add one or several tags to sent messages, so that you
+can more easily filter your messages on Mandrill dashboard.
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\Mandrill();
-$message->setTag('registration-mail');
+$message->setTags(array('registration-mail', 'my-designed-mail'));
 
-// Or multiple:
-$message->addTags(array('registration-mail', 'my-designed-mail'));
+// Or add one:
+$message->addTag('registration-mail');
 ```
 
 #### Templates
