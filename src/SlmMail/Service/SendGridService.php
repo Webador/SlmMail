@@ -3,7 +3,8 @@
 namespace SlmMail\Service;
 
 use SlmMail\Service\AbstractMailService;
-use Zend\Http\Request as HttpRequest;
+use Zend\Http\Client   as HttpClient;
+use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mail\Address;
 use Zend\Mail\Message;
@@ -87,26 +88,19 @@ class SendGridService extends AbstractMailService
             $parameters['replyto'] = $replyTo->rewind()->getEmail();
         }
 
-        $attachments = $this->extractAttachments($message);
-        foreach ($attachments as $attachment) {
-            $parameters['files'][$attachment->filename] = '';
-        }
-
-        $client = $this->prepareHttpClient('/mail.send.json', $parameters, array('files'));
+        $client = $this->prepareHttpClient('/mail.send.json', $parameters);
 
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
+        $post        = $client->getRequest()->getPost();
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $client->setFileUpload(
-                $attachment->filename,
-                'files',
-                $attachment->getRawContent(),
-                $attachment->type
-            );
+            $post->set('files[' . $attachment->filename . ']', $attachment->getRawContent() . ';type=' . $attachment->type);
         }
 
-        $response = $client->send();
+        $response = $client->setMethod(HttpRequest::METHOD_POST)
+                           ->setEncType(HttpClient::ENC_FORMDATA)
+                           ->send();
 
         return $this->parseResponse($response);
     }
