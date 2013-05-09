@@ -1,6 +1,6 @@
 SlmMail
 =======
-Version 0.2.0 Created by Jurian Sluiman
+Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
 
 Introduction
 ------------
