@@ -4,7 +4,8 @@ namespace SlmMail\Service;
 
 use SlmMail\Mail\Message\Provider\Mailgun as MailgunMessage;
 use SlmMail\Service\AbstractMailService;
-use Zend\Http\Request as HttpRequest;
+use Zend\Http\Client   as HttpClient;
+use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mail\Address;
 use Zend\Mail\Message;
@@ -121,21 +122,14 @@ class MailgunService extends AbstractMailService
         // reset all parameters (response, request...), therefore we would loose the file upload
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $this->getClient()->setFileUpload(
+            $client->setFileUpload(
                 $attachment->filename,
                 'attachment',
                 $attachment->getRawContent(),
                 $attachment->type
             );
         }
-        /**
-         * @todo From the MailGun api for sending attachments:
-         *
-         * > File attachment. You can post multiple attachment values. Important: You must use multipart/form-data
-         * > encoding when sending attachments.
-         *
-         * How should this be handled?
-         */
+        $client->setEncType(HttpClient::ENC_FORMDATA);
 
         $response = $client->send();
 
