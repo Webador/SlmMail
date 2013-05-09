@@ -14,7 +14,7 @@ class SendGridService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://sendgrid.com/api/';
+    const API_ENDPOINT = 'https://sendgrid.com/api';
 
     /**
      * SendGrid username
@@ -94,7 +94,7 @@ class SendGridService extends AbstractMailService
             }
         }
 
-        $client = $this->prepareHttpClient('mail.send.json', $parameters);
+        $client = $this->prepareHttpClient('/mail.send.json', $parameters);
 
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
@@ -122,7 +122,7 @@ class SendGridService extends AbstractMailService
     {
         $parameters = array('date' => $date, 'start_date' => $startDate, 'end_date' => $endDate, 'aggregate' => (int)$aggregate);
 
-        $response = $this->prepareHttpClient('stats.get.json', $parameters)
+        $response = $this->prepareHttpClient('/stats.get.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -151,7 +151,7 @@ class SendGridService extends AbstractMailService
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
 
-        $response = $this->prepareHttpClient('bounces.get.json', $parameters)
+        $response = $this->prepareHttpClient('/bounces.get.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -169,7 +169,7 @@ class SendGridService extends AbstractMailService
     {
         $parameters = array('start_date' => $startDate, 'end_date' => $endDate, 'email' => $email);
 
-        $response = $this->prepareHttpClient('bounces.delete.json', $parameters)
+        $response = $this->prepareHttpClient('/bounces.delete.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -184,7 +184,7 @@ class SendGridService extends AbstractMailService
     {
         $parameters = array('start_date' => $startDate, 'end_date' => $endDate);
 
-        $response = $this->prepareHttpClient('bounces.count.json', $parameters)
+        $response = $this->prepareHttpClient('/bounces.count.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -213,7 +213,7 @@ class SendGridService extends AbstractMailService
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
 
-        $response = $this->prepareHttpClient('spamreports.get.json', $parameters)
+        $response = $this->prepareHttpClient('/spamreports.get.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -227,7 +227,7 @@ class SendGridService extends AbstractMailService
      */
     public function deleteSpamReport($email = '')
     {
-        $response = $this->prepareHttpClient('spamreports.delete.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/spamreports.delete.json', array('email' => $email))
                          ->send();
 
         return $this->parseResponse($response);
@@ -273,7 +273,7 @@ class SendGridService extends AbstractMailService
      */
     public function deleteBlock($email)
     {
-        $response = $this->prepareHttpClient('blocks.delete', array('email' => $email))
+        $response = $this->prepareHttpClient('/blocks.delete', array('email' => $email))
                          ->send();
 
         return $this->parseResponse($response);
