@@ -1,78 +1,92 @@
 Postmark
-===
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Postmark](http://postmarkapp.com). The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
+========
+
+This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Postmark](http://postmarkapp.com).
+The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 
 Installation
----
+------------
+
 It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](https://github.com/juriansluiman/SlmMail/blob/master/README.md) to do so.
 
-Copy the `./vendors/SlmMail/config/module.slmmail.postmark.config.php.dist` to your `./config/autoload/module.postmark.config.php` and update your api key in `./config/autoload/module.postmark.config.php`.
+Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.postmark.local.php.dist` to your `./config/autoload` folder (don't
+forget to remove the .dist extension !) and update your API key.
 
 Usage
----
-You need access to the `Zend\Di\Di` instance to grab the Postmark transport layer `SlmMail\Mail\Transport\Postmark` from there or inject it automatically with your own DI configuration.
+-----
 
-### Use locator
-If you have `$locator` as your `Zend\Di\Di` instance, you can simply do:
+### Supported functionnalities
 
-    $message   = new Zend\Mail\Message;
-    // set up Message here
+SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Postmark`, that you can use to take advantage of
+specific Postmark features. Here are a list of supported features.
 
-    $transport = $locator->get('postmark-transport');
-    $transport->send($message);
+#### Attachments
 
-### Inject transport
-If you have a class `Foo\Bar` which need the transport injected, create a DI configuration as follows:
+You can add any attachment to Postmark message. The content **MUST BE** a base64 encoded string of your content:
 
-    'di' => array(
-        'instance' => array(
-            'Foo\Bar' => array(
-                'parameters' => array(
-                    'transport' => 'postmark-transport'
-                ),
-            ),
-        ),
-    ),
+```php
+$message    = new \SlmMail\Mail\Message\Provider\Postmark();
+$attachment = new \SlmMail\Mail\Message\Attachment('my-file.txt', base64_encode($file), 'text/plain');
+$message->addAttachment($attachment);
+```
 
-Then you can create your class as follows:
+#### Tag
 
-    namespace Foo;
-    
-    use Zend\Mail\Transport,
-        Zend\Mail\Message;
-    
-    class Bar
-    {
-        protected $transport;
-        
-        public function setTransport (Transport $transport)
-        {
-            $this->transport = $transport;
-        }
-        
-        public function doSomething ()
-        {
-            $message   = new Message;
-            // set up Message here
+To simplify statistics on your account, you can add a single tag to sent messages, so that you can more easily
+filter your messages on Postmark dashboard. Note that currently, you can add only one tag per mail.
 
-            $this->transport->send($message);
-        }
-    }
+```php
+$message = new \SlmMail\Mail\Message\Provider\Postmark();
+$message->setTag('registration-mail');
+```
+
+### Use service locator
+
+If you have access to the service locator, you can retrieve the Postmark transport:
+
+```php
+// As stated above, you can also create a specialized Postmark message for more features
+$message = new \Zend\Mail\Message();
+
+// set up Message here
+
+$transport = $locator->get('SlmMail\Mail\Transport\PostmarkTransport');
+$transport->send($message);
+```
+
+Of course, you are encouraged to inject this transport object whenever you need to send an email.
 
 ### Advanced usage
-The transport layer depends on a service class `SlmMail\Service\Postmark` which sends the requests to the Postmark server. However, this service implements also the [bounces retrieval api](http://developer.postmarkapp.com/developer-bounces.html) so you can immediately check the state of the sent email and act upon a bounced message.
 
-The service class is injected into the `SlmMail\Mail\Transport\Postmark` but you can get the service class yourself too:
+The transport layer depends on a service class `SlmMail\Service\PostmarkService` which sends the requests to the Postage
+server. However, this service implements also [bounces retrieval api](http://developer.postmarkapp.com/developer-bounces.html) so you can immediately check the
+state of the sent email and act upon a bounced message.
 
-    $postmark = $locator->get('postmark-service');
-    $bounce   = $postmark->getBounce($id); // Example
-    
+The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
+
+```php
+$postageService = $locator->get('SlmMail\Service\PostmarkService');
+$bounce         = $postage->getMessageReceipt($uid); // Example
+```
+
 The complete list of methods is:
 
-1. `sendEmail($message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://developer.postmarkapp.com/developer-build.html))
-2. `getDeliveryStats()`: return summary of inactive emails and bounces by type ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-delivery-stats))
-3. `getBounces($type, $inactive, $emailFilter, $paging)`: fetches a portion of bounces according to the specified input criteria, all arguments are optional and can be set to `null` ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounces))
-4. `getBounce($id)`: get details about a single bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-a-single-bounce))
-5. `getBounceDump($id)`: return the raw source of the bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounce-dump))
-6. `getBounceTags()`: return a list of tags ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounce-tags))
-7. `activateBounce($id)`:  activates a deactivated bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#activate-a-bounce))
+* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://developer.postmarkapp.com/developer-build.html))
+* `getDeliveryStats()`: return summary of inactive emails and bounces by type ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-delivery-stats))
+* `getBounces($type, $inactive, $emailFilter, $paging)`: fetches a portion of bounces according to the specified input criteria, all arguments are optional and can be set to `null` ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounces))
+* `getBounce($id)`: get details about a single bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-a-single-bounce))
+* `getBounceDump($id)`: return the raw source of the bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounce-dump))
+* `getBounceTags()`: return a list of tags ([docs](http://developer.postmarkapp.com/developer-bounces.html#get-bounce-tags))
+* `activateBounce($id)`:  activates a deactivated bounce, $id is the bounce id ([docs](http://developer.postmarkapp.com/developer-bounces.html#activate-a-bounce))
+
+### Error handling
+
+If an error occurs when a request is made to the Postmark API using `SlmMail\Service\PostmarkService`, some exceptions
+are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
+exceptions.
+
+The following exceptions are thrown, depending on the errors returned by Postmark:
+
+* `SlmMail\Service\Exception\InvalidCredentialsException`: this exception is thrown when invalid or no API key was sent.
+* `SlmMail\Service\Exception\ValidationErrorException`: this exception is thrown when malformed or missing data is sent.
+* `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.

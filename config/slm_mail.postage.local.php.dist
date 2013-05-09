@@ -1,0 +1,12 @@
+<?php
+
+return array(
+    'slm_mail' => array(
+        'postage' => array(
+            /**
+             * Set your Postage API key
+             */
+            // 'key' => ''
+        )
+    )
+);
