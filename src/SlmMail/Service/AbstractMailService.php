@@ -5,6 +5,7 @@ namespace SlmMail\Service;
 use Zend\Http\Client as HttpClient;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Mime;
 
 /**
  * Class AbstractMailService
@@ -35,7 +36,7 @@ abstract class AbstractMailService implements MailServiceInterface
         }
 
         foreach ($body->getParts() as $part) {
-            if ($part->type === 'text/plain') {
+            if ($part->type === 'text/plain' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
                 return $part->getContent();
             }
         }
@@ -57,7 +58,7 @@ abstract class AbstractMailService implements MailServiceInterface
         }
 
         foreach ($body->getParts() as $part) {
-            if ($part->type === 'text/html') {
+            if ($part->type === 'text/html' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
                 return $part->getContent();
             }
         }
@@ -85,7 +86,7 @@ abstract class AbstractMailService implements MailServiceInterface
         $filter      = array('text/plain', 'text/html');
         $attachments = array();
         foreach ($body->getParts() as $part) {
-            if (!in_array($part->type, $filter)) {
+            if (!in_array($part->type, $filter) ||  && $part->disposition === Mime::DISPOSITION_ATTACHMENT) {
                 $attachments[] = $part;
             }
         }
