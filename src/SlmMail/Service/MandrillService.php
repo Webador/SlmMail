@@ -640,14 +640,12 @@ class MandrillService extends AbstractMailService
                 $parameters['message']['tags'][] = $tag;
             }
 
-            foreach ($message->getAttachments() as $attachment) {
-                $parameters['message']['attachments'][] = array(
-                    'type'    => $attachment->getContentType(),
-                    'name'    => $attachment->getName(),
-                    'content' => $attachment->getContent()
-                );
-            }
-
+            /**
+             * @todo Images are recognized as attachments
+             * with the extractAttachments call. How are
+             * "special" template images in Mandrill
+             * recognized?
+             */
             foreach ($message->getImages() as $image) {
                 $parameters['message']['images'][] = array(
                     'type'    => $image->getContentType(),
@@ -655,6 +653,15 @@ class MandrillService extends AbstractMailService
                     'content' => $image->getContent()
                 );
             }
+        }
+
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['message']['attachments'][] = array(
+                'type'    => $attachment->type,
+                'name'    => $attachment->filename,
+                'content' => base64_encode($attachment->getRawContent())
+            );
         }
 
         return $parameters;

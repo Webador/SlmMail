@@ -92,13 +92,14 @@ class PostageService extends AbstractMailService
                 $parameters['arguments']['template']  = $message->getTemplate();
                 $parameters['arguments']['variables'] = $message->getVariables();
             }
+        }
 
-            foreach ($message->getAttachments() as $attachment) {
-                $parameters['arguments']['attachments'][$attachment->getName()] = array(
-                    'content_type' => $attachment->getContentType(),
-                    'content'      => $attachment->getContent()
-                );
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['arguments']['attachments'][$attachment->filename] = array(
+                'content_type' => $attachment->type,
+                'content'      => base64_encode($attachment->getRawContent())
+            );
         }
 
         $response =  $this->prepareHttpClient('/send_message.json', $parameters)
@@ -254,13 +255,20 @@ class PostageService extends AbstractMailService
         }
 
         if ($result['response']['status'] !== 'ok') {
+            $errors = false;
+            if (isset($result['data']) && isset($result['data']['errors'])) {
+                $errors = implode(', ', $result['data']['errors']);
+            }
+
             if (isset($result['response']['message'])) {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, message: %s', $result['response']['message']
+                    'An error occurred on Postage, message: %s%s', $result['response']['message'],
+                    ($errors) ? ' (' . $errors . ')' : ''
                 ));
             } else {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, status code: %s', $result['response']['status']
+                    'An error occurred on Postage, status code: %s%s', $result['response']['status'],
+                    ($errors) ? ' (' . $errors . ')' : ''
                 ));
             }
         }

@@ -64,6 +64,36 @@ abstract class AbstractMailService implements MailServiceInterface
     }
 
     /**
+     * Extract all attachments from a message
+     *
+     * Attachments are detected in the Mime message where
+     * the type of the mime part is not text/plain or
+     * text/html.
+     *
+     * @param  Message $message
+     * @return array
+     */
+    protected function extractAttachments(Message $message)
+    {
+        $body = $message->getBody();
+
+        // If body is not a MimeMessage object, then the body is just the text version
+        if (is_string($body) || !$body instanceof MimeMessage) {
+            return array();
+        }
+
+        $filter      = array('text/plain', 'text/html');
+        $attachments = array();
+        foreach ($body->getParts() as $part) {
+            if (!in_array($part->type, $filter)) {
+                $attachments[] = $part;
+            }
+        }
+
+        return $attachments;
+    }
+
+    /**
      * Get HTTP client
      *
      * @return HttpClient

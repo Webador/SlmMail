@@ -100,11 +100,12 @@ class MailgunService extends AbstractMailService
 
         $parameters['bcc'] = implode(',', $bcc);
 
-        if ($message instanceof MailgunMessage) {
-            foreach ($message->getAttachments() as $attachment) {
-                $parameters['attachment'][] = $attachment->getName();
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['attachment'][] = $attachment->filename;
+        }
 
+        if ($message instanceof MailgunMessage) {
             foreach ($message->getOptions() as $key => $value) {
                 if (array_key_exists($key, $this->validOptions)) {
                     $parameters[$this->validOptions[$key]] = $value;
@@ -118,11 +119,23 @@ class MailgunService extends AbstractMailService
 
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
-        if ($message instanceof MailgunMessage) {
-            foreach ($message->getAttachments() as $attachment) {
-                $this->getClient()->setFileUpload($attachment->getName(), 'attachment', $attachment->getContent(), $attachment->getContentType());
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $this->getClient()->setFileUpload(
+                $attachment->filename,
+                'attachment',
+                $attachment->getRawContent(),
+                $attachment->type
+            );
         }
+        /**
+         * @todo From the MailGun api for sending attachments:
+         *
+         * > File attachment. You can post multiple attachment values. Important: You must use multipart/form-data
+         * > encoding when sending attachments.
+         *
+         * How should this be handled?
+         */
 
         $response = $client->send();
 

@@ -9,6 +9,7 @@ use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mail\Address;
 use Zend\Mail\Message;
+use Zend\Mime\Part;
 use SimpleXMLElement;
 use DateTime;
 
@@ -98,14 +99,16 @@ class ElasticEmailService extends AbstractMailService
         if ($message instanceof ElasticEmailMessage) {
             $parameters['channel']  = $message->getChannel();
             $parameters['template'] = $message->getTemplate();
+        }
 
-            // Attachments are handled using a very strange way in Elastic Email. They must first be uploaded
-            // to their API and THEN appended here. Therefore, you should limit how many attachments you have
-            $attachmentIds = array();
-            foreach ($message->getAttachments() as $attachment) {
-                $attachmentIds[] = $this->uploadAttachment($attachment);
-            }
-
+        // Attachments are handled using a very strange way in Elastic Email. They must first be uploaded
+        // to their API and THEN appended here. Therefore, you should limit how many attachments you have
+        $attachmentIds = array();
+        $attachments   = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $attachmentIds[] = $this->uploadAttachment($attachment);
+        }
+        if (count($attachmentIds)) {
             $parameters['attachments'] = implode(';', $attachmentIds);
         }
 
@@ -154,18 +157,23 @@ class ElasticEmailService extends AbstractMailService
      * Upload an attachment to Elastic Email so it can be reused when an email is sent
      *
      * @link   http://elasticemail.com/api-documentation/attachments-upload
-     * @param  Attachment $attachment
+     * @param  Part $attachment
      * @return int The attachment id
      */
-    public function uploadAttachment(Attachment $attachment)
+    public function uploadAttachment(Part $attachment)
     {
-        $request = $this->prepareHttpClient('/attachments/upload', array('file' => $attachment->getName()))
+        $request = $this->prepareHttpClient('/attachments/upload', array('file' => $attachment->filename))
                         ->setMethod(HttpRequest::METHOD_PUT)
-                        ->setRawBody($attachment->getContent())
+                        ->setRawBody($attachment->getRawContent())
                         ->getRequest();
 
+        // Elastic Email handles the content type of the message itself. Based on the extension of
+        // the file, Elastic Email determines the content type. The attachment must be uploaded to
+        // the server with always the application/x-www-form-urlencoded content type.
+        //
+        // More information: http://support.elasticemail.com/discussions/questions/1486-how-to-set-content-type-of-an-attachment
         $request->getHeaders()->addHeaderLine('Content-Type', 'application/x-www-form-urlencoded')
-                              ->addHeaderLine('Content-Length', strlen($attachment->getContent()));
+                              ->addHeaderLine('Content-Length', strlen($attachment->getRawContent()));
 
         $response = $this->client->send($request);
 

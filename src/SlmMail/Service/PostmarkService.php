@@ -136,14 +136,15 @@ class PostmarkService extends AbstractMailService
             if (count($message->getTags()) > 0) {
                 $parameters['Tag'] = reset($message->getTags());
             }
+        }
 
-            foreach ($message->getAttachments() as $attachment) {
-                $parameters['Attachments'][] = array(
-                    'Name'        => $attachment->getName(),
-                    'ContentType' => $attachment->getContentType(),
-                    'Content'     => $attachment->getContent()
-                );
-            }
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['Attachments'][] = array(
+                'Name'        => $attachment->filename,
+                'ContentType' => $attachment->type,
+                'Content'     => base64_encode($attachment->getRawContent())
+            );
         }
 
         $response = $this->prepareHttpClient('/email')
