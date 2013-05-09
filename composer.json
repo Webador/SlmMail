@@ -1,9 +1,21 @@
 {
-    "name": "juriansluiman/slm-mail",
+    "name": "slm/mail",
     "description": "Integration of various email service providers in the Zend Framework Zend\\Mail",
     "type": "library",
     "keywords": [
-        "zf2"
+        "zf2",
+        "email",
+        "alpha mail",
+        "alphamail",
+        "elastic email",
+        "elasticemail",
+        "mailgun",
+        "mandrill",
+        "postage",
+        "postmark",
+        "send grid",
+        "sendgrid",
+        "transactional email"
     ],
     "homepage": "https://github.com/juriansluiman/SlmMail",
     "authors": [
@@ -11,13 +23,29 @@
             "name": "Jurian Sluiman",
             "email": "jurian@juriansluiman.nl",
             "homepage": "http://juriansluiman.nl"
+        },
+        {
+            "name": "Michaël Gallego",
+            "email": "mic.gallego@gmail.com",
+            "homepage": "http://www.michaelgallego.fr"
         }
     ],
     "require": {
-        "php": ">=5.3.3.",
-        "zendframework/zendframework": "dev-master"
+        "php": ">=5.3.3",
+        "zendframework/zend-mail": ">=2.0,<=2.3",
+        "zendframework/zend-mime": ">=2.0,<=2.3"
+    },
+    "require-dev": {
+        "aws/aws-sdk-php-zf2": ">=1.0.1"
+    },
+    "suggest": {
+        "aws/aws-sdk-php-zf2": "If you need to use Amazon SES"
     },
     "autoload": {
+        "psr-0": {
+            "SlmMail\\": "src/",
+            "SlmMailTest\\": "tests/"
+        },
         "classmap": [
             "./"
         ]

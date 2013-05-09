@@ -1,0 +1,300 @@
+<?php
+
+namespace SlmMail\Service;
+
+use Aws\Ses\SesClient;
+use SlmMail\Service\AbstractMailService;
+use Zend\Mail\Address;
+use Zend\Mail\Message;
+
+class SesService extends AbstractMailService
+{
+    /**
+     * SES supports a maximum of 50 recipients per messages
+     */
+    const RECIPIENT_LIMIT = 50;
+
+    /**
+     * @param SesClient $client
+     */
+    public function __construct(SesClient $client)
+    {
+        $this->client = $client;
+    }
+
+    /**
+     * ------------------------------------------------------------------------------------------
+     * MESSAGES
+     * ------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * {@inheritDoc}
+     * @link http://help.postageapp.com/kb/api/send_message
+     * @throws Exception\RuntimeException if the mail is sent to more than 50 recipients (Amazon SES limit)
+     * @return array The id and UID of the sent message (if sent correctly)
+     */
+    public function send(Message $message)
+    {
+        $from = $message->getFrom();
+        if (count($from) !== 1) {
+            throw new Exception\RuntimeException(
+                'Amazon SES requires exactly one from sender'
+            );
+        }
+
+        $parameters = array(
+            'Source'  => $from->rewind()->toString(),
+            'Message' => array(
+                'Subject' => array('Data' => $message->getSubject()),
+            )
+        );
+
+        $textContent = $this->extractText($message);
+        if (!empty($textContent)) {
+            $parameters['Message']['Body']['Text']['Data'] = $textContent;
+        }
+
+        $htmlContent = $this->extractHtml($message);
+        if (!empty($htmlContent)) {
+            $parameters['Message']['Body']['Html']['Data'] = $htmlContent;
+        }
+
+        $countRecipients = count($message->getTo());
+
+        $to = array();
+        foreach ($message->getTo() as $address) {
+            $to[] = $address->toString();
+        }
+
+        $parameters['Destination']['ToAddresses'] = $to;
+
+        $countRecipients += count($message->getCc());
+
+        $cc = array();
+        foreach ($message->getCc() as $address) {
+            $cc[] = $address->toString();
+        }
+
+        $parameters['Destination']['CcAddresses'] = $cc;
+
+        $countRecipients += count($message->getBcc());
+
+        $bcc = array();
+        foreach ($message->getBcc() as $address) {
+            $bcc[] = $address->toString();
+        }
+
+        $parameters['Destination']['BccAddresses'] = $bcc;
+
+        if ($countRecipients > self::RECIPIENT_LIMIT) {
+            throw new Exception\RuntimeException(sprintf(
+                'You have exceeded limitation for Amazon SES count recipients (%s maximum, %s given)',
+                self::RECIPIENT_LIMIT,
+                $countRecipients
+            ));
+        }
+
+        $replyTo = array();
+        foreach ($message->getReplyTo() as $address) {
+            $replyTo[] = $address->toString();
+        }
+
+        $parameters['ReplyToAddresses'] = $replyTo;
+
+        return $this->client->sendEmail($this->filterParameters($parameters))->toArray();
+    }
+
+    /**
+     * Get the user's current sending limits
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendQuota.html
+     * @return array
+     */
+    public function getSendQuota()
+    {
+        return $this->client->getSendQuota()->toArray();
+    }
+
+    /**
+     * Get the user's sending statistics. The result is a list of data points, representing the last two weeks
+     * of sending activity
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendStatistics.html
+     * @return array
+     */
+    public function getSendStatistics()
+    {
+        return $this->client->getSendStatistics()->toArray();
+    }
+
+    /**
+     * ------------------------------------------------------------------------------------------
+     * IDENTITIES AND EMAILS
+     * ------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * Get a list containing all of the identities (email addresses and domains) for a specific AWS Account,
+     * regardless of verification status
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_ListIdentities.html
+     * @param  string $identityType can be EmailAddress or Domain
+     * @param  int    $maxItems can be between 1 and 100 inclusive
+     * @param  string $nextToken token to use for pagination
+     * @return array
+     */
+    public function getIdentities($identityType = '', $maxItems = 50, $nextToken = '')
+    {
+        $parameters = array(
+            'IdentityType' => $identityType,
+            'MaxItems'     => $maxItems,
+            'NextToken'    => $nextToken
+        );
+
+        return $this->client->listIdentities(array_filter($parameters))->toArray();
+    }
+
+    /**
+     * Delete the specified identity (email address or domain) from the list of verified identities
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_DeleteIdentity.html
+     * @param  string $identity
+     * @return void
+     */
+    public function deleteIdentity($identity)
+    {
+        $this->client->deleteIdentity(array('Identity' => $identity));
+    }
+
+    /**
+     * Get the current status of Easy DKIM signing for an entity
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetIdentityDkimAttributes.html
+     * @param  array $identities
+     * @return array
+     */
+    public function getIdentityDkimAttributes(array $identities)
+    {
+        return $this->client->getIdentityDkimAttributes(array('Identities' => $identities))->toArray();
+    }
+
+    /**
+     * Given a list of verified identities (email addresses and/or domains), returns a structure describing
+     * identity notification attributes
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetIdentityNotificationAttributes.html
+     * @param  array $identities
+     * @return array
+     */
+    public function getIdentityNotificationAttributes(array $identities)
+    {
+        return $this->client->getIdentityNotificationAttributes(array('Identities' => $identities))->toArray();
+    }
+
+    /**
+     * Given a list of identities (email addresses and/or domains), returns the verification status and (for domain
+     * identities) the verification token for each identity
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetIdentityVerificationAttributes.html
+     * @param  array $identities
+     * @return array
+     */
+    public function getIdentityVerificationAttributes(array $identities)
+    {
+        return $this->client->getIdentityVerificationAttributes(array('Identities' => $identities))->toArray();
+    }
+
+    /**
+     * Enable or disable Easy DKIM signing of email sent from an identity
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_SetIdentityDkimEnabled.html
+     * @param  string $identity
+     * @param  bool $dkimEnabled
+     * @return void
+     */
+    public function setIdentityDkimEnabled($identity, $dkimEnabled)
+    {
+        $this->client->setIdentityDkimEnabled(array(
+            'Identity'    => $identity,
+            'DkimEnabled' => (bool) $dkimEnabled
+        ));
+    }
+
+    /**
+     * Given an identity (email address or domain), enables or disables whether Amazon SES forwards feedback
+     * notifications as email
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_SetIdentityFeedbackForwardingEnabled.html
+     * @param  string $identity
+     * @param  bool $forwardingEnabled
+     * @return void
+     */
+    public function setIdentityFeedbackForwardingEnabled($identity, $forwardingEnabled)
+    {
+        $this->client->setIdentityFeedbackForwardingEnabled(array(
+            'Identity'          => $identity,
+            'ForwardingEnabled' => (bool) $forwardingEnabled
+        ));
+    }
+
+    /**
+     * Given an identity (email address or domain), sets the Amazon SNS topic to which Amazon SES will publish bounce
+     * and complaint notifications for emails sent with that identity as the Source
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_SetIdentityNotificationTopic.html
+     * @param string $identity
+     * @param string $notificationType
+     * @param string $snsTopic
+     * @return void
+     */
+    public function setIdentityNotificationTopic($identity, $notificationType, $snsTopic = '')
+    {
+        $parameters = array(
+            'Identity'         => $identity,
+            'NotificationType' => $notificationType,
+            'SnsTopic'         => $snsTopic
+        );
+
+        $this->client->setIdentityNotificationTopic(array_filter($parameters));
+    }
+
+    /**
+     * Get a set of DKIM tokens for a domain
+     *
+     * DKIM tokens are character strings that represent your domain's identity. Using these tokens, you will need to
+     * create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. This action is throttled at
+     * one request per second.
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_VerifyDomainDkim.html
+     * @param  string $domain
+     * @return array
+     */
+    public function verifyDomainDkim($domain)
+    {
+        return $this->client->verifyDomainDkim(array('Domain' => $domain))->toArray();
+    }
+
+    /**
+     * Verifies a domain identity
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_VerifyDomainIdentity.html
+     * @param string $domain
+     */
+    public function verifyDomainIdentity($domain)
+    {
+        $this->client->verifyDomainIdentity(array('Domain' => $domain));
+    }
+
+    /**
+     * Verify an email address. This action causes a confirmation email message to be sent to the specified address
+     *
+     * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_VerifyEmailIdentity.html
+     * @param  string $email
+     * @return void
+     */
+    public function verifyEmailIdentity($email)
+    {
+        $this->client->verifyEmailIdentity(array('EmailAddress' => $email));
+    }
+}
