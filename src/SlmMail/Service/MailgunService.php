@@ -32,18 +32,6 @@ class MailgunService extends AbstractMailService
     protected $apiKey;
 
     /**
-     * @var array
-     */
-    protected $validOptions = array(
-        'dkim'            => 'o:dkim',
-        'delivery_time'   => 'o:deliverytime',
-        'test_mode'       => 'o:testmode',
-        'tracking'        => 'o:tracking',
-        'tracking_clicks' => 'o:tracking-clicks',
-        'tracking_opens'  => 'o:tracking-opens'
-    );
-
-    /**
      * @param string $domain
      * @param string $apiKey
      */
@@ -107,10 +95,9 @@ class MailgunService extends AbstractMailService
         }
 
         if ($message instanceof MailgunMessage) {
+            $options = $message->getValidOptions();
             foreach ($message->getOptions() as $key => $value) {
-                if (array_key_exists($key, $this->validOptions)) {
-                    $parameters[$this->validOptions[$key]] = $value;
-                }
+                $parameters[$options[$key]] = $value;
             }
 
             if (count($message->getTags()) > 0) {

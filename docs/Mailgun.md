@@ -56,9 +56,9 @@ $message->setOption('tracking_clicks', true);
 $message->setOptions(array('tracking_clicks' => true, 'tracking_opens' => true));
 ```
 
-Mailgun service will automatically filter unknown options. Here are the currently supported options:
+Mailgun service will filter unknown options. Unsupported options with throw an exception `SlmMail\Mail\Message\Provider\Exception\InvalidArgumentException`. Here are the currently supported options:
 
-* dkim: (string) enables/disables DKIM signatures on per-message basis. Pass *yes* or *n*-o*.
+* dkim: (string) enables/disables DKIM signatures on per-message basis. Pass *yes* or *no*.
 * delivery_time: (string) desired time of delivery. The date format must be encoded according to RFC 2822.
 * test_mode: (string) enables sending in test mode. Pass *yes* if needed.
 * tracking: (string) toggles tracking on a per-message basis. Pass *yes* or *no*.
