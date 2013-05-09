@@ -99,7 +99,7 @@ The complete list of methods is:
 
 ### Error handling
 
-If an error occurs when a request is made to the Mandrill API using `SlmMail\Service\PostageService`, some exceptions
+If an error occurs when a request is made to the Postage API using `SlmMail\Service\PostageService`, some exceptions
 are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
 exceptions.
 
