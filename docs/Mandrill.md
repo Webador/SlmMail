@@ -13,7 +13,7 @@ Installation
 It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.mandrill.local.php.dist` to your `./config/autoload` folder (don't
-forget to remove the .dist extension !) and update your API key.
+forget to remove the .dist extension!) and update your API key.
 
 Usage
 -----
@@ -21,16 +21,30 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Mandrill`, that you can use to take advantage of
-specific Mandrill features. Here are a list of supported features.
+specific Mandrill features. The Mandrill transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mandrill message class. Here are a list of supported features.
 
 #### Attachments
 
-You can add any attachment to Mandrill message. The content **MUST BE** a base64 encoded string of your content:
+You can add any attachment to a Mandrill message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$message    = new \SlmMail\Mail\Message\Provider\Mandrill();
-$attachment = new \SlmMail\Mail\Message\Attachment('my-file.txt', base64_encode($file), 'text/plain');
-$message->addAttachment($attachment);
+$text = new \Zend\Mime\Part($textContent);
+$text->type = "text/plain";
+
+$html = new \Zend\Mime\Part($htmlMarkup);
+$html->type = "text/html";
+
+$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf->type     = "application/pdf";
+$pdf->filename = "my-attachment.pdf";
+
+$body = new \Zend\Mime\Message;
+$body->setParts(array($text, $html, $pdf));
+
+// You can use the \SlmMail\Mail\Message\Mandrill class
+// But attachments work with Zend\Mail\Message too
+$message = new \Zend\Mail\Message;
+$message->setBody($body);
 ```
 
 #### Images
@@ -39,12 +53,14 @@ You can add any images to Mandrill message. The content must be a base64 encoded
 are similar to attachments, instead that you can use them more easily in Mandrill template (in your templates
 hosted on Mandrill, you can use `<img src="cid:THIS_VALUE">`, where THIS_VALUE is the name of the image you add).
 
-Note that the MIME-Type of images must start by image/.
+Note that the MIME-Type of images must start with `image/`.
 
 ```php
-$message = new \SlmMail\Mail\Message\Provider\Mandrill();
-$image   = new \SlmMail\Mail\Message\Attachment('my-image.png', base64_encode($file), 'image/png');
-$message->addImage($image);
+$image = new \Zend\Mime\Part(fopen($pathToImage, 'r'));
+$image->type     = "image/png";
+$image->filename = "my-image.png";
+
+// Like attachments, add $image to the Zend\Mime\Message
 ```
 
 #### Options

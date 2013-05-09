@@ -1,4 +1,4 @@
-ElasticEmail
+Elastic Email
 ============
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Elastic Email](http://elasticemail.com).
@@ -10,7 +10,7 @@ Installation
 It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.elastic_email.local.php.dist` to your `./config/autoload` folder (don't
-forget to remove the .dist extension !) and update your username and API key.
+forget to remove the .dist extension!) and update your username and API key.
 
 Usage
 -----
@@ -18,33 +18,55 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\ElasticEmail`, that you can use to take advantage of
-specific Elastic Email features. Here are a list of supported features.
+specific Elastic Email features. The Elastic Email transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Elastic Email message class. Here are a list of supported features.
 
 #### Attachments
 
-You can add any attachment to Elastic Email message. Contrary to most other providers, the content **MUST NOT** be a base64
-encoded string of your content (you can omit the content type - third parameter of Attachment constructor - because
-Elastic Email does not use it):
+You can add any attachment to an Elastic Email message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$message    = new \SlmMail\Mail\Message\Provider\ElasticEmail();
-$attachment = new \SlmMail\Mail\Message\Attachment('my-file.txt', base64_encode($file));
-$message->addAttachment($attachment);
+$text = new \Zend\Mime\Part($textContent);
+$text->type = "text/plain";
+
+$html = new \Zend\Mime\Part($htmlMarkup);
+$html->type = "text/html";
+
+$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf->type     = "application/pdf";
+$pdf->filename = "my-attachment.pdf";
+
+$body = new \Zend\Mime\Message;
+$body->setParts(array($text, $html, $pdf));
+
+// You can use the \SlmMail\Mail\Message\ElasticEmail class
+// But attachments work with Zend\Mail\Message too
+$message = new \Zend\Mail\Message;
+$message->setBody($body);
 ```
 
-> Please note that Elastic Email attachments handling is a bit different than other email providers. Indeed, attachments
-are not sent with the email, but through another request to Elastic Email API to upload attachment. This is done
-automatically for you by SlmMail, but remember to reduce your attachments, because each attachment will generate one
-more REST request to their API.
+> Please note that Elastic Email attachments handling is a bit different than other email providers. Attachments
+are not sent within the email, but uploaded first to the Elastic Email server. This is done automatically for you
+by SlmMail, but remember to reduce your attachments, because each attachment will generate onemore REST request
+to their API.
 
 #### Template
 
-Elastic Email has a primitive support for templates. Templates are created and stored from your Elastic Email account,
-and you can reuse it by calling the `setTemplate` method:
+Elastic Email has support for templates. Templates are created and stored from your Elastic Email account, and
+you can reuse it by calling the `setTemplate` method:
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\ElasticEmail();
 $message->setTemplate('registration-mail');
+```
+
+#### Channel
+
+Elastic Email has support for channels. Channels can be used to group emails send from your Elastic Email account, and
+you can set the channel by calling the `setChannel` method:
+
+```php
+$message = new \SlmMail\Mail\Message\Provider\ElasticEmail();
+$message->setChannel('registration');
 ```
 
 ### Use service locator
@@ -52,7 +74,7 @@ $message->setTemplate('registration-mail');
 If you have access to the service locator, you can retrieve the Elastic Email transport:
 
 ```php
-// As stated above, you can also create a specialized Elastic Email message for more features
+// You can also use the Elastic Email message class
 $message = new \Zend\Mail\Message();
 
 // set up Message here
@@ -65,10 +87,7 @@ Of course, you are encouraged to inject this transport object whenever you need 
 
 ### Advanced usage
 
-The transport layer depends on a service class `SlmMail\Service\ElasticEmailService` which sends the requests to the Elastic Email
-server.
-
-The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
+The transport layer depends on a service class `SlmMail\Service\ElasticEmailService` which sends the requests to the Elastic Email server. The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
 
 ```php
 $elasticEmailService = $locator->get('SlmMail\Service\ElasticEmailService');
@@ -84,8 +103,8 @@ The complete list of methods is:
 * `getActiveChannels($format = 'xml')`: get a list of active channels ([docs](http://elasticemail.com/api-documentation/channels))
 * `deleteChannel($name, $format = 'xml')`: delete a channel ([docs](http://elasticemail.com/api-documentation/channels))
 
+The `getEmailStatus()`, `getAccountDetails()` and `getActiveChannels()` methods will return an array with the fields of information. Elastic Email returns an XML string and SlmMail converts the XML values to this array.
+
 ### Error handling
 
-Elastic Email error handling really sucks because it only send HTTP response with status code of 200 (Success), hence
-making error handling very difficult for third-party libraries. Therefore, at the time of writing, there are no error
-reporting for Elastic Email.
+Elastic Email error handling is a non-standard approach. Elastic Email returns always the HTTP 200 code and has no uniform way of exceptional cases. SlmMail tries to handle these cases as best as possible, in most cases a `SlmMail\Service\Exception\RuntimeException` is thrown, but there might be some edge cases where the errors are not caught by SlmMail.

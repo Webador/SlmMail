@@ -10,7 +10,7 @@ Installation
 It is assumed this module is already installed and enabled in your Zend Framework 2 project. If not, please read first the [installation instructions](../README.md) to do so.
 
 Copy the `./vendor/juriansluiman/slm-mail/config/slm_mail.mailgun.local.php.dist` to your `./config/autoload` folder (don't
-forget to remove the .dist extension !) and update your API key.
+forget to remove the .dist extension!) and update your API key.
 
 Usage
 -----
@@ -18,22 +18,35 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Provider\Mailgun`, that you can use to take advantage of
-specific Mailgun features. Here are a list of supported features.
+specific Mailgun features. The Mailgun transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mailgun message class. Here are a list of supported features.
 
 #### Attachments
 
-You can add any attachment to Mailgun message. The content **MUST NOT* be a base64 encoded string of your content:
+You can add any attachment to a Mailgun message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$message    = new \SlmMail\Mail\Message\Provider\Mailgun();
-$attachment = new \SlmMail\Mail\Message\Attachment('my-file.txt', file_get_contents('path/to/file'), 'text/plain');
-$message->addAttachment($attachment);
+$text = new \Zend\Mime\Part($textContent);
+$text->type = "text/plain";
+
+$html = new \Zend\Mime\Part($htmlMarkup);
+$html->type = "text/html";
+
+$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf->type     = "application/pdf";
+$pdf->filename = "my-attachment.pdf";
+
+$body = new \Zend\Mime\Message;
+$body->setParts(array($text, $html, $pdf));
+
+// You can use the \SlmMail\Mail\Message\Mailgun class
+// But attachments work with Zend\Mail\Message too
+$message = new \Zend\Mail\Message;
+$message->setBody($body);
 ```
 
 #### Options
 
-Mailgun API allows you to add several options to your mail, to tweak if your mails must be tracked, when it should
-be delivered... To add an option:
+Mailgun API allows you to add several options to your mail. Possible options are the tracking of mails and further delivery options. To add an option, use the `setOption()` method:
 
 ```php
 $message = new \SlmMail\Mail\Message\Provider\Mailgun();
