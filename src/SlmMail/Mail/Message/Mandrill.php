@@ -126,7 +126,7 @@ class Mandrill extends Message
      */
     public function setOption($key, $value)
     {
-        if (!array_key_exists($key, $this->validOptions)) {
+        if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid option %s given', $key
             ));
