@@ -573,7 +573,7 @@ class MandrillService extends AbstractMailService
                 $parameters['template_name'] = $message->getTemplate();
 
                 foreach ($message->getTemplateContent() as $key => $value) {
-                    $parameters['template_content'] = array(
+                    $parameters['template_content'][] = array(
                         'name'    => $key,
                         'content' => $value
                     );
