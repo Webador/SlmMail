@@ -1,6 +1,7 @@
 {
     "name": "slm/mail",
     "description": "Integration of various email service providers in the Zend Framework Zend\\Mail",
+    "license": "BSD-3-Clause",
     "type": "library",
     "keywords": [
         "zf2",
