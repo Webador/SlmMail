@@ -65,7 +65,7 @@ Cook-book
 ### How to send an HTML email ?
 
 Every email providers used in SlmMail allow to send HTML emails. However, by default, if you set the mail's content
-using the `setBody` content, this content will be considered as the plain text version as shown above:
+using the `setBody` content, this content will be considered as the plain text version as shown below:
 
 ```php
 $message = new \Zend\Mail\Message();
@@ -75,7 +75,7 @@ $message->setBody('Hello world');
 ```
 
 To send a HTML version, you must specify the body as a MimeMessage, and add the HTML version as a MIME part, as
-shown above:
+shown below:
 
 ```php
 $message = new \Zend\Mail\Message();
