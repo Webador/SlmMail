@@ -56,7 +56,7 @@ class AlphaMail extends Message
      *
      * @var array
      */
-    protected $variables;
+    protected $variables = array();
 
     /**
      * Set the project id to use

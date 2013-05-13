@@ -111,16 +111,12 @@ class AlphaMailService extends AbstractMailService
         }
 
         $parameters = array(
-            'project_id' => $message->getProject(),
-            'sender'     => array(
-                'email' => $from->rewind()->getEmail(),
-                'name'  => $from->rewind()->getName()
-            ),
-            'receiver' => array(
-                'email' => $to->rewind()->getEmail(),
-                'name'  => $to->rewind()->getName()
-            ),
-            'payload' => $message->getVariables()
+            'project_id'     => $message->getProject(),
+            'sender_name'    => $from->rewind()->getName() ?: $from->rewind()->getEmail(),
+            'sender_email'   => $from->rewind()->getEmail(),
+            'receiver_name'  => $to->rewind()->getName() ?: $to->rewind()->getEmail(),
+            'receiver_email' => $to->rewind()->getEmail(),
+            'body'           => json_encode($message->getVariables())
         );
 
         $response = $this->prepareHttpClient('/email/queue')
@@ -408,7 +404,7 @@ class AlphaMailService extends AbstractMailService
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
                ->getHeaders()
-               ->addHeaderLine('Authorization', 'Basic ' . base64_encode($this->username . ':' . $this->apiKey));
+               ->addHeaderLine('Authorization', 'Basic ' . base64_encode(':' . $this->apiKey));
 
          $client->setMethod(HttpRequest::METHOD_GET)
                 ->setUri(self::API_ENDPOINT . $uri)
