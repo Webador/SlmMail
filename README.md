@@ -100,12 +100,8 @@ By defaut the adapter is Zend\Http\Client\Adapter\Socket but you can override it
 
 ```php
 'slm_mail' => array(
-        'mandrill' => array(
-            /**
-             * Set your Mandrill API key
-             */
-            'key' => 'yourkey'
-        ),
+        // Here your email service provider options
+        
         'http_adapter' => 'Zend\Http\Client\Adapter\Proxy' // for example
     )
 ```
@@ -114,12 +110,8 @@ If you want to change some options of your adapter please refer to you adapter c
 
 ```php
 'slm_mail' => array(
-        'mandrill' => array(
-            /**
-             * Set your Mandrill API key
-             */
-            'key' => 'yourkey'
-        ),
+        // Here your email service provider options
+        
         // example for Socket adapter
         'http_options' => array(
             'sslverifypeer' => false,
