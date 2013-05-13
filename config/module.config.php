@@ -71,6 +71,7 @@ return array(
             'SlmMail\Http\Client' => 'SlmMail\Factory\HttpClientFactory',
         ),
     ),
+    
     'slm_mail' => array(
         'http_adapter' => 'Zend\Http\Client\Adapter\Socket',
     ),
