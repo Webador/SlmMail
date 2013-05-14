@@ -70,7 +70,7 @@ abstract class AbstractMailService implements MailServiceInterface
         }
 
         if (!$body instanceof MimeMessage) {
-            return '';
+            return null;
         }
 
         foreach ($body->getParts() as $part) {
@@ -94,7 +94,7 @@ abstract class AbstractMailService implements MailServiceInterface
 
         // If body is not a MimeMessage object, then the body is just the text version
         if (is_string($body) || !$body instanceof MimeMessage) {
-            return '';
+            return null;
         }
 
         foreach ($body->getParts() as $part) {
