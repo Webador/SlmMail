@@ -55,13 +55,6 @@ class AlphaMailService extends AbstractMailService
     const API_ENDPOINT = 'http://api.amail.io/v1';
 
     /**
-     * AlphaMail username
-     *
-     * @var string
-     */
-    protected $username;
-
-    /**
      * AlphaMail API key
      *
      * @var string
@@ -69,12 +62,10 @@ class AlphaMailService extends AbstractMailService
     protected $apiKey;
 
     /**
-     * @param string $username
      * @param string $apiKey
      */
-    public function __construct($username, $apiKey)
+    public function __construct($apiKey)
     {
-        $this->username = (string) $username;
         $this->apiKey   = (string) $apiKey;
     }
 
