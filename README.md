@@ -1,6 +1,6 @@
 SlmMail
 =======
-Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
+Version 1.0.0-rc3 Created by Jurian Sluiman and Michaël Gallego
 
 Introduction
 ------------
@@ -38,11 +38,14 @@ file called `composer.json` and save it in the root of your project:
 
 ```
 {
+    "minimum-stability": "rc",
     "require": {
         "slm/mail": ">=1.*"
     }
 }
 ```
+
+> minimum-stability attribute is required as we have not reached final version yet.
 
 Then execute the following commands in a CLI:
 
@@ -101,7 +104,7 @@ By defaut the adapter is Zend\Http\Client\Adapter\Socket but you can override it
 ```php
 'slm_mail' => array(
         // Here your email service provider options
-        
+
         'http_adapter' => 'Zend\Http\Client\Adapter\Proxy' // for example
     )
 ```
@@ -111,7 +114,7 @@ If you want to change some options of your adapter please refer to you adapter c
 ```php
 'slm_mail' => array(
         // Here your email service provider options
-        
+
         // example for Socket adapter
         'http_options' => array(
             'sslverifypeer' => false,
