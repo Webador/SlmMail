@@ -53,15 +53,12 @@ class HttpClientFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('Config');
 
-        if (!isset($config['slm_mail']['http_adapter'])
-         || !isset($config['slm_mail']['http_options'])
-        ) {
-            return new HttpClient();
-        }
-
         $client = new HttpClient();
         $client->setAdapter($config['slm_mail']['http_adapter']);
-        $client->getAdapter()->setOptions($config['slm_mail']['http_options']);
+        
+        if (isset($config['slm_mail']['http_options'])) {
+            $client->getAdapter()->setOptions($config['slm_mail']['http_options']);
+        }
 
         return $client;
     }
