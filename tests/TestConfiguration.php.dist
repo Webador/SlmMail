@@ -18,7 +18,7 @@
  */
 return array(
     'modules' => array(
-        'Aws',
+        //'Aws',
         'SlmMail',
     ),
     'module_listener_options' => array(

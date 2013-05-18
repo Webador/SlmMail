@@ -38,28 +38,50 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail\Factory;
+namespace SlmMailTest\Http;
 
-use Zend\Http\Client as HttpClient;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use PHPUnit_Framework_TestCase;
+use SlmMailTest\Util\ServiceManagerFactory;
 
-class HttpClientFactory implements FactoryInterface
+class ClientTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function testAssertSocketAdapterIsUsedByDefault()
     {
-        $config = $serviceLocator->get('Config');
+        /** @var \Zend\Http\Client $client */
+        $client = ServiceManagerFactory::getServiceManager()->get('SlmMail\Http\Client');
+        $this->assertInstanceOf('Zend\Http\Client\Adapter\Socket', $client->getAdapter());
+    }
 
-        $client = new HttpClient();
-        $client->setAdapter($config['slm_mail']['http_adapter']);
+    public function testAssertCanChangeAdapter()
+    {
+        $serviceManager = ServiceManagerFactory::getServiceManager();
+        $serviceManager->setAllowOverride(true);
 
-        if (isset($config['slm_mail']['http_options'])) {
-            $client->getAdapter()->setOptions($config['slm_mail']['http_options']);
-        }
+        $config                             = $serviceManager->get('Config');
+        $config['slm_mail']['http_adapter'] = 'Zend\Http\Client\Adapter\Test';
 
-        return $client;
+        $serviceManager->setService('Config', $config);
+
+        /** @var \Zend\Http\Client $client */
+        $client = $serviceManager->get('SlmMail\Http\Client');
+        $this->assertInstanceOf('Zend\Http\Client\Adapter\Test', $client->getAdapter());
+    }
+
+    public function testCanSetOptionsForHttpAdapter()
+    {
+        $serviceManager = ServiceManagerFactory::getServiceManager();
+        $serviceManager->setAllowOverride(true);
+
+        $config                             = $serviceManager->get('Config');
+        $config['slm_mail']['http_options'] = array(
+            'sslverifypeer' => false
+        );
+
+        $serviceManager->setService('Config', $config);
+
+        /** @var \Zend\Http\Client $client */
+        $client = $serviceManager->get('SlmMail\Http\Client');
+        $config = $client->getAdapter()->getConfig();
+        $this->assertFalse($config['sslverifypeer']);
     }
 }
