@@ -37,6 +37,9 @@
         "zendframework/zend-http": ">=2.0,<=2.3"
     },
     "require-dev": {
+        "zendframework/zend-servicemanager": ">=2.0,<=2.3",
+        "zendframework/zend-mvc": ">=2.0,<=2.3",
+        "zendframework/zend-serializer": ">=2.0,<=2.3",
         "aws/aws-sdk-php-zf2": ">=1.0.1"
     },
     "suggest": {
