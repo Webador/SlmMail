@@ -40,7 +40,7 @@ file called `composer.json` and save it in the root of your project:
 {
     "minimum-stability": "rc",
     "require": {
-        "slm/mail": ">=1.*"
+        "slm/mail": "1.*"
     }
 }
 ```
