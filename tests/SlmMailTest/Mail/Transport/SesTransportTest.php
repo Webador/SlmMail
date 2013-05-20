@@ -51,12 +51,13 @@ class SesTransportTest extends PHPUnit_Framework_TestCase
         $serviceManager = ServiceManagerFactory::getServiceManager();
         $serviceManager->setAllowOverride(true);
 
-        $serviceManager->setFactory('Aws', function() {
-            $aws = $this->getMock('Guzzle\Service\Builder\ServiceBuilderInterface');
-            $aws->expects($this->once())
+        $self = $this;
+        $serviceManager->setFactory('Aws', function() use ($self) {
+            $aws = $self->getMock('Guzzle\Service\Builder\ServiceBuilderInterface');
+            $aws->expects($self->once())
                 ->method('get')
-                ->with($this->equalTo('Ses'))
-                ->will($this->returnValue($this->getMock('Aws\Ses\SesClient', array(), array(), '', false)));
+                ->with($self->equalTo('Ses'))
+                ->will($self->returnValue($self->getMock('Aws\Ses\SesClient', array(), array(), '', false)));
 
             return $aws;
         });
