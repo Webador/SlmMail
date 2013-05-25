@@ -1,5 +1,8 @@
 SlmMail
 =======
+
+[![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
+
 Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
 
 Introduction
