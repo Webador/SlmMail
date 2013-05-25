@@ -37,7 +37,8 @@
         "zendframework/zend-http": ">=2.0,<=2.3"
     },
     "require-dev": {
-        "aws/aws-sdk-php-zf2": ">=1.0.1"
+        "aws/aws-sdk-php-zf2": ">=1.0.1",
+        "zendframework/zendframework": ">=2.0,<=2.3"
     },
     "suggest": {
         "aws/aws-sdk-php-zf2": "If you need to use Amazon SES"
