@@ -81,3 +81,24 @@ Identities and emails functions:
 
 > Some functions of the official SDK (`deleteVerifiedEmailAddress`, `listVerifiedEmailAddresses` and `verifyEmailAddress`) have
 been deprecated in May 2012. This is why are not part of SlmMail wrapper.
+
+### Error handling
+
+If an error occurs when a request is made to the Amazon SES API using `SlmMail\Service\SesService`, some exceptions
+are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
+exceptions.
+
+The following exceptions are thrown, depending on the errors returned by Amazon SES:
+
+* `SlmMail\Service\Exception\InvalidCredentialsException`: this exception is thrown when security tokens are wrong.
+* `SlmMail\Service\Exception\ValidationErrorException`: this exception is thrown when malformed, invalid or missing data is sent (for instance when someone try to send an email using an unverified sender).
+* `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.
+
+You can get the exact message and error code the following way:
+
+```php
+catch (\SlmMail\Service\Exception\InvalidCredentialsException $e) {
+    $message = $e->getMessage();
+    $code    = $e->getCode();
+}
+```

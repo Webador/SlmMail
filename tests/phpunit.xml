@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="./tests/Bootstrap.php" colors="true">
+<phpunit bootstrap="./Bootstrap.php" colors="true">
     <testsuite name="SlmMail tests">
-        <directory>./tests</directory>
+        <directory>./</directory>
     </testsuite>
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">

@@ -40,6 +40,7 @@
 
 namespace SlmMail\Service;
 
+use Aws\Ses\Exception\SesException;
 use Aws\Ses\SesClient;
 use SlmMail\Service\AbstractMailService;
 use Zend\Mail\Address;
@@ -140,7 +141,11 @@ class SesService extends AbstractMailService
 
         $parameters['ReplyToAddresses'] = $replyTo;
 
-        return $this->client->sendEmail($this->filterParameters($parameters))->toArray();
+        try {
+            return $this->client->sendEmail($this->filterParameters($parameters))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -151,7 +156,11 @@ class SesService extends AbstractMailService
      */
     public function getSendQuota()
     {
-        return $this->client->getSendQuota()->toArray();
+        try {
+            return $this->client->getSendQuota()->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -163,7 +172,11 @@ class SesService extends AbstractMailService
      */
     public function getSendStatistics()
     {
-        return $this->client->getSendStatistics()->toArray();
+        try {
+            return $this->client->getSendStatistics()->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -190,7 +203,11 @@ class SesService extends AbstractMailService
             'NextToken'    => $nextToken
         );
 
-        return $this->client->listIdentities(array_filter($parameters))->toArray();
+        try {
+            return $this->client->listIdentities(array_filter($parameters))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -202,7 +219,11 @@ class SesService extends AbstractMailService
      */
     public function deleteIdentity($identity)
     {
-        $this->client->deleteIdentity(array('Identity' => $identity));
+        try {
+            $this->client->deleteIdentity(array('Identity' => $identity));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -214,7 +235,11 @@ class SesService extends AbstractMailService
      */
     public function getIdentityDkimAttributes(array $identities)
     {
-        return $this->client->getIdentityDkimAttributes(array('Identities' => $identities))->toArray();
+        try {
+            return $this->client->getIdentityDkimAttributes(array('Identities' => $identities))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -227,7 +252,11 @@ class SesService extends AbstractMailService
      */
     public function getIdentityNotificationAttributes(array $identities)
     {
-        return $this->client->getIdentityNotificationAttributes(array('Identities' => $identities))->toArray();
+        try {
+            return $this->client->getIdentityNotificationAttributes(array('Identities' => $identities))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -240,7 +269,11 @@ class SesService extends AbstractMailService
      */
     public function getIdentityVerificationAttributes(array $identities)
     {
-        return $this->client->getIdentityVerificationAttributes(array('Identities' => $identities))->toArray();
+        try {
+            return $this->client->getIdentityVerificationAttributes(array('Identities' => $identities))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -253,10 +286,14 @@ class SesService extends AbstractMailService
      */
     public function setIdentityDkimEnabled($identity, $dkimEnabled)
     {
-        $this->client->setIdentityDkimEnabled(array(
-            'Identity'    => $identity,
-            'DkimEnabled' => (bool) $dkimEnabled
-        ));
+        try {
+            $this->client->setIdentityDkimEnabled(array(
+                'Identity'    => $identity,
+                'DkimEnabled' => (bool) $dkimEnabled
+            ));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -270,10 +307,14 @@ class SesService extends AbstractMailService
      */
     public function setIdentityFeedbackForwardingEnabled($identity, $forwardingEnabled)
     {
-        $this->client->setIdentityFeedbackForwardingEnabled(array(
-            'Identity'          => $identity,
-            'ForwardingEnabled' => (bool) $forwardingEnabled
-        ));
+        try {
+            $this->client->setIdentityFeedbackForwardingEnabled(array(
+                'Identity'          => $identity,
+                'ForwardingEnabled' => (bool) $forwardingEnabled
+            ));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -294,7 +335,11 @@ class SesService extends AbstractMailService
             'SnsTopic'         => $snsTopic
         );
 
-        $this->client->setIdentityNotificationTopic(array_filter($parameters));
+        try {
+            $this->client->setIdentityNotificationTopic(array_filter($parameters));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -310,7 +355,11 @@ class SesService extends AbstractMailService
      */
     public function verifyDomainDkim($domain)
     {
-        return $this->client->verifyDomainDkim(array('Domain' => $domain))->toArray();
+        try {
+            return $this->client->verifyDomainDkim(array('Domain' => $domain))->toArray();
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -318,10 +367,15 @@ class SesService extends AbstractMailService
      *
      * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_VerifyDomainIdentity.html
      * @param string $domain
+     * @return void
      */
     public function verifyDomainIdentity($domain)
     {
-        $this->client->verifyDomainIdentity(array('Domain' => $domain));
+        try {
+            $this->client->verifyDomainIdentity(array('Domain' => $domain));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
     }
 
     /**
@@ -333,6 +387,34 @@ class SesService extends AbstractMailService
      */
     public function verifyEmailIdentity($email)
     {
-        $this->client->verifyEmailIdentity(array('EmailAddress' => $email));
+        try {
+            $this->client->verifyEmailIdentity(array('EmailAddress' => $email));
+        } catch (SesException $exception) {
+            $this->parseException($exception);
+        }
+    }
+
+    /**
+     * @param  SesException $exception
+     * @throws Exception\InvalidCredentialsException
+     * @throws Exception\ValidationErrorException
+     * @throws Exception\RuntimeException
+     */
+    private function parseException(SesException $exception)
+    {
+        switch ($exception->getStatusCode()) {
+            case 400:
+                throw new Exception\ValidationErrorException(sprintf(
+                    'An error occurred on Amazon SES (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                ));
+            case 403:
+                throw new Exception\InvalidCredentialsException(sprintf(
+                    'Amazon SES authentication error (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                ));
+            default:
+                throw new Exception\RuntimeException(sprintf(
+                    'An error occurred on Amazon SES (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                ));
+        }
     }
 }

@@ -142,5 +142,4 @@ Send Grid    | five plans with a maximum of emails for each. Bronze: 9.95$ / mon
 
 TODO
 ----
- 1. Better exception handling for Amazon SES to work the same as other services
- 2. More tests
+ 1. More tests
