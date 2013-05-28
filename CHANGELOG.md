@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.0 RC3
+
+- Add exceptions support for Amazon SES.
+- Now allow the new "metadata" option in Mandrill message
+- Http adapter can now be configured more easily
+
 ## 1.0.0 RC2
 - Licensing of `composer.json` and all files inside SlmMail
 - Addition of a CHANGELOG document

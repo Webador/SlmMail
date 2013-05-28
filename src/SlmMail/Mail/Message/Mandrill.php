@@ -59,19 +59,20 @@ class Mandrill extends Message
      * @var array
      */
     protected $validOptions = array(
-        'important',
-        'track_opens',
-        'track_clicks',
-        'auto_text',
         'auto_html',
-        'inline_css',
-        'url_strip_qs',
-        'preserve_recipients',
-        'tracking_domain',
-        'signing_domain',
-        'merge',
+        'auto_text',
+        'google_analytics_campaign',
         'google_analytics_domains',
-        'google_analytics_campaign'
+        'important',
+        'inline_css',
+        'merge',
+        'metadata',
+        'preserve_recipients',
+        'signing_domain',
+        'track_clicks',
+        'track_opens',
+        'tracking_domain',
+        'url_strip_qs'
     );
 
     /**

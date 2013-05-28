@@ -3,7 +3,7 @@ SlmMail
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
 
-Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
+Version 1.0.0-rc3 Created by Jurian Sluiman and Michaël Gallego
 
 Introduction
 ------------
@@ -41,11 +41,14 @@ file called `composer.json` and save it in the root of your project:
 
 ```
 {
+    "minimum-stability": "rc",
     "require": {
-        "slm/mail": ">=1.*"
+        "slm/mail": "1.*"
     }
 }
 ```
+
+> minimum-stability attribute is required as we have not reached final version yet.
 
 Then execute the following commands in a CLI:
 
@@ -96,6 +99,32 @@ $message->setBody($body);
 ```
 
 > For accessibility purposes, you should *always* provide both a text and HTML version of your mails.
+
+### How to configure HttpClient with http_options and http_adapter
+
+By defaut the adapter is Zend\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
+
+```php
+'slm_mail' => array(
+        // Here your email service provider options
+
+        'http_adapter' => 'Zend\Http\Client\Adapter\Proxy' // for example
+    )
+```
+
+If you want to change some options of your adapter please refer to you adapter class in var $config [here](https://github.com/zendframework/zf2/tree/master/library/Zend/Http/Client/Adapter) and override these in your slm_mail.*.local.php like this :
+
+```php
+'slm_mail' => array(
+        // Here your email service provider options
+
+        // example for Socket adapter
+        'http_options' => array(
+            'sslverifypeer' => false,
+            'persistent' => true,
+        ),
+    )
+```
 
 ### Pricing comparison
 
