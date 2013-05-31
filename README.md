@@ -3,7 +3,7 @@ SlmMail
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
 
-Version 1.0.0-rc3 Created by Jurian Sluiman and Michaël Gallego
+Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
 
 > Note that API calls are not currently unit-tested (although we have properly test them manually). Therefore, you
 are encouraged to test your API usage before going into production.
@@ -46,14 +46,11 @@ file called `composer.json` and save it in the root of your project:
 
 ```
 {
-    "minimum-stability": "rc",
     "require": {
-        "slm/mail": "1.*"
+        "slm/mail": ">=1.0.0,<1.1.0"
     }
 }
 ```
-
-> minimum-stability attribute is required as we have not reached final version yet.
 
 Then execute the following commands in a CLI:
 
