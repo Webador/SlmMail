@@ -5,6 +5,9 @@ SlmMail
 
 Version 1.0.0-rc3 Created by Jurian Sluiman and Michaël Gallego
 
+> Note that API calls are not currently unit-tested (although we have properly test them manually). Therefore, you
+are encouraged to test your API usage before going into production.
+
 Introduction
 ------------
 
@@ -16,23 +19,25 @@ or MailJet) are out-of-the scope of this module.
 
 Here are the currently supported services:
 
-* AlphaMail (complete)
-* Amazon SES (complete)
-* Elastic Email (complete)
-* Mailgun (nearly complete - advanced features like Routes are not supported -)
-* Mandrill (complete)
-* Postmark (complete)
-* Postage (complete)
-* Send Grid (nearly complete)
+* [AlphaMail](http://www.amail.io) (complete)
+* [Amazon SES](http://aws.amazon.com/ses) (complete)
+* [Elastic Email](http://elasticemail.com) (complete)
+* [Mailgun](http://www.mailgun.com) (nearly complete - advanced features like Routes are not supported -)
+* [Mandrill](http://mandrill.com) (complete)
+* [Postmark](https://postmarkapp.com) (complete)
+* [Postage](http://postageapp.com) (complete)
+* [Send Grid](http://sendgrid.com) (nearly complete)
 
 Requirements
 ------------
+
 * PHP 5.3
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [Amazon AWS ZF 2 Module](https://github.com/aws/aws-sdk-php-zf2): only if you plan to use Amazon SES service
 
 Installation
 ------------
+
 Add "slm/mail" to your composer.json file and update your dependencies. Enable SlmMail in your
 `application.config.php`. To use one of the transport layers, see the documentation in the [docs](https://github.com/juriansluiman/SlmMail/tree/master/docs) folder.
 
@@ -64,6 +69,20 @@ you include the `vendor/autoload.php` file to properly load the SlmMail module.
 
 If you want to use Amazon SES, you need to install the official AWS ZF 2 module. Please refer to the documentation
 of Amazon SES in the [docs](https://github.com/juriansluiman/SlmMail/tree/master/docs) folder.
+
+Documentation
+-------------
+
+Documentation for SlmMail is splitted for each provider:
+
+* [AlphaMail](/docs/AlphaMail.md)
+* [Amazon SES](/docs/Ses.md)
+* [Elastic Email](/docs/ElasticEmail.md)
+* [Mailgun](/docs/Mailgun.md)
+* [Mandrill](/docs/Mandrill.md)
+* [Postage](/docs/Postage.md)
+* [Postmark](/docs/Postmark.md)
+* [SendGrid](/docs/SendGrid.md)
 
 Cook-book
 ---------
@@ -126,23 +145,9 @@ If you want to change some options of your adapter please refer to you adapter c
     )
 ```
 
-### Pricing comparison
+### Which provider should I choose?
 
-Here is a table of prices for each service providers (if they are outdated please create an issue). Of course, you
-are encouraged to have a look at features instead of just pricing, but this may be important too ;-) :
+We won't answer you :-)! Each provider have their own set of features. You should carefully read each website
+to discover which one suit your needs the most.
 
-Provider     | Price | Example with 100 000 emails/month |
------------- | ----- | ---------------------------------
-Alpha Mail   | up to 6 000 emails/month: free, up to 40 000 emails/month: 9.49 $/month, up to 100 000 emails/month: 79.49$/month, 199.49 $/month, up to 700 000 emails/month: 399.49$/month | 79.49 $ / month
-Amazon SES   | 2 000 messages/day for free, then 0.10$ for 1000 | 4 $ / month
-Elastic Mail | depends on what you send AND your reputation accross time | between 95$ and 50$ / month
-Mailgun      | five plans depending on a minimum required per month. Free plan: 200 mails / day ; standard plan: 1$ for 1000, minimum of 19$ per month required ; express plan: 0.50$ per 1000, minimum of 59$ per month required ; priority plan: 0.40$ per 1000, minimum of 199$ per month required ; first-class plan: 0.10$ per 1000, minimum of 499$ per month required | 10$ / month with the first-class plan or 40$ / month with the priority plan
-Mandrill     | up to 12 000 emails per month for free, then 0.20$ per 1000 for next 1 milion mail, then 0.15 $ per 1000 for next 5 million mails, then 0.10 $ per 1000 | 17.60$ / month
-Postmark     | 1.50 $ per 1000 mails. You can get discounted prices by buying more credits at once (lowest price is 0.50$ per 1000) | 150 $ / month
-Postage      | five plans with a maximum of emails for each. Carrier pigeon: 9$ / month, with a maximum of 10 000 emails / month ; Falcon: 29$ / month with a maximum of 40 000 / month ; Owl: 79$ / month with a maximum of 100 000 / month ; Eagle: 199$ / month with a maximum of 400 000 / month ; Pterodactyl: 399$ / month with a maximum of 1 000 000 per month | 79 $ / month
-Send Grid    | five plans with a maximum of emails for each. Bronze: 9.95$ / month with a maximum of 40 000 emails ; Silver: 79.95 $ / month with a maximum of 100 000 / month ; Gold: 199.95 $ / month with a maximum of 300 000 / month ; Platinum: 399.95 $ / month with a maximum of 700 000 / month | 79.95 $
-
-
-TODO
-----
- 1. More tests
+However, for convenience purpose, we [have wrapped a pricing table](/docs/Pricing.md) for each email provider!
