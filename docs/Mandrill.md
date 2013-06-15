@@ -49,9 +49,10 @@ $message->setBody($body);
 
 #### Images
 
-You can add any images to Mandrill message. The content must be a base64 encoded string of your content. Images
-are similar to attachments, instead that you can use them more easily in Mandrill template (in your templates
-hosted on Mandrill, you can use `<img src="cid:THIS_VALUE">`, where THIS_VALUE is the name of the image you add).
+You can add any images to Mandrill message. However, contrary to attachments, images added using
+the following method ARE NOT attached to the mail. Rather, they can be used inside your Mandrill
+template (using the following syntax: `<img src="cid:THIS_VALUE">`, where THIS_VALUE is the name 
+of the image you add) for visual purposes.
 
 Note that the MIME-Type of images must start with `image/`.
 
@@ -60,7 +61,8 @@ $image = new \Zend\Mime\Part(fopen($pathToImage, 'r'));
 $image->type     = "image/png";
 $image->filename = "my-image.png";
 
-// Like attachments, add $image to the Zend\Mime\Message
+$message = new \SlmMail\Mail\Message\Mandrill();
+$message->addImage($image);
 ```
 
 #### Options
