@@ -4,7 +4,7 @@ SlmMail
 [![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
 [![Latest Stable Version](https://poser.pugx.org/slm/mail/v/stable.png)](https://packagist.org/packages/slm/mail)
 
-Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
+Created by Jurian Sluiman and Michaël Gallego
 
 > Note that API calls are not currently unit-tested (although we have properly test them manually). Therefore, you
 are encouraged to test your API usage before going into production.
