@@ -2,6 +2,7 @@ SlmMail
 =======
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
+[![Latest Stable Version](https://poser.pugx.org/slm/mail/v/stable.png)](https://packagist.org/packages/slm/mail)
 
 Version 1.0.0 Created by Jurian Sluiman and Michaël Gallego
 
