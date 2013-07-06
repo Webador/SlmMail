@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.0.1
+
+- Add the new "getMessageInfo" to Mandrilll service.
+
+## 1.0.0
+
+- Doc update
+
 ## 1.0.0 RC3
 
 - Add exceptions support for Amazon SES.

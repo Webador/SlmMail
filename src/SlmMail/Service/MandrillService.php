@@ -107,6 +107,21 @@ class MandrillService extends AbstractMailService
     }
 
     /**
+     * Get all the information about a message by its Mandrill id
+     *
+     * @link https://mandrillapp.com/api/docs/messages.JSON.html#method=info
+     * @param  string $id
+     * @return array
+     */
+    public function getMessageInfo($id)
+    {
+        $response = $this->prepareHttpClient('/messages/info.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
      * ------------------------------------------------------------------------------------------
      * USERS
      * ------------------------------------------------------------------------------------------
