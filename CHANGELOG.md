@@ -3,6 +3,7 @@
 ## 1.0.1
 
 - Add the new "getMessageInfo" to Mandrilll service.
+- Add a new "UnknownTemplateException" for services that support templates and report this error (currently, only Mandrill)
 
 ## 1.0.0
 

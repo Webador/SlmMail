@@ -224,4 +224,5 @@ The following exceptions are thrown, depending on the errors returned by Mandril
 
 * `SlmMail\Service\Exception\InvalidCredentialsException`: this exception is thrown when invalid or no API key was sent.
 * `SlmMail\Service\Exception\ValidationErrorException`: this exception is thrown when malformed or missing data is sent.
+* `SlmMail\Service\Exception\UnknownTemplateException`: this exception is thrown when using a template that does not exist on Mandrill.
 * `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.

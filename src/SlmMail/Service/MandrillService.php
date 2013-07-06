@@ -714,6 +714,7 @@ class MandrillService extends AbstractMailService
      * @param  HttpResponse $response
      * @throws Exception\InvalidCredentialsException
      * @throws Exception\ValidationErrorException
+     * @throws Exception\UnknownTemplateException
      * @throws Exception\RuntimeException
      * @return array
      */
@@ -732,6 +733,10 @@ class MandrillService extends AbstractMailService
                 ));
             case 'ValidationError':
                 throw new Exception\ValidationErrorException(sprintf(
+                    'An error occurred on Mandrill (code %s): %s', $result['code'], $result['message']
+                ));
+            case 'Unknown_Template':
+                throw new Exception\UnknownTemplateException(sprintf(
                     'An error occurred on Mandrill (code %s): %s', $result['code'], $result['message']
                 ));
             default:
