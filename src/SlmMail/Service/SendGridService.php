@@ -138,6 +138,7 @@ class SendGridService extends AbstractMailService
 
         $response = $client->setMethod(HttpRequest::METHOD_POST)
                            ->setEncType(HttpClient::ENC_FORMDATA)
+                           ->setParameterPost($parameters)
                            ->send();
 
         return $this->parseResponse($response);
