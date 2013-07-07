@@ -51,7 +51,7 @@ $message->setBody($body);
 
 You can add any images to Mandrill message. However, contrary to attachments, images added using
 the following method ARE NOT attached to the mail. Rather, they can be used inside your Mandrill
-template (using the following syntax: `<img src="cid:THIS_VALUE">`, where THIS_VALUE is the name 
+template (using the following syntax: `<img src="cid:THIS_VALUE">`, where THIS_VALUE is the name
 of the image you add) for visual purposes.
 
 Note that the MIME-Type of images must start with `image/`.
@@ -165,6 +165,7 @@ Messages functions:
 
 * `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](https://mandrillapp.com/api/docs/messages.html#method=send))
 * `sendTemplate(Message $message)`: used by transport layer if a $message has a template ([docs](https://mandrillapp.com/api/docs/messages.html#method=send-template))
+* `getMessageInfo($id)`: get all the information about a message by its Mandrill id ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=info))
 
 Users functions:
 
@@ -223,4 +224,5 @@ The following exceptions are thrown, depending on the errors returned by Mandril
 
 * `SlmMail\Service\Exception\InvalidCredentialsException`: this exception is thrown when invalid or no API key was sent.
 * `SlmMail\Service\Exception\ValidationErrorException`: this exception is thrown when malformed or missing data is sent.
+* `SlmMail\Service\Exception\UnknownTemplateException`: this exception is thrown when using a template that does not exist on Mandrill.
 * `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.

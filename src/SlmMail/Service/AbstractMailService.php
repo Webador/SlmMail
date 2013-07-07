@@ -114,7 +114,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * text/html.
      *
      * @param  Message $message
-     * @return array
+     * @return \Zend\Mime\Part[]|array
      */
     protected function extractAttachments(Message $message)
     {

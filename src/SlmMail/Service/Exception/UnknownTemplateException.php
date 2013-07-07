@@ -38,9 +38,14 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail;
+namespace SlmMail\Service\Exception;
 
-class Version
+use RuntimeException as BaseRuntimeException;
+use SlmMail\Exception\ExceptionInterface;
+
+/**
+ * This exception is thrown for when a template is not known (only for services that support it)
+ */
+class UnknownTemplateException extends BaseRuntimeException implements ExceptionInterface
 {
-    const VERSION = '1.0.1';
 }

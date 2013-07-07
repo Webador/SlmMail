@@ -70,6 +70,7 @@ class MandrillServiceTest extends PHPUnit_Framework_TestCase
             array(200, null, null),
             array(401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'),
             array(400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'),
+            array(400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'),
             array(500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
         );
     }
