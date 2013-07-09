@@ -127,7 +127,9 @@ class SendGridService extends AbstractMailService
         }
 
         $client = $this->prepareHttpClient('/mail.send.json', $parameters);
-
+        // Set Parameters as POST, since prepareHttpClient() put only GET parameters
+        $client->setParameterPost($parameters);
+        
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
         $post        = $client->getRequest()->getPost();
