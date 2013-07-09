@@ -2,6 +2,7 @@
 
 ## 1.0.1
 
+- Fix a problem when sending messages via SendGrid.
 - Add the new "getMessageInfo" to Mandrilll service.
 - Add a new "UnknownTemplateException" for services that support templates and report this error (currently, only Mandrill)
 
