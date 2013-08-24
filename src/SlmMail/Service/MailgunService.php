@@ -87,7 +87,7 @@ class MailgunService extends AbstractMailService
 
     /**
      * {@inheritDoc}
-     * @link http://help.postageapp.com/kb/api/send_message
+     * @link http://documentation.mailgun.com/api-sending.html
      * @return string id of message (if sent correctly)
      */
     public function send(Message $message)
@@ -260,6 +260,116 @@ class MailgunService extends AbstractMailService
 
     /**
      * ------------------------------------------------------------------------------------------
+     * ROUTES
+     * ------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * Add a new route (expression and action must be valid according to Mailgun syntax)
+     *
+     * @link http://documentation.mailgun.com/api-routes.html
+     * @param  string       $description A description for the route
+     * @param  string       $expression  A filter expression
+     * @param  string|array $actions     A single or multiple actions
+     * @param  int          $priority    Optional priority (smaller number indicates higher priority)
+     * @return array
+     */
+    public function addRoute($description, $expression, $actions, $priority = 0)
+    {
+        $parameters = array(
+            'description' => $description,
+            'expression'  => $expression,
+            'actions'     => (array) $actions,
+            'priority'    => $priority
+        );
+
+        $response = $this->prepareHttpClient('/routes', $parameters, false)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Delete an existing route
+     *
+     * @link @link http://documentation.mailgun.com/api-routes.html
+     * @param  string $id
+     * @return array
+     */
+    public function deleteRoute($id)
+    {
+        $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
+                         ->setMethod(HttpRequest::METHOD_DELETE)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get all the routes
+     *
+     * @link http://documentation.mailgun.com/api-routes.html
+     * @param  int $limit
+     * @param  int $offset
+     * @return array
+     */
+    public function getRoutes($limit = 100, $offset = 0)
+    {
+        $parameters = array('limit' => $limit, 'skip' => $offset);
+
+        $response = $this->prepareHttpClient('/routes', array(), false)
+                         ->setMethod(HttpRequest::METHOD_GET)
+                         ->setParameterGet($this->filterParameters($parameters))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get route details
+     *
+     * @link http://documentation.mailgun.com/api-routes.html
+     * @param  string $id
+     * @return array
+     */
+    public function getRoute($id)
+    {
+        $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
+                         ->setMethod(HttpRequest::METHOD_GET)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Update an existing route (expression and action must be valid according to Mailgun syntax)
+     *
+     * @link http://documentation.mailgun.com/api-routes.html
+     * @param  string       $id          Identifier of the route
+     * @param  string       $description A description for the route
+     * @param  string       $expression  A filter expression
+     * @param  string|array $actions     A single or multiple actions
+     * @param  int          $priority    Optional priority (smaller number indicates higher priority)
+     * @return array
+     */
+    public function updateRoute($id, $description, $expression, $actions, $priority = 0)
+    {
+        $parameters = array(
+            'description' => $description,
+            'expression'  => $expression,
+            'actions'     => (array) $actions,
+            'priority'    => $priority
+        );
+
+        $response = $this->prepareHttpClient('/routes/' . $id, $parameters, false)
+                         ->setMethod(HttpRequest::METHOD_PUT)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * ------------------------------------------------------------------------------------------
      * BOUNCES
      * ------------------------------------------------------------------------------------------
      */
@@ -335,18 +445,24 @@ class MailgunService extends AbstractMailService
 
     /**
      * @param string $uri
-     * @param array $parameters
+     * @param array  $parameters
+     * @param bool   $perDomain
      * @return \Zend\Http\Client
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient($uri, array $parameters = array(), $perDomain = true)
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
                ->getHeaders()
                ->addHeaderLine('Authorization', 'Basic ' . base64_encode('api:' . $this->apiKey));
 
+        if ($perDomain) {
+            $client->setUri(self::API_ENDPOINT . '/' . $this->domain . $uri);
+        } else {
+            $client->setUri(self::API_ENDPOINT . $uri);
+        }
+
         return $client->setMethod(HttpRequest::METHOD_POST)
-                      ->setUri(self::API_ENDPOINT . '/' . $this->domain . $uri)
                       ->setParameterPost($this->filterParameters($parameters));
     }
 
