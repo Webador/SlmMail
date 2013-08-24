@@ -48,11 +48,6 @@ class Mandrill extends Message
     /**
      * @var array
      */
-    protected $tags = array();
-
-    /**
-     * @var array
-     */
     protected $options = array();
 
     /**
@@ -68,12 +63,19 @@ class Mandrill extends Message
         'merge',
         'metadata',
         'preserve_recipients',
+        'return_path_domain',
         'signing_domain',
+        'subaccount',
         'track_clicks',
         'track_opens',
         'tracking_domain',
         'url_strip_qs'
     );
+
+    /**
+     * @var array
+     */
+    protected $tags = array();
 
     /**
      * @var string
@@ -99,40 +101,6 @@ class Mandrill extends Message
      * @var Part[]|array
      */
     protected $images = array();
-
-    /**
-     * Get all tags for this message
-     *
-     * @return array
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * Set all tags for this message
-     *
-     * @param  array $tags
-     * @return self
-     */
-    public function setTags(array $tags)
-    {
-        $this->tags = $tags;
-        return $this;
-    }
-
-    /**
-     * Add a tag to this message
-     *
-     * @param string $tag
-     * @return self
-     */
-    public function addTag($tag)
-    {
-        $this->tags[] = (string) $tag;
-        return $this;
-    }
 
     /**
      * Add options to the message
@@ -167,7 +135,7 @@ class Mandrill extends Message
     {
         if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option %s given', $key
+                'Invalid option "%s" given', $key
             ));
         }
 
@@ -183,6 +151,40 @@ class Mandrill extends Message
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * Get all tags for this message
+     *
+     * @return array
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Set all tags for this message
+     *
+     * @param  array $tags
+     * @return self
+     */
+    public function setTags(array $tags)
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * Add a tag to this message
+     *
+     * @param string $tag
+     * @return self
+     */
+    public function addTag($tag)
+    {
+        $this->tags[] = (string) $tag;
+        return $this;
     }
 
     /**

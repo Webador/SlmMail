@@ -92,6 +92,7 @@ class Mailgun extends Message
                 'Mailgun only allows up to %s tags', self::TAG_LIMIT
             ));
         }
+
         $this->tags = $tags;
         return $this;
     }
@@ -127,7 +128,7 @@ class Mailgun extends Message
         foreach ($options as $key => $value) {
             if (!array_key_exists($key, $this->getValidOptions())) {
                 throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid option %s given', $key
+                    'Invalid option "%s" given', $key
                 ));
             }
         }
@@ -148,7 +149,7 @@ class Mailgun extends Message
     {
         if (!array_key_exists($key, $this->getValidOptions())) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option %s given', $key
+                'Invalid option "%s" given', $key
             ));
         }
 

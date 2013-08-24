@@ -1,9 +1,18 @@
 # CHANGELOG
 
+## 1.1.0
+
+- Add support for Mandrill subaccounts API
+- Allow up to one BCC address for Mandrill
+- Add following options to Mandrill messages: return_path_domain, subaccount
+- Updated Mandrill doc
+- Add support for Mailgun routes
+- Updated Mailgun doc
+
 ## 1.0.1
 
 - Fix a problem when sending messages via SendGrid.
-- Add the new "getMessageInfo" to Mandrilll service.
+- Add the new "getMessageInfo" to Mandrill service.
 - Add a new "UnknownTemplateException" for services that support templates and report this error (currently, only Mandrill)
 
 ## 1.0.0
