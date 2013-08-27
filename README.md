@@ -23,7 +23,7 @@ Here are the currently supported services:
 * [AlphaMail](http://www.amail.io) (complete)
 * [Amazon SES](http://aws.amazon.com/ses) (nearly complete, [attachments are missing](https://github.com/juriansluiman/SlmMail/issues/44))
 * [Elastic Email](http://elasticemail.com) (complete)
-* [Mailgun](http://www.mailgun.com) (nearly complete - advanced features like Routes are not supported -)
+* [Mailgun](http://www.mailgun.com) (complete)
 * [Mandrill](http://mandrill.com) (complete)
 * [Postmark](https://postmarkapp.com) (complete)
 * [Postage](http://postageapp.com) (complete)
@@ -48,7 +48,7 @@ file called `composer.json` and save it in the root of your project:
 ```
 {
     "require": {
-        "slm/mail": ">=1.0.0,<1.1.0"
+        "slm/mail": ">=1.1.0,<1.2.0-dev"
     }
 }
 ```

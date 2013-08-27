@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.0
+
+- Add support for Mailgun routes
+- Updated Mailgun doc
+
 ## 1.0.1
 
 - Fix a problem when sending messages via SendGrid.

@@ -121,6 +121,15 @@ Spam functions:
 * `addSpamComplaint($address)`: add an address to the complaints table ([docs](http://documentation.mailgun.com/api-complaints.html))
 * `deleteSpamComplaint($address)`: delete an address from spam complaint ([docs](http://documentation.mailgun.com/api-complaints.html))
 
+Route functions:
+
+* `addRoute($description, $expression, $actions, $priority = 0)`: add a new route ([docs](http://documentation.mailgun.com/api-routes.html))
+* `deleteRoute($id)`: delete an existing route ([docs](http://documentation.mailgun.com/api-routes.html))
+* `getRoutes($limit = 100, $offset = 0)`: get routes ([docs](http://documentation.mailgun.com/api-routes.html))
+* `getRoute($id)`: get route by its identifier ([docs](http://documentation.mailgun.com/api-routes.html))
+* `updateRoute($id, $description, $expression, $actions, $priority = 0)`: update an existing route ([docs](http://documentation.mailgun.com/api-routes.html))
+
+
 Bounce functions:
 
 * `getBounces($limit = 100, $offset = 0)`: get bounces ([docs](http://documentation.mailgun.com/api-bounces.html))
