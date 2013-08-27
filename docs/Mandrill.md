@@ -2,10 +2,10 @@ Mandrill
 ========
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Mandrill](http://mandrill.com).
-The transport is a drop-in component and can be used to send email messages *without* Cc & Bcc addresses and attachments.
+The transport is a drop-in component and can be used to send email messages *without* Cc addresses.
 
 Mandrill only supports To recipients currently, but you can hide the recipients using your Mandrill preferences ([learn here how to do it](http://help.mandrill.com/entries/21751312-Can-I-send-to-more-than-one-recipient-at-a-time-)),
-or by using options (more on that latter).
+or by using options (more on that latter). You can also add up to 1 BCC address (setting more will throw an exception).
 
 Installation
 ------------
@@ -88,8 +88,10 @@ Mandrill service will filter unknown options. Unsupported options with throw an 
 * inline_css: (boolean) whether or not to automatically inline all CSS styles provided in the message HTML - only for HTML documents less than 256KB in size
 * url_strip_qs: (boolean) whether or not to strip the query string from URLs when aggregating tracked URL data
 * preserve_recipients: (boolean) whether or not to expose all recipients in to "To" header for each email
+* return_path_domain: (string) a custom domain to use for the messages's return-path
 * tracking_domain: (string) a custom domain to use for tracking opens and clicks instead of mandrillapp.com
 * signing_domain: (string) a custom domain to use for SPF/DKIM signing instead of mandrill (for "via" or "on behalf of" in email clients)
+* subaccount: (string) a unique id of a subaccount (it must exists)
 * merge: (boolean) whether to evaluate merge tags in the message. Will automatically be set to true if either merge_vars or global_merge_vars are provided.
 * google_analytics_domains: (array) an array of strings indicating for which any matching URLs will automatically have Google Analytics parameters appended to their query string automatically.
 * google_analytics_campaign: (string) optional string indicating the value to set for the utm_campaign tracking parameter. If this isn't provided the email's from address will be used instead.
@@ -185,6 +187,16 @@ Tags functions:
 * `deleteTag($tag)`: delete a tag permanently ([docs](https://mandrillapp.com/api/docs/tags.html#method=delete))
 * `getTagInfo($tag)`: get more detailed information about a single tag, including aggregates of recent stats ([docs](https://mandrillapp.com/api/docs/tags.html#method=info))
 * `getRecentTagInfo($tag)`: get recent detailed information (last 30 days) about a single tag, including aggregates of recent stats ([docs](https://mandrillapp.com/api/docs/tags.html#method=time-series))
+
+Subaccounts functions:
+
+* `addSubaccount($id, $name = '', $notes = '', $customQuota = null)`: add a new subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=add))
+* `deleteSubaccount($id)`: delete an existing subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=delete))
+* `getSubaccountInfo($id)`: get info about a specific subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=info))
+* `getSubaccounts($prefix = '')`: get all subaccounts, optionally filtered by a prefix ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=list))
+* `pauseAccount($id)`: pause a subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=pause))
+* `resumeAccount($id)`: resume a subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=resume))
+* `updateAccount($id, $name = '', $notes = '', $customQuota = null)`: update an existing subaccount ([docs](https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=update))
 
 Rejection blacklist functions:
 

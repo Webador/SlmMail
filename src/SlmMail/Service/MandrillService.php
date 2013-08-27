@@ -226,20 +226,6 @@ class MandrillService extends AbstractMailService
      */
 
     /**
-     * Get all of the user-defined tag information
-     *
-     * @link https://mandrillapp.com/api/docs/tags.html#method=list
-     * @return array
-     */
-    public function getTags()
-    {
-        $response = $this->prepareHttpClient('/tags/list.json')
-                         ->send();
-
-        return $this->parseResponse($response);
-    }
-
-    /**
      * Delete a tag permanently
      *
      * @link https://mandrillapp.com/api/docs/tags.html#method=delete
@@ -249,6 +235,21 @@ class MandrillService extends AbstractMailService
     public function deleteTag($tag)
     {
         $response = $this->prepareHttpClient('/tags/delete.json', array('tag' => $tag))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get recent detailed information (last 30 days) about a single tag, including aggregates of recent stats
+     *
+     * @link https://mandrillapp.com/api/docs/tags.html#method=time-series
+     * @param string $tag
+     * @return array
+     */
+    public function getRecentTagInfo($tag)
+    {
+        $response = $this->prepareHttpClient('/tags/time-series.json', array('tag' => $tag))
                          ->send();
 
         return $this->parseResponse($response);
@@ -270,16 +271,15 @@ class MandrillService extends AbstractMailService
     }
 
     /**
-     * Get recent detailed information (last 30 days) about a single tag, including aggregates of recent stats
+     * Get all of the user-defined tag information
      *
-     * @link https://mandrillapp.com/api/docs/tags.html#method=time-series
-     * @param string $tag
+     * @link https://mandrillapp.com/api/docs/tags.html#method=list
      * @return array
      */
-    public function getRecentTagInfo($tag)
+    public function getTags()
     {
-        $response = $this->prepareHttpClient('/tags/time-series.json', array('tag' => $tag))
-                         ->send();
+        $response = $this->prepareHttpClient('/tags/list.json')
+            ->send();
 
         return $this->parseResponse($response);
     }
@@ -425,6 +425,137 @@ class MandrillService extends AbstractMailService
     public function getRecentUrlInfo($url)
     {
         $response = $this->prepareHttpClient('/url/time-series.json', array('url' => $url))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * ----------------------------------------------------------------------------------------------------
+     * SUB ACCOUNTS
+     * ----------------------------------------------------------------------------------------------------
+     */
+
+    /**
+     * Add a new subaccount to Mandrill
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=add
+     * @param  string   $id   Unique identifier (max of 255 characters)
+     * @param  string   $name Optional display name to identify the subaccount (max of 1024 characters)
+     * @param  string   $notes Optional text associated with the subaccount
+     * @param  int|null $customQuota Optional manual hourly quota for subaccount (let null for letting Mandril decide)
+     * @return array
+     */
+    public function addSubaccount($id, $name = '', $notes = '', $customQuota = null)
+    {
+        $parameters = array(
+            'id'           => $id,
+            'name'         => $name,
+            'notes'        => $notes,
+            'custom_quota' => $customQuota
+        );
+
+        $response = $this->prepareHttpClient('/subaccounts/add.json', $parameters)
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Delete an existing subaccount from its identifier
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=delete
+     * @param  string $id Subaccount's unique identifier
+     * @return array
+     */
+    public function deleteSubaccount($id)
+    {
+        $response = $this->prepareHttpClient('/subaccounts/delete.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get information about a given subaccount
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=info
+     * @param  string $id Subaccount's unique identifier
+     * @return array
+     */
+    public function getSubaccountInfo($id)
+    {
+        $response = $this->prepareHttpClient('/subaccounts/info.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get all subaccounts, optionally filtered by a prefix
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=list
+     * @param  string $prefix Optional prefix to filter the subaccounts ids and names
+     * @return array
+     */
+    public function getSubaccounts($prefix = '')
+    {
+        $response = $this->prepareHttpClient('/subaccounts/list.json', array('q' => $prefix))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Pause an existing subaccount
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=pause
+     * @param  string $id Subaccount's unique identifier
+     * @return array
+     */
+    public function pauseSubaccount($id)
+    {
+        $response = $this->prepareHttpClient('/subaccounts/pause.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Resume a paused subaccount
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=resume
+     * @param  string $id Subaccount's unique identifier
+     * @return array
+     */
+    public function resumeSubaccount($id)
+    {
+        $response = $this->prepareHttpClient('/subaccounts/resume.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Update an existing subaccount from Mandrill
+     *
+     * @link https://mandrillapp.com/api/docs/subaccounts.JSON.html#method=update
+     * @param  string   $id   Unique identifier (max of 255 characters)
+     * @param  string   $name Optional display name to identify the subaccount (max of 1024 characters)
+     * @param  string   $notes Optional text associated with the subaccount
+     * @param  int|null $customQuota Optional manual hourly quota for subaccount (let null for letting Mandril decide)
+     * @return array
+     */
+    public function updateSubaccount($id, $name = '', $notes = '', $customQuota = null)
+    {
+        $parameters = array(
+            'id'           => $id,
+            'name'         => $name,
+            'notes'        => $notes,
+            'custom_quota' => $customQuota
+        );
+
+        $response = $this->prepareHttpClient('/subaccounts/update.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -593,10 +724,6 @@ class MandrillService extends AbstractMailService
             throw new Exception\RuntimeException('Mandrill does not support CC addresses');
         }
 
-        if (count($message->getBcc())) {
-            throw new Exception\RuntimeException('Mandrill does not support BCC addresses');
-        }
-
         $from = $from->rewind();
 
         $parameters['message'] = array(
@@ -619,6 +746,13 @@ class MandrillService extends AbstractMailService
             throw new Exception\RuntimeException('Mandrill has only support for one Reply-To address');
         } elseif (count($replyTo)) {
             $parameters['message']['headers']['Reply-To'] = $replyTo->rewind()->toString();
+        }
+
+        $bcc = $message->getBcc();
+        if (count($bcc) > 1) {
+            throw new Exception\RuntimeException('Mandrill has only support for one BCC address');
+        } elseif (count($bcc)) {
+            $parameters['message']['bcc_address'] = $bcc->rewind()->getEmail();
         }
 
         if ($message instanceof MandrillMessage) {
