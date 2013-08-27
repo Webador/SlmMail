@@ -279,7 +279,7 @@ class MandrillService extends AbstractMailService
     public function getTags()
     {
         $response = $this->prepareHttpClient('/tags/list.json')
-            ->send();
+                         ->send();
 
         return $this->parseResponse($response);
     }
