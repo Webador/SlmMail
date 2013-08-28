@@ -86,6 +86,7 @@ Mandrill service will filter unknown options. Unsupported options with throw an 
 * auto_text: (boolean) whether or not to automatically generate a text part for messages that are not given text
 * auto_html: (boolean) whether or not to automatically generate an HTML part for messages that are not given HTML
 * inline_css: (boolean) whether or not to automatically inline all CSS styles provided in the message HTML - only for HTML documents less than 256KB in size
+* metadata: (array) a list of custom metadata that is indexable
 * url_strip_qs: (boolean) whether or not to strip the query string from URLs when aggregating tracked URL data
 * preserve_recipients: (boolean) whether or not to expose all recipients in to "To" header for each email
 * return_path_domain: (string) a custom domain to use for the messages's return-path
