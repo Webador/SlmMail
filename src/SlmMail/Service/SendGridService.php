@@ -126,7 +126,7 @@ class SendGridService extends AbstractMailService
             $parameters['replyto'] = $replyTo->rewind()->getEmail();
         }
 
-        $client = $this->prepareHttpClient('/mail.send.json', $parameters);
+        $client = $this->prepareHttpClient('/mail.send.json');
         // Set Parameters as POST, since prepareHttpClient() put only GET parameters
         $client->setParameterPost($parameters);
         

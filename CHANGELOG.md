@@ -2,6 +2,10 @@
 
 ## 1.1.0
 
+- Add support for Mandrill subaccounts API
+- Allow up to one BCC address for Mandrill
+- Add following options to Mandrill messages: return_path_domain, subaccount
+- Updated Mandrill doc
 - Add support for Mailgun routes
 - Updated Mailgun doc
 

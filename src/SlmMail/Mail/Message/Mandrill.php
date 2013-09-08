@@ -48,11 +48,6 @@ class Mandrill extends Message
     /**
      * @var array
      */
-    protected $tags = array();
-
-    /**
-     * @var array
-     */
     protected $options = array();
 
     /**
@@ -68,12 +63,19 @@ class Mandrill extends Message
         'merge',
         'metadata',
         'preserve_recipients',
+        'return_path_domain',
         'signing_domain',
+        'subaccount',
         'track_clicks',
         'track_opens',
         'tracking_domain',
         'url_strip_qs'
     );
+
+    /**
+     * @var array
+     */
+    protected $tags = array();
 
     /**
      * @var string
@@ -99,6 +101,57 @@ class Mandrill extends Message
      * @var Part[]|array
      */
     protected $images = array();
+
+    /**
+     * Add options to the message
+     *
+     * @param  array $options
+     * @throws Exception\InvalidArgumentException
+     * @return self
+     */
+    public function setOptions(array $options)
+    {
+        foreach ($options as $key => $value) {
+            if (!in_array($key, $this->validOptions)) {
+                throw new Exception\InvalidArgumentException(sprintf(
+                    'Invalid option "%s" given', $key
+                ));
+            }
+        }
+
+        $this->options = $options;
+        return $this;
+    }
+
+    /**
+     * Set an option to the message
+     *
+     * @param  string $key
+     * @param  string $value
+     * @throws Exception\InvalidArgumentException
+     * @return self
+     */
+    public function setOption($key, $value)
+    {
+        if (!in_array($key, $this->validOptions)) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid option "%s" given', $key
+            ));
+        }
+
+        $this->options[$key] = $value;
+        return $this;
+    }
+
+    /**
+     * Get all the options of the message
+     *
+     * @return string[]
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
 
     /**
      * Get all tags for this message
@@ -132,57 +185,6 @@ class Mandrill extends Message
     {
         $this->tags[] = (string) $tag;
         return $this;
-    }
-
-    /**
-     * Add options to the message
-     *
-     * @param  array $options
-     * @throws Exception\InvalidArgumentException
-     * @return self
-     */
-    public function setOptions(array $options)
-    {
-        foreach ($options as $key => $value) {
-            if (!in_array($key, $this->validOptions)) {
-                throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid option %s given', $key
-                ));
-            }
-        }
-
-        $this->options = $options;
-        return $this;
-    }
-
-    /**
-     * Set an option to the message
-     *
-     * @param  string $key
-     * @param  string $value
-     * @throws Exception\InvalidArgumentException
-     * @return self
-     */
-    public function setOption($key, $value)
-    {
-        if (!in_array($key, $this->validOptions)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option %s given', $key
-            ));
-        }
-
-        $this->options[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * Get all the options of the message
-     *
-     * @return string[]
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 
     /**
