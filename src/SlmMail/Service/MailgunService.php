@@ -433,10 +433,14 @@ class MailgunService extends AbstractMailService
      */
     public function updateRoute($id, $description = '', $expression = '', $actions = array(), $priority = 0)
     {
+        $actions = (array) $actions;
+
         $parameters = array(
             'description' => $description,
             'expression'  => $expression,
-            'actions'     => (array) $actions,
+            'action'      => array_reverse($actions), // For unknown reasons, Mailgun API saves
+                                                      // routes in the opposite order as you specify
+                                                      // them, hence the array_reverse
             'priority'    => $priority
         );
 
