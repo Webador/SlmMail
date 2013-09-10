@@ -771,29 +771,29 @@ class MandrillService extends AbstractMailService
                 if (!isset($parameters['template_content'])) {
                     $parameters['template_content'] = array();
                 }
+            }
 
-                foreach ($message->getGlobalVariables() as $key => $value) {
-                    $parameters['message']['global_merge_vars'][] = array(
+            foreach ($message->getGlobalVariables() as $key => $value) {
+                $parameters['message']['global_merge_vars'][] = array(
+                    'name'    => $key,
+                    'content' => $value
+                );
+            }
+
+            foreach ($message->getVariables() as $recipient => $variables) {
+                $recipientVariables = array();
+
+                foreach ($variables as $key => $value) {
+                    $recipientVariables[] = array(
                         'name'    => $key,
                         'content' => $value
                     );
                 }
 
-                foreach ($message->getVariables() as $recipient => $variables) {
-                    $recipientVariables = array();
-
-                    foreach ($variables as $key => $value) {
-                        $recipientVariables[] = array(
-                            'name'    => $key,
-                            'content' => $value
-                        );
-                    }
-
-                    $parameters['message']['merge_vars'][] = array(
-                        'rcpt' => $recipient,
-                        'vars' => $recipientVariables
-                    );
-                }
+                $parameters['message']['merge_vars'][] = array(
+                    'rcpt' => $recipient,
+                    'vars' => $recipientVariables
+                );
             }
 
             foreach ($message->getOptions() as $key => $value) {

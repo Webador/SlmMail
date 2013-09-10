@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1
+
+- Allow non-template Mandrill messages to have merge variables
+
 ## 1.1.0
 
 - Add support for Mandrill subaccounts API
