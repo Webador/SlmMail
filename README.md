@@ -23,7 +23,7 @@ Here are the currently supported services:
 * [AlphaMail](http://www.amail.io) (complete)
 * [Amazon SES](http://aws.amazon.com/ses) (nearly complete, [attachments are missing](https://github.com/juriansluiman/SlmMail/issues/44))
 * [Elastic Email](http://elasticemail.com) (complete)
-* [Mailgun](http://www.mailgun.com) (nearly complete - advanced features like Routes are not supported -)
+* [Mailgun](http://www.mailgun.com) (complete)
 * [Mandrill](http://mandrill.com) (complete)
 * [Postmark](https://postmarkapp.com) (complete)
 * [Postage](http://postageapp.com) (complete)
