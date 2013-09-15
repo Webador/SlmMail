@@ -38,9 +38,17 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail;
+namespace SlmMailTest\Asset;
 
-class Version
+use SlmMail\Service\AbstractMailService;
+use Zend\Mail\Message;
+
+class SimpleMailService extends AbstractMailService
 {
-    const VERSION = '1.1.2';
+    /**
+     * {@inheritDoc}
+     */
+    public function send(Message $message)
+    {
+    }
 }

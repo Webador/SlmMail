@@ -201,9 +201,9 @@ Subaccounts functions:
 
 Rejection blacklist functions:
 
-* `addRejectionBlacklist($email)`: add an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=add))
-* `deleteRejectionBlacklist($email)`: delete an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=delete))
-* `getRejectionBlacklist($email, $includeExpired = false)`: get all the email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=list))
+* `addRejectionBlacklist($email, $subaccount = '', $comment = '')`: add an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=add))
+* `deleteRejectionBlacklist($email, $subaccount = '')`: delete an email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=delete))
+* `getRejectionBlacklist($email, $includeExpired = false, $subaccount = '')`: get all the email rejection blacklist ([docs](https://mandrillapp.com/api/docs/rejects.html#method=list))
 
 Rejection whitelist functions:
 

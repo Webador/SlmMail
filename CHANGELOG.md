@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.2
+
+- Add support for adding an email to a subaccount's rejection blacklist
+
 ## 1.1.1
 
 - Allow non-template Mandrill messages to have merge variables
@@ -30,6 +34,7 @@
 - Http adapter can now be configured more easily
 
 ## 1.0.0 RC2
+
 - Licensing of `composer.json` and all files inside SlmMail
 - Addition of a CHANGELOG document
 - Bug fixes for Options properties in Mandrill
