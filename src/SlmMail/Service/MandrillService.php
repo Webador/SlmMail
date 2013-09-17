@@ -291,15 +291,17 @@ class MandrillService extends AbstractMailService
      */
 
     /**
-     * Add an email to the rejection blacklist
+     * Add an email to the rejection blacklist (optionally in a subaccount)
      *
      * @link https://mandrillapp.com/api/docs/rejects.html#method=add
      * @param string $email
+     * @param string $subaccount
+     * @param string $comment
      * @return array
      */
-    public function addRejectionBlacklist($email)
+    public function addRejectionBlacklist($email, $subaccount = '', $comment = '')
     {
-        $response = $this->prepareHttpClient('/rejects/add.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/rejects/add.json', compact('email', 'subaccount', 'comment'))
                          ->send();
 
         return $this->parseResponse($response);
@@ -311,11 +313,12 @@ class MandrillService extends AbstractMailService
      *
      * @link https://mandrillapp.com/api/docs/rejects.html#method=delete
      * @param  string $email
+     * @param  string $subaccount
      * @return array
      */
-    public function deleteRejectionBlacklist($email)
+    public function deleteRejectionBlacklist($email, $subaccount = '')
     {
-        $response = $this->prepareHttpClient('/rejects/delete.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/rejects/delete.json', compact('email', 'subaccount'))
                          ->send();
 
         return $this->parseResponse($response);
@@ -326,12 +329,19 @@ class MandrillService extends AbstractMailService
      *
      * @link https://mandrillapp.com/api/docs/rejects.html#method=list
      * @param  string $email
-     * @param  bool $includeExpired
+     * @param  bool   $includeExpired
+     * @param  string $subaccount
      * @return array
      */
-    public function getRejectionBlacklist($email = '', $includeExpired = false)
+    public function getRejectionBlacklist($email = '', $includeExpired = false, $subaccount = '')
     {
-        $response = $this->prepareHttpClient('/rejects/list.json', array('email' => $email, 'include_expired' => $includeExpired))
+        $parameters = array(
+            'email'           => $email,
+            'include_expired' => $includeExpired,
+            'subaccount'      => $subaccount
+        );
+
+        $response = $this->prepareHttpClient('/rejects/list.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
