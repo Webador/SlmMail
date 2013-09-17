@@ -3,6 +3,8 @@ SlmMail
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmMail.png?branch=amazon-ses-exceptions)](https://travis-ci.org/juriansluiman/SlmMail)
 [![Latest Stable Version](https://poser.pugx.org/slm/mail/v/stable.png)](https://packagist.org/packages/slm/mail)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/juriansluiman/SlmMail/badges/quality-score.png?s=a9ce359ccf0362f8ffe6cff3644af2e065748eb0)](https://scrutinizer-ci.com/g/juriansluiman/SlmMail/)
+[![Dependencies Status](https://d2xishtp1ojlk0.cloudfront.net/d/2834272)](http://depending.in/juriansluiman/SlmMail)
 
 Created by Jurian Sluiman and Michaël Gallego
 
