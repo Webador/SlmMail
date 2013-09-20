@@ -41,7 +41,7 @@
 namespace SlmMail\Service;
 
 use Zend\Mail\Message;
-use Zend\Mail\TransportInterface;
+use Zend\Mail\Transport\TransportInterface;
 
 interface MailServiceInterface extends TransportInterface
 {
