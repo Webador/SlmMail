@@ -3,6 +3,7 @@
 ## 1.1.2
 
 - Add support for adding an email to a subaccount's rejection blacklist
+- Add support for Mandrill template labels
 
 ## 1.1.1
 
