@@ -218,10 +218,10 @@ URLs functions:
 
 Template functions:
 
-* `addTemplate($name, Address $address = null, $subject = '', $html = '', $text = '')`: add a new template to Mandrill ([docs](https://mandrillapp.com/api/docs/templates.html#method=add))
-* `updateTemplate($name, Address $address = null, $subject = '', $html = '', $text = '')`: update an existing template ([docs](https://mandrillapp.com/api/docs/templates.html#method=update))
+* `addTemplate($name, Address $address = null, $subject = '', $html = '', $text = '', array $labels = array())`: add a new template to Mandrill ([docs](https://mandrillapp.com/api/docs/templates.html#method=add))
+* `updateTemplate($name, Address $address = null, $subject = '', $html = '', $text = '', array $labels = array())`: update an existing template ([docs](https://mandrillapp.com/api/docs/templates.html#method=update))
 * `deleteTemplate($template)`: delete an existing template ([docs](https://mandrillapp.com/api/docs/templates.html#method=delete))
-* `getTemplates()`: get all registered templates on Mandrill ([docs](https://mandrillapp.com/api/docs/templates.html#method=list))
+* `getTemplates($label = '')`: get all registered templates on Mandrill ([docs](https://mandrillapp.com/api/docs/templates.html#method=list))
 * `deleteTemplate($template)`: delete an existing template ([docs](https://mandrillapp.com/api/docs/templates.html#method=delete))
 * `getTemplateInfo($template)`: get template info ([docs](https://mandrillapp.com/api/docs/templates.html#method=info))
 * `getRecentTemplateInfo($template)`: get recent template info (last 30 days) ([docs](https://mandrillapp.com/api/docs/templates.html#method=time-series))

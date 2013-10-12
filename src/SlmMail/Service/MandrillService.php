@@ -581,22 +581,32 @@ class MandrillService extends AbstractMailService
      * Add a new template to Mandrill
      *
      * @link https://mandrillapp.com/api/docs/templates.html#method=add
-     * @param  string       $name
+     * @param  string $name
      * @param  Address|null $address
-     * @param  string       $subject
-     * @param  string       $html
-     * @param  string       $text
+     * @param  string $subject
+     * @param  string $html
+     * @param  string $text
+     * @param  array $labels
      * @return array
+     * @throws Exception\RuntimeException If there are more than 10 template labels
      */
-    public function addTemplate($name, Address $address = null, $subject = '', $html = '', $text = '')
+    public function addTemplate($name, Address $address = null, $subject = '',
+                                $html = '', $text = '', array $labels = array())
     {
+        if (count($labels) > 10) {
+            throw new Exception\RuntimeException(
+                'Mandrill only supports up to 10 template labels'
+            );
+        }
+
         $parameters = array(
             'name'       => $name,
             'from_email' => ($address !== null) ? $address->getEmail() : '',
             'from_name'  => ($address !== null) ? $address->getName() : '',
             'subject'    => $subject,
             'code'       => $html,
-            'text'       => $text
+            'text'       => $text,
+            'labels'     => $labels
         );
 
         $response = $this->prepareHttpClient('/templates/add.json', $parameters)
@@ -609,22 +619,32 @@ class MandrillService extends AbstractMailService
      * Update an existing template
      *
      * @link https://mandrillapp.com/api/docs/templates.html#method=update
-     * @param  string  $name
+     * @param  string $name
      * @param  Address $address
-     * @param  string  $subject
-     * @param  string  $html
-     * @param  string  $text
+     * @param  string $subject
+     * @param  string $html
+     * @param  string $text
+     * @param  array $labels
      * @return array
+     * @throws Exception\RuntimeException If there are more than 10 template labels
      */
-    public function updateTemplate($name, Address $address = null, $subject = '', $html = '', $text = '')
+    public function updateTemplate($name, Address $address = null, $subject = '',
+                                   $html = '', $text = '', array $labels = array())
     {
+        if (count($labels) > 10) {
+            throw new Exception\RuntimeException(
+                'Mandrill only supports up to 10 template labels'
+            );
+        }
+
         $parameters = array(
             'name'       => $name,
             'from_email' => ($address !== null) ? $address->getEmail() : '',
             'from_name'  => ($address !== null) ? $address->getName() : '',
             'subject'    => $subject,
             'code'       => $html,
-            'text'       => $text
+            'text'       => $text,
+            'labels'     => $labels
         );
 
         $response = $this->prepareHttpClient('/templates/update.json', $parameters)
@@ -649,14 +669,15 @@ class MandrillService extends AbstractMailService
     }
 
     /**
-     * Get all registered templates on Mandrill
+     * Get all registered templates on Mandrill (optionally filtered by a label)
      *
      * @link https://mandrillapp.com/api/docs/templates.html#method=list
+     * @param  string $label
      * @return array
      */
-    public function getTemplates()
+    public function getTemplates($label = '')
     {
-        $response = $this->prepareHttpClient('/templates/list.json')
+        $response = $this->prepareHttpClient('/templates/list.json', array('label' => $label))
                          ->send();
 
         return $this->parseResponse($response);
