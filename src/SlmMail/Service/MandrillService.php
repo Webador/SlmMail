@@ -751,10 +751,6 @@ class MandrillService extends AbstractMailService
             );
         }
 
-        if (count($message->getCc())) {
-            throw new Exception\RuntimeException('Mandrill does not support CC addresses');
-        }
-
         $from = $from->rewind();
 
         $parameters['message'] = array(
@@ -768,7 +764,24 @@ class MandrillService extends AbstractMailService
         foreach ($message->getTo() as $to) {
             $parameters['message']['to'][] = array(
                 'email' => $to->getEmail(),
-                'name'  => $to->getName()
+                'name'  => $to->getName(),
+                'type'  => 'to'
+            );
+        }
+
+        foreach ($message->getCc() as $cc) {
+            $parameters['message']['to'][] = array(
+                'email' => $cc->getEmail(),
+                'name'  => $cc->getName(),
+                'type'  => 'cc'
+            );
+        }
+
+        foreach ($message->getBcc() as $bcc) {
+            $parameters['message']['to'][] = array(
+                'email' => $bcc->getEmail(),
+                'name'  => $bcc->getName(),
+                'type'  => 'bcc'
             );
         }
 
@@ -777,13 +790,6 @@ class MandrillService extends AbstractMailService
             throw new Exception\RuntimeException('Mandrill has only support for one Reply-To address');
         } elseif (count($replyTo)) {
             $parameters['message']['headers']['Reply-To'] = $replyTo->rewind()->toString();
-        }
-
-        $bcc = $message->getBcc();
-        if (count($bcc) > 1) {
-            throw new Exception\RuntimeException('Mandrill has only support for one BCC address');
-        } elseif (count($bcc)) {
-            $parameters['message']['bcc_address'] = $bcc->rewind()->getEmail();
         }
 
         if ($message instanceof MandrillMessage) {

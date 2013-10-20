@@ -2,7 +2,7 @@ Mandrill
 ========
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Mandrill](http://mandrill.com).
-The transport is a drop-in component and can be used to send email messages *without* Cc addresses.
+The transport is a drop-in component and can be used to send email messages.
 
 Mandrill only supports To recipients currently, but you can hide the recipients using your Mandrill preferences ([learn here how to do it](http://help.mandrill.com/entries/21751312-Can-I-send-to-more-than-one-recipient-at-a-time-)),
 or by using options (more on that latter). You can also add up to 1 BCC address (setting more will throw an exception).
