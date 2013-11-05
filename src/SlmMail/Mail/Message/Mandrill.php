@@ -98,6 +98,16 @@ class Mandrill extends Message
     protected $variables = array();
 
     /**
+     * @var array
+     */
+    protected $globalMetadata = array();
+
+    /**
+     * @var array
+     */
+    protected $metadata = array();
+
+    /**
      * @var Part[]|array
      */
     protected $images = array();
@@ -274,6 +284,51 @@ class Mandrill extends Message
     public function getVariables()
     {
         return $this->variables;
+    }
+
+    /**
+     * Set the global metadata to send with with message
+     *
+     * @param  array $globalVariables
+     * @return self
+     */
+    public function setGlobalMetadata(array $globalMetadata)
+    {
+        $this->globalMetadata = $globalMetadata;
+        return $this;
+    }
+
+    /**
+     * Get the global metadata to send with with message
+     *
+     * @return array
+     */
+    public function getGlobalMetadata()
+    {
+        return $this->globalMetadata;
+    }
+
+    /**
+     * Set the metadata for a given recipient address
+     *
+     * @param  string $recipient
+     * @param  array  $variables
+     * @return Mandrill
+     */
+    public function setMetadata($recipient, array $metadata)
+    {
+        $this->metadata[$recipient] = $metadata;
+        return $this;
+    }
+
+    /**
+     * Get the metadata for all recipients
+     *
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
     }
 
     /**
