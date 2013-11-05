@@ -831,7 +831,7 @@ class MandrillService extends AbstractMailService
 
             foreach ($message->getMetadata() as $recipient => $variables) {
                 $parameters['message']['recipient_metadata'][] = array(
-                    'rcpt' => $recipient,
+                    'rcpt'   => $recipient,
                     'values' => $variables
                 );
             }
