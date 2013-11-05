@@ -4,6 +4,8 @@
 
 - [BC] Removing the Version class (it's a hassle to maintain and has little use)
 - Improve support for Cc and Bcc in Mandrill
+- Allow support for per-recipient metadata in Mandrill messages through the "setMetadata" method.
+- Using the "metadata" option for Mandrill message has been deprecated, please now use the "setGlobalMetadata" method.
 
 ## 1.2.0
 
