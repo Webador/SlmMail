@@ -50,7 +50,7 @@ file called `composer.json` and save it in the root of your project:
 ```
 {
     "require": {
-        "slm/mail": ">=1.1.0,<1.2.0-dev"
+        "slm/mail": ">=1.3.0,<1.4.0-dev"
     }
 }
 ```

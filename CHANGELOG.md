@@ -1,6 +1,11 @@
 # CHANGELOG
 
-## 1.1.2
+## 1.3.0
+
+- [BC] Removing the Version class (it's a hassle to maintain and has little use)
+- Improve support for Cc and Bcc in Mandrill
+
+## 1.2.0
 
 - Add support for adding an email to a subaccount's rejection blacklist
 - Add support for Mandrill template labels
