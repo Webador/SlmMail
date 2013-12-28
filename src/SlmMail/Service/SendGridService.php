@@ -346,10 +346,10 @@ class SendGridService extends AbstractMailService
 
         // There is a 4xx error
         if ($response->isClientError()) {
-            if (isset($result->errors) && is_array($result->errors)) {
-                $message = implode(', ', $result->errors);
-            } elseif (isset($result->error)) {
-                $message = $result->error;
+            if (isset($result['errors']) && is_array($result['errors'])) {
+                $message = implode(', ', $result['errors']);
+            } elseif (isset($result['error'])) {
+                $message = $result['error'];
             } else {
                 $message = 'Unknown error';
             }
