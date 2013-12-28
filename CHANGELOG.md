@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.1
+
+- Fix a bug when extracting errors for SendGrid ([#60](https://github.com/juriansluiman/SlmMail/pull/60))
+
 ## 1.3.0
 
 - [BC] Removing the Version class (it's a hassle to maintain and has little use)
