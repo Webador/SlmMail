@@ -99,7 +99,7 @@ to the user.
 
 ### Advanced usage
 
-The transport layer depends on a service class `SlmMail\Service\MailgunService` which sends the requests to the Mandrill
+The transport layer depends on a service class `SlmMail\Service\MailgunService` which sends the requests to the Mailgun
 server. However, this service implements also a major part of the Mailgun API.
 
 The service class is injected into the `SlmMail\Mail\Transport\HttpTransport` but you can get the service class yourself too:
