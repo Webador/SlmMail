@@ -85,8 +85,13 @@ class MandrillService extends AbstractMailService
             return $this->sendTemplate($message);
         }
 
-        $response = $this->prepareHttpClient('/messages/send.json', $this->parseMessage($message, false))
-                         ->send();
+        $response = $this->prepareHttpClient('/messages/send.json', $this->parseMessage($message, false));
+
+        if ($this->testMode()) {
+            return array();
+        }
+
+        $response->send();
 
         return $this->parseResponse($response);
     }
