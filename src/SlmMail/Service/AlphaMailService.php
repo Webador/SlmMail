@@ -112,8 +112,10 @@ class AlphaMailService extends AbstractMailService
 
         $response = $this->prepareHttpClient('/email/queue')
                          ->setMethod(HttpRequest::METHOD_POST)
-                         ->setRawBody(json_encode($this->filterParameters($parameters)))
-                         ->send();
+                         ->setRawBody(json_encode($this->filterParameters($parameters)));
+        if (!$this->getTestMode()) {
+            $response->send();
+        }
 
         return $this->parseResponse($response);
     }
