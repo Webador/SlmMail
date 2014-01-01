@@ -54,7 +54,7 @@ class SesServiceFactory implements FactoryInterface
         $config = $serviceLocator->get('Config');
 
         $service = new SesService($serviceLocator->get('Aws')->get('Ses'));
-        $service->setTestMode(isset($config['slm_mail']['test_mode'])?$config['slm_mail']['test_mode']:true);
+        $service->setTestMode(isset($config['slm_mail']['test_mode']) ? $config['slm_mail']['test_mode'] : true);
 
         return $service;
     }
