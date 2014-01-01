@@ -149,8 +149,10 @@ class ElasticEmailService extends AbstractMailService
             $parameters['attachments'] = implode(';', $attachmentIds);
         }
 
-        $response = $this->prepareHttpClient('/mailer/send', $parameters)
-                         ->send();
+        $response = $this->prepareHttpClient('/mailer/send', $parameters);
+        if (!$this->getTestMode()) {
+            $response->send();
+        }
 
         return $this->parseResponse($response);
     }
