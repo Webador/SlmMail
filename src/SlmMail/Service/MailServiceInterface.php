@@ -51,9 +51,4 @@ interface MailServiceInterface
      * @return mixed
      */
     public function send(Message $message);
-
-    /**
-     * @return boolean
-     */
-    public function getTestMode();
 }
