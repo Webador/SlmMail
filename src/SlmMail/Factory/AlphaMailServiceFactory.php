@@ -61,7 +61,7 @@ class AlphaMailServiceFactory implements FactoryInterface
         }
 
         $config  = $config['slm_mail']['alpha_mail'];
-        $service = new AlphaMailService($config['username'], $config['key']);
+        $service = new AlphaMailService($config['key']);
 
         $client  = $serviceLocator->get('SlmMail\Http\Client');
         $service->setClient($client);
