@@ -66,6 +66,8 @@ class SendGridServiceFactory implements FactoryInterface
         $client  = $serviceLocator->get('SlmMail\Http\Client');
         $service->setClient($client);
 
+        $service->setTestMode(isset($config['slm_mail']['test_mode'])?$config['slm_mail']['test_mode']:true);
+
         return $service;
     }
 }
