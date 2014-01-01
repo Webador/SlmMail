@@ -56,6 +56,11 @@ abstract class AbstractMailService implements MailServiceInterface
     protected $client;
 
     /**
+     * @var boolean
+     */
+    protected $testMode = false;
+
+    /**
      * Extract text part from a message
      *
      * @param  Message $message
@@ -178,5 +183,21 @@ abstract class AbstractMailService implements MailServiceInterface
         return array_filter($parameters, function($value) {
             return $value !== null && $value !== '';
         });
+    }
+
+    /**
+     * @param boolean $test_mode
+     */
+    public function setTestMode($test_mode)
+    {
+        $this->test_mode = $test_mode;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getTestMode()
+    {
+        return $this->test_mode;
     }
 }
