@@ -123,6 +123,8 @@ $message->setBody($body);
 When test mode is enabled, no emails will be sent. Notice that all other api calls would be executed as normal and only sending of emails would be stopped.
 You can enable test mode by setting the `test_mode` to `true` in your config file.
 
+Test mode is turned off by default.
+
 ### How to configure HttpClient with http_options and http_adapter
 
 By defaut the adapter is Zend\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
