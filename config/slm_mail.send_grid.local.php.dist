@@ -2,6 +2,12 @@
 
 return array(
     'slm_mail' => array(
+        /**
+         * Test mode
+         * If true, the system wont send any emails.
+         */
+        // 'test_mode' => 'false',
+
         'send_grid' => array(
             /**
              * Set your Send Grid username

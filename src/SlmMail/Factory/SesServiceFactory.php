@@ -51,6 +51,11 @@ class SesServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new SesService($serviceLocator->get('Aws')->get('Ses'));
+        $config = $serviceLocator->get('Config');
+
+        $service = new SesService($serviceLocator->get('Aws')->get('Ses'));
+        $service->setTestMode(isset($config['slm_mail']['test_mode']) ? $config['slm_mail']['test_mode'] : true);
+
+        return $service;
     }
 }

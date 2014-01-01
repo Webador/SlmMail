@@ -141,6 +141,10 @@ class SesService extends AbstractMailService
 
         $parameters['ReplyToAddresses'] = $replyTo;
 
+        if ($this->testMode) {
+            return array();
+        }
+
         try {
             return $this->client->sendEmail($this->filterParameters($parameters))->toArray();
         } catch (SesException $exception) {

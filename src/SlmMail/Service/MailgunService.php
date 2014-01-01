@@ -158,6 +158,10 @@ class MailgunService extends AbstractMailService
         }
         $client->setEncType(HttpClient::ENC_FORMDATA);
 
+        if ($this->testMode) {
+            return array();
+        }
+
         $response = $client->send();
 
         $result = $this->parseResponse($response);
