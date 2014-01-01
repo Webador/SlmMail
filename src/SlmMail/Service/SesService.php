@@ -141,7 +141,7 @@ class SesService extends AbstractMailService
 
         $parameters['ReplyToAddresses'] = $replyTo;
 
-        if ($this->testMode()) {
+        if ($this->testMode) {
             return array();
         }
 

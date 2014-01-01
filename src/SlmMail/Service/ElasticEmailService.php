@@ -151,7 +151,7 @@ class ElasticEmailService extends AbstractMailService
 
         $response = $this->prepareHttpClient('/mailer/send', $parameters);
 
-        if ($this->testMode()) {
+        if ($this->testMode) {
             return array();
         }
 

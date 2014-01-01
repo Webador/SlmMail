@@ -142,7 +142,7 @@ class PostageService extends AbstractMailService
 
         $response =  $this->prepareHttpClient('/send_message.json', $parameters);
 
-        if ($this->testMode()) {
+        if ($this->testMode) {
             return array();
         }
 

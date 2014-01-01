@@ -114,7 +114,7 @@ class AlphaMailService extends AbstractMailService
                          ->setMethod(HttpRequest::METHOD_POST)
                          ->setRawBody(json_encode($this->filterParameters($parameters)));
 
-        if ($this->getTestMode()) {
+        if ($this->testMode) {
             return array();
         }
 

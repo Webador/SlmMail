@@ -189,7 +189,7 @@ class PostmarkService extends AbstractMailService
                          ->setMethod(HttpRequest::METHOD_POST)
                          ->setRawBody(json_encode($this->filterParameters($parameters)));
 
-        if ($this->testMode()) {
+        if ($this->testMode) {
             return array();
         }
 
