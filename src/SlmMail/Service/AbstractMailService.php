@@ -186,11 +186,11 @@ abstract class AbstractMailService implements MailServiceInterface
     }
 
     /**
-     * @param boolean $test_mode
+     * @param boolean $testMode
      */
-    public function setTestMode($test_mode)
+    public function setTestMode($testMode)
     {
-        $this->test_mode = $test_mode;
+        $this->testMode = (bool) $testMode;
     }
 
     /**
@@ -198,6 +198,6 @@ abstract class AbstractMailService implements MailServiceInterface
      */
     public function getTestMode()
     {
-        return $this->test_mode;
+        return $this->testMode;
     }
 }
