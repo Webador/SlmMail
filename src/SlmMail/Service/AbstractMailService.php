@@ -75,7 +75,7 @@ abstract class AbstractMailService implements MailServiceInterface
 
         foreach ($body->getParts() as $part) {
             if ($part->type === 'text/plain' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
-                return $part->getContent();
+                return $part->getRawContent();
             }
         }
 
@@ -99,7 +99,7 @@ abstract class AbstractMailService implements MailServiceInterface
 
         foreach ($body->getParts() as $part) {
             if ($part->type === 'text/html' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
-                return $part->getContent();
+                return $part->getRawContent();
             }
         }
 
