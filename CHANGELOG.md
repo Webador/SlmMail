@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.2
+
+- Simplify ZF dependency to allow any 2.x versions. This fix some subtle bugs that can happen with Composer
+
 ## 1.3.1
 
 - Fix a bug when extracting errors for SendGrid ([#60](https://github.com/juriansluiman/SlmMail/pull/60))
