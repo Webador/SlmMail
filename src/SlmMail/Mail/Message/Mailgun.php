@@ -60,12 +60,13 @@ class Mailgun extends Message
      * @var array
      */
     protected $validOptions = array(
-        'dkim'            => 'o:dkim',
-        'delivery_time'   => 'o:deliverytime',
-        'test_mode'       => 'o:testmode',
-        'tracking'        => 'o:tracking',
-        'tracking_clicks' => 'o:tracking-clicks',
-        'tracking_opens'  => 'o:tracking-opens'
+        'dkim'                  => 'o:dkim',
+        'delivery_time'         => 'o:deliverytime',
+        'test_mode'             => 'o:testmode',
+        'tracking'              => 'o:tracking',
+        'tracking_clicks'       => 'o:tracking-clicks',
+        'tracking_opens'        => 'o:tracking-opens',
+        'recipient_variables'   => 'recipient-variables',
     );
 
     /**

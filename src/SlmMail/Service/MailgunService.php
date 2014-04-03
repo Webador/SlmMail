@@ -165,6 +165,89 @@ class MailgunService extends AbstractMailService
     }
 
     /**
+     * {@inheritDoc}
+     * @link http://documentation.mailgun.com/api-sending.html
+     * @return string id of message (if sent correctly)
+     */
+    public function sendBulk(Message $message)
+    {
+        $from = $message->getFrom();
+        if (count($from) !== 1) {
+            throw new Exception\RuntimeException(
+                'Postage API requires exactly one from sender'
+            );
+        }
+
+        $parameters = array(
+            'from'    => $from->rewind()->toString(),
+            'subject' => $message->getSubject(),
+            'text'    => $this->extractText($message),
+            'html'    => $this->extractHtml($message)
+        );
+
+        $to = array();
+        foreach ($message->getTo() as $address) {
+            $to[] = $address->toString();
+        }
+
+        $parameters['to'] = $to;
+
+        $cc = array();
+        foreach ($message->getCc() as $address) {
+            $cc[] = $address->toString();
+        }
+
+        $parameters['cc'] = implode(',', $cc);
+
+        $bcc = array();
+        foreach ($message->getBcc() as $address) {
+            $bcc[] = $address->toString();
+        }
+
+        $parameters['bcc'] = implode(',', $bcc);
+
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $parameters['attachment'][] = $attachment->filename;
+        }
+
+        if ($message instanceof MailgunMessage) {
+            $options = $message->getValidOptions();
+            foreach ($message->getOptions() as $key => $value) {
+                if ($key == 'recipient_variables') {
+                    $value = json_encode($value);
+                }
+
+                $parameters[$options[$key]] = $value;
+            }
+
+            if (count($message->getTags()) > 0) {
+                $parameters['o:tag'] = $message->getTags();
+            }
+        }
+
+        $client = $this->prepareHttpClient('/messages', $parameters);
+
+        // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
+        // reset all parameters (response, request...), therefore we would loose the file upload
+        $attachments = $this->extractAttachments($message);
+        foreach ($attachments as $attachment) {
+            $client->setFileUpload(
+                $attachment->filename,
+                'attachment',
+                $attachment->getRawContent(),
+                $attachment->type
+            );
+        }
+        $client->setEncType(HttpClient::ENC_FORMDATA);
+
+        $response = $client->send();
+
+        $result = $this->parseResponse($response);
+        return $result['id'];
+    }
+
+    /**
      * Get log entries
      *
      * @link   http://documentation.mailgun.com/api-logs.html
