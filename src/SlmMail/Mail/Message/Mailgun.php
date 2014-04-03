@@ -196,7 +196,8 @@ class Mailgun extends Message
      * @param $key
      * @param $value
      */
-    public function addRecipientVariable($recipient, $key, $value) {
+    public function addRecipientVariable($recipient, $key, $value)
+    {
         $this->recipientVariables[$recipient][$key] = $value;
     }
 
