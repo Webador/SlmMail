@@ -183,7 +183,7 @@ class Mailgun extends Message
     }
 
     /**
-     * @param $recipient
+     * @param string $recipient
      * @param array $variables
      */
     public function setRecipientVariables($recipient, array $variables)
