@@ -183,9 +183,8 @@ class Mailgun extends Message
     }
 
     /**
-     * @param $recipient
+     * @param string $recipient
      * @param array $variables
-     * @throws \Exception
      */
     public function setRecipientVariables($recipient, array $variables)
     {
@@ -196,7 +195,6 @@ class Mailgun extends Message
      * @param string $recipient
      * @param string $key
      * @param string $value
-     * @throws \Exception
      */
     public function addRecipientVariable($recipient, $key, $value) {
         $this->recipientVariables[$recipient][$key] = $value;
