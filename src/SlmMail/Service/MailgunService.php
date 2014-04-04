@@ -146,7 +146,7 @@ class MailgunService extends AbstractMailService
                 $variables = $message->getRecipientVariables();
                 foreach ($variables as $recipient => $variable) {
                     if (!$message->getTo()->has($recipient)) {
-                        throw new \Exception(sprintf(
+                        throw new Exception\RuntimeException(sprintf(
                             'The email "%s" must be added as a receiver before you can add recipient variables',
                             $recipient
                         ));
