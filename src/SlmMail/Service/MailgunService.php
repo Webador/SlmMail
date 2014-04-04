@@ -113,18 +113,6 @@ class MailgunService extends AbstractMailService
 
         $parameters['to'] = implode(',', $to);
 
-        if ($message instanceof MailgunMessage && count($message->getRecipientVariables())) {
-            foreach ($message->getRecipientVariables() as $recipientEmail => $variables) {
-                if (!$message->getTo()->has($recipientEmail)) {
-                    throw new \Exception(sprintf(
-                        'The email "%s" must be added as a receiver before you can add recipient variables', $recipientEmail
-                    ));
-                }
-            }
-
-            $parameters['recipient-variables'] = json_encode($message->getRecipientVariables());
-        }
-
         $cc = array();
         foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();
@@ -150,8 +138,24 @@ class MailgunService extends AbstractMailService
                 $parameters[$options[$key]] = $value;
             }
 
-            if (count($message->getTags()) > 0) {
-                $parameters['o:tag'] = $message->getTags();
+            $tags = $message->getTags();
+            if (count($tags) > 0) {
+                $parameters['o:tag'] = $tags;
+            }
+            
+            $variables = $message->getRecipientVariables();
+            if (count($variables)) {
+                // It is only possible to add variables for recipients that exist in the To: field
+                foreach ($variables as $recipient => $variable) {
+                    if (!$message->getTo()->has($recipient)) {
+                        throw new Exception\RuntimeException(sprintf(
+                            'The email "%s" must be added as a receiver before you can add recipient variables',
+                            $recipient
+                        ));
+                    }
+                }
+    
+                $parameters['recipient-variables'] = json_encode($variables);
             }
         }
 

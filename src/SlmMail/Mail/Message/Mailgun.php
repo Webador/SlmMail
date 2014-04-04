@@ -60,12 +60,12 @@ class Mailgun extends Message
      * @var array
      */
     protected $validOptions = array(
-        'dkim'              => 'o:dkim',
-        'delivery_time'     => 'o:deliverytime',
-        'test_mode'         => 'o:testmode',
-        'tracking'          => 'o:tracking',
-        'tracking_clicks'   => 'o:tracking-clicks',
-        'tracking_opens'    => 'o:tracking-opens',
+        'dkim'            => 'o:dkim',
+        'delivery_time'   => 'o:deliverytime',
+        'test_mode'       => 'o:testmode',
+        'tracking'        => 'o:tracking',
+        'tracking_clicks' => 'o:tracking-clicks',
+        'tracking_opens'  => 'o:tracking-opens',
     );
 
     /**
@@ -188,7 +188,7 @@ class Mailgun extends Message
      */
     public function setRecipientVariables($recipient, array $variables)
     {
-        $this->recipientVariables[$recipient] = $variables;
+        $this->recipientVariables[(string) $recipient] = $variables;
     }
 
     /**
@@ -196,8 +196,9 @@ class Mailgun extends Message
      * @param string $key
      * @param string $value
      */
-    public function addRecipientVariable($recipient, $key, $value) {
-        $this->recipientVariables[$recipient][$key] = $value;
+    public function addRecipientVariable($recipient, $key, $value)
+    {
+        $this->recipientVariables[(string) $recipient][(string) $key] = (string) $value;
     }
 
     /**
