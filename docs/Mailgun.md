@@ -82,7 +82,7 @@ $message->addTag('registration-mail');
 ### Batch sending
 
 Batch sending allows you to send an e-mail to a group from one single API call. By using recipient variables,
-you can define custom parameters to each recipient.
+you can define custom parameters for each recipient.
 
 ```php
 $message = new \SlmMail\Mail\Message\Mailgun();
