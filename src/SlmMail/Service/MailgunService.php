@@ -113,6 +113,18 @@ class MailgunService extends AbstractMailService
 
         $parameters['to'] = implode(',', $to);
 
+        if ($message instanceof MailgunMessage && count($message->getRecipientVariables())) {
+            foreach ($message->getRecipientVariables() as $recipientEmail => $variables) {
+                if (!$message->getTo()->has($recipientEmail)) {
+                    throw new \Exception(sprintf(
+                        'The email "%s" must be added as a receiver before you can add recipient variables', $recipientEmail
+                    ));
+                }
+            }
+
+            $parameters['recipient-variables'] = json_encode($message->getRecipientVariables());
+        }
+
         $cc = array();
         foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();

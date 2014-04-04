@@ -79,6 +79,26 @@ $message->setTags(array('registration-mail', 'my-designed-mail'));
 $message->addTag('registration-mail');
 ```
 
+### Batch sending
+
+Batch sending allows you to send an e-mail to a group from one single API call. By using recipient variables,
+you can define custom parameters for each recipient.
+
+```php
+$message = new \SlmMail\Mail\Message\Mailgun();
+$message->addTo('demo1@mailgun.com');
+$message->addTo('demo2@mailgun.com');
+
+$message->setSubject("Hi %recipient.name%");
+$message->setBody("Hi, activate your account by clicking on http://mailgun.com/activate/%recipient.key%");
+
+$message->setRecipientVariables('demo1@mailgun.com', array('name' => 'Demo', 'key' => 'key1'));
+
+// Or add one:
+$message->addRecipientVariable('demo2@mailgun.com', 'name', 'Demo');
+$message->addRecipientVariable('demo2@mailgun.com', 'key', 'key2');
+```
+
 ### Use service locator
 
 If you have access to the service locator, you can retrieve the Mailgun transport:
