@@ -138,12 +138,14 @@ class MailgunService extends AbstractMailService
                 $parameters[$options[$key]] = $value;
             }
 
-            if (count($message->getTags()) > 0) {
-                $parameters['o:tag'] = $message->getTags();
+            $tags = $message->getTags();
+            if (count($tags) > 0) {
+                $parameters['o:tag'] = $tags;
             }
             
-            if (count($message->getRecipientVariables())) {
-                $variables = $message->getRecipientVariables();
+            $variables = $message->getRecipientVariables();
+            if (count($variables)) {
+                // It is only possible to add variables for recipients that exist in the To: field
                 foreach ($variables as $recipient => $variable) {
                     if (!$message->getTo()->has($recipient)) {
                         throw new Exception\RuntimeException(sprintf(
