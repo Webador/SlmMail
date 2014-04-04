@@ -111,11 +111,10 @@ class MailgunService extends AbstractMailService
             $to[] = $address->toString();
         }
 
+        $parameters['to'] = $to;
+
         if ($message instanceof MailgunMessage && count($message->getRecipientVariables())) {
-            $parameters['to'] = $to;
             $parameters['recipient-variables'] = json_encode($message->getRecipientVariables());
-        } else {
-            $parameters['to'] = implode(',', $to);
         }
 
         $cc = array();
