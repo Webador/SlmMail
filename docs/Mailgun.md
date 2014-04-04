@@ -92,9 +92,10 @@ $message->addTo('demo2@mailgun.com');
 $message->setSubject("Hi %recipient.name%");
 $message->setBody("Hi, activate your account by clicking on http://mailgun.com/activate/%recipient.key%");
 
+// Set all variables for demo1@mailgun.com
 $message->setRecipientVariables('demo1@mailgun.com', array('name' => 'Demo', 'key' => 'key1'));
 
-// Or add one:
+// Or add one by one for demo2@mailgun.com:
 $message->addRecipientVariable('demo2@mailgun.com', 'name', 'Demo');
 $message->addRecipientVariable('demo2@mailgun.com', 'key', 'key2');
 ```
