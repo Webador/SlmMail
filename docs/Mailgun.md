@@ -90,7 +90,7 @@ $message->addTo('demo1@mailgun.com');
 $message->addTo('demo2@mailgun.com');
 
 $message->setSubject("Hi %recipient.name%");
-$message->setBody("http://mailgun.com/activate/%recipient.key%");
+$message->setBody("Hi, activate your account by clicking on http://mailgun.com/activate/%recipient.key%");
 
 $message->setRecipientVariables('demo1@mailgun.com', array('name' => 'Demo', 'key' => 'key1'));
 
