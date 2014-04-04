@@ -143,7 +143,8 @@ class MailgunService extends AbstractMailService
             }
             
             if (count($message->getRecipientVariables())) {
-                foreach ($message->getRecipientVariables() as $recipientEmail => $variables) {
+                $variables = $message->getRecipientVariables();
+                foreach ($variables as $recipientEmail => $variable) {
                     if (!$message->getTo()->has($recipientEmail)) {
                         throw new \Exception(sprintf(
                             'The email "%s" must be added as a receiver before you can add recipient variables', $recipientEmail
@@ -151,7 +152,7 @@ class MailgunService extends AbstractMailService
                     }
                 }
     
-                $parameters['recipient-variables'] = json_encode($message->getRecipientVariables());
+                $parameters['recipient-variables'] = json_encode($variables);
             }
         }
 
