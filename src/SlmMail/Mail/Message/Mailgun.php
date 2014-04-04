@@ -189,12 +189,6 @@ class Mailgun extends Message
      */
     public function setRecipientVariables($recipient, array $variables)
     {
-        if (!$this->getTo()->has($recipient)) {
-            throw new \Exception(sprintf(
-                'The email "%s" must be added as a receiver before you can add recipient variables', $recipient
-            ));
-        }
-
         $this->recipientVariables[$recipient] = $variables;
     }
 
@@ -205,12 +199,6 @@ class Mailgun extends Message
      * @throws \Exception
      */
     public function addRecipientVariable($recipient, $key, $value) {
-        if (!$this->getTo()->has($recipient)) {
-            throw new \Exception(sprintf(
-                'The email "%s" must be added as a receiver before you can add recipient variables', $recipient
-            ));
-        }
-
         $this->recipientVariables[$recipient][$key] = $value;
     }
 
