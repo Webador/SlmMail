@@ -183,21 +183,34 @@ class Mailgun extends Message
     }
 
     /**
-     * @param string $recipient
+     * @param $recipient
      * @param array $variables
+     * @throws \Exception
      */
     public function setRecipientVariables($recipient, array $variables)
     {
+        if (!$this->getTo()->has($recipient)) {
+            throw new \Exception(sprintf(
+                'The email "%s" must be added as a receiver before you can add recipient variables', $recipient
+            ));
+        }
+
         $this->recipientVariables[$recipient] = $variables;
     }
 
     /**
-     * @param $recipient
-     * @param $key
-     * @param $value
+     * @param string $recipient
+     * @param string $key
+     * @param string $value
+     * @throws \Exception
      */
-    public function addRecipientVariable($recipient, $key, $value)
-    {
+    public function addRecipientVariable($recipient, $key, $value) {
+        if (!$this->getTo()->has($recipient)) {
+            throw new \Exception(sprintf(
+                'The email "%s" must be added as a receiver before you can add recipient variables', $recipient
+            ));
+        }
+
         $this->recipientVariables[$recipient][$key] = $value;
     }
 
