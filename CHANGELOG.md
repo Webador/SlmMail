@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.4.1
+
+- Fix Sendgrid attachment issues with Outlook clients
+
+## 1.4.0
+
+- Mailgun users can now use batch sending. You can now send the same email to multiple recipients in one API call.
+
 ## 1.3.2
 
 - Simplify ZF dependency to allow any 2.x versions. This fix some subtle bugs that can happen with Composer
