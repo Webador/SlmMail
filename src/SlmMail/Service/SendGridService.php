@@ -135,7 +135,7 @@ class SendGridService extends AbstractMailService
         $post        = $client->getRequest()->getPost();
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $post->set('files[' . $attachment->filename . ']', $attachment->getRawContent() . ';type=' . $attachment->type);
+            $post->set('files[' . $attachment->filename . ']', $attachment->getRawContent());
         }
 
         $response = $client->setMethod(HttpRequest::METHOD_POST)
