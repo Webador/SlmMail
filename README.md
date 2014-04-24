@@ -41,10 +41,10 @@ Requirements
 Installation
 ------------
 
-Add "slm/mail" to your composer.json file and update your dependencies. Enable SlmMail in your
+Add `"slm/mail"` to your `composer.json` file and update your dependencies. Enable `SlmMail` in your
 `application.config.php`. To use one of the transport layers, see the documentation in the [docs](https://github.com/juriansluiman/SlmMail/tree/master/docs) folder.
 
-If you do not have a composer.json file in the root of your project, copy the contents below and put that into a
+If you do not have a `composer.json` file in the root of your project, copy the contents below and put that into a
 file called `composer.json` and save it in the root of your project:
 
 ```
