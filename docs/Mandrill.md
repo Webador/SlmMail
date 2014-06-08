@@ -106,6 +106,7 @@ Mandrill service will filter unknown options. Unsupported options with throw an 
 * merge: (boolean) whether to evaluate merge tags in the message. Will automatically be set to true if either merge_vars or global_merge_vars are provided.
 * google_analytics_domains: (array) an array of strings indicating for which any matching URLs will automatically have Google Analytics parameters appended to their query string automatically.
 * google_analytics_campaign: (string) optional string indicating the value to set for the utm_campaign tracking parameter. If this isn't provided the email's from address will be used instead.
+* view_content_link: (boolean): whether or not to remove content logging for sensitive emails
 
 #### Tags
 

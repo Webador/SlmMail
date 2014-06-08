@@ -69,7 +69,8 @@ class Mandrill extends Message
         'track_clicks',
         'track_opens',
         'tracking_domain',
-        'url_strip_qs'
+        'url_strip_qs',
+        'view_content_link'
     );
 
     /**
