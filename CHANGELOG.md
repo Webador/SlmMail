@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.5.0
+
+- You can now schedule Mandrill emails in the future by using the optional `sendAt` variable in both `send` and
+`sendTemplate` methods.
+- `getScheduledMessages`, `cancelScheduledMessage` and `rescheduleMessage` methods have been also added to the
+Mandrill service to handle those messages.
+
 ## 1.4.1
 
 - Fix Sendgrid attachment issues with Outlook clients

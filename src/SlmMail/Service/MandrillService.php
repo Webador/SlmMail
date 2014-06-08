@@ -40,6 +40,8 @@
 
 namespace SlmMail\Service;
 
+use DateTime;
+use DateTimeZone;
 use SlmMail\Mail\Message\Mandrill as MandrillMessage;
 use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request  as HttpRequest;
@@ -77,15 +79,17 @@ class MandrillService extends AbstractMailService
 
     /**
      * @link https://mandrillapp.com/api/docs/messages.html#method=send
-     * {@inheritDoc}
+     * @param  Message       $message
+     * @param  DateTime|null $sendAt
+     * @return array
      */
-    public function send(Message $message)
+    public function send(Message $message, DateTime $sendAt = null)
     {
         if ($message instanceof MandrillMessage && $message->getTemplate()) {
             return $this->sendTemplate($message);
         }
 
-        $response = $this->prepareHttpClient('/messages/send.json', $this->parseMessage($message, false))
+        $response = $this->prepareHttpClient('/messages/send.json', $this->parseMessage($message, $sendAt))
                          ->send();
 
         return $this->parseResponse($response);
@@ -96,11 +100,12 @@ class MandrillService extends AbstractMailService
      *
      * @link https://mandrillapp.com/api/docs/messages.html#method=send-template
      * @param  MandrillMessage $message
+     * @param  DateTime|null   $sendAt
      * @return array
      */
-    public function sendTemplate(MandrillMessage $message)
+    public function sendTemplate(MandrillMessage $message, DateTime $sendAt = null)
     {
-        $response = $this->prepareHttpClient('/messages/send-template.json', $this->parseMessage($message, true))
+        $response = $this->prepareHttpClient('/messages/send-template.json', $this->parseMessage($message, $sendAt))
                          ->send();
 
         return $this->parseResponse($response);
@@ -116,6 +121,57 @@ class MandrillService extends AbstractMailService
     public function getMessageInfo($id)
     {
         $response = $this->prepareHttpClient('/messages/info.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Get the scheduled messages, optionally filtered by an email To address
+     *
+     * @link https://mandrillapp.com/api/docs/messages.JSON.html#method=list-scheduled
+     * @param  string $to
+     * @return array
+     */
+    public function getScheduledMessages($to = '')
+    {
+        $response = $this->prepareHttpClient('/messages/list-scheduled.json', array('to' => $to))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Cancel a scheduled message using the mail identifier (you get it by from send methods or getScheduledMessages method)
+     *
+     * @link https://mandrillapp.com/api/docs/messages.JSON.html#method=cancel-scheduled
+     * @param  string $id
+     * @return array
+     */
+    public function cancelScheduledMessage($id)
+    {
+        $response = $this->prepareHttpClient('/messages/cancel-scheduled.json', array('id' => $id))
+                         ->send();
+
+        return $this->parseResponse($response);
+    }
+
+    /**
+     * Reschedule an already scheduled message to a new date
+     *
+     * @link https://mandrillapp.com/api/docs/messages.JSON.html#method=reschedule
+     * @param  string   $id
+     * @param  DateTime $sendAt
+     * @return array
+     */
+    public function rescheduleMessage($id, DateTime $sendAt)
+    {
+        // Mandrill needs to have date in UTC, using this format
+        $sendAt->setTimezone(new DateTimeZone('UTC'));
+
+        $parameters = array('id' => $id, 'send_at' => $sendAt->format('Y-m-d H:i:s'));
+
+        $response = $this->prepareHttpClient('/messages/reschedule.json', $parameters)
                          ->send();
 
         return $this->parseResponse($response);
@@ -737,15 +793,17 @@ class MandrillService extends AbstractMailService
     }
 
     /**
-     * @param  Message $message
-     * @param  bool $isTemplate
+     * @param  Message       $message
+     * @param  DateTime|null $sendAt
      * @throws Exception\RuntimeException
      * @return array
      */
-    private function parseMessage(Message $message, $isTemplate)
+    private function parseMessage(Message $message, DateTime $sendAt = null)
     {
+        $hasTemplate = ($message instanceof MandrillMessage && null !== $message->getTemplate());
+
         $from = $message->getFrom();
-        if (($isTemplate && count($from) > 1) || (!$isTemplate && count($from) !== 1)) {
+        if (($hasTemplate && count($from) > 1) || (!$hasTemplate && count($from) !== 1)) {
             throw new Exception\RuntimeException(
                 'Mandrill API requires exactly one from sender (or none if send with a template)'
             );
@@ -786,6 +844,7 @@ class MandrillService extends AbstractMailService
         }
 
         $replyTo = $message->getReplyTo();
+
         if (count($replyTo) > 1) {
             throw new Exception\RuntimeException('Mandrill has only support for one Reply-To address');
         } elseif (count($replyTo)) {
@@ -793,7 +852,7 @@ class MandrillService extends AbstractMailService
         }
 
         if ($message instanceof MandrillMessage) {
-            if ($isTemplate) {
+            if ($hasTemplate) {
                 $parameters['template_name'] = $message->getTemplate();
 
                 foreach ($message->getTemplateContent() as $key => $value) {
@@ -866,6 +925,12 @@ class MandrillService extends AbstractMailService
                 'name'    => $attachment->filename,
                 'content' => base64_encode($attachment->getRawContent())
             );
+        }
+
+        if (null !== $sendAt) {
+            // Mandrill needs to have date in UTC, using this format
+            $sendAt->setTimezone(new DateTimeZone('UTC'));
+            $parameters['send_at'] = $sendAt->format('Y-m-d H:i:s');
         }
 
         return $parameters;

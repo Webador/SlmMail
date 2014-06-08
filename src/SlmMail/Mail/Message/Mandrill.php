@@ -78,7 +78,7 @@ class Mandrill extends Message
     protected $tags = array();
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $template;
 
