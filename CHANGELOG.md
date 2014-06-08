@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.0
+
+- AlphaMail is dead and no longer operates. It is therefore removed from SlmMail.
+
 ## 1.4.1
 
 - Fix Sendgrid attachment issues with Outlook clients
