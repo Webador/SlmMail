@@ -106,6 +106,7 @@ Mandrill service will filter unknown options. Unsupported options with throw an 
 * merge: (boolean) whether to evaluate merge tags in the message. Will automatically be set to true if either merge_vars or global_merge_vars are provided.
 * google_analytics_domains: (array) an array of strings indicating for which any matching URLs will automatically have Google Analytics parameters appended to their query string automatically.
 * google_analytics_campaign: (string) optional string indicating the value to set for the utm_campaign tracking parameter. If this isn't provided the email's from address will be used instead.
+* view_content_link: (boolean): whether or not to remove content logging for sensitive emails
 
 #### Tags
 
@@ -144,6 +145,28 @@ $message->setTemplate('foo')
         ->setTemplateContent(array('header' => '<header><h1>This is an example</h1></header>'))
 ```
 
+#### Scheduled messages
+
+Mandrill natively supports the ability to schedule message in the future. You can schedule a message using the optional
+sendAt parameter in both `send` and `sendTemplate` methods:
+
+```php
+$sendAt = new DateTime();
+$sendAt->modify('+1 day'); // send message in 1 day
+
+$message = new \SlmMail\Mail\Message\Mandrill();
+
+$mandrillService->send($message, $sendAt);
+```
+
+You can also use the various `getScheduledMessages`, `cancelScheduledMessage` and `rescheduleMessage` from the
+Mandrill service to interact with this API.
+
+Internally, the date is automatically converted to UTC and to the appropriate date format that Mandrill is expected.
+
+Please note that this feature of Mandrill introduces additional fees, and require you to have a positive balance
+account ([see here for more details](http://help.mandrill.com/entries/24331201-Can-I-schedule-a-message-to-send-at-a-specific-time-).
+
 ### Use service locator
 
 If you have access to the service locator, you can retrieve the Mandrill transport:
@@ -176,9 +199,12 @@ $ping            = $mandrillService->pingUser(); // Example
 
 Messages functions:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](https://mandrillapp.com/api/docs/messages.html#method=send))
-* `sendTemplate(Message $message)`: used by transport layer if a $message has a template ([docs](https://mandrillapp.com/api/docs/messages.html#method=send-template))
+* `send(Message $message, DateTime $sendAt = null)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](https://mandrillapp.com/api/docs/messages.html#method=send))
+* `sendTemplate(Message $message, DateTime $sendAt = null)`: used by transport layer if a $message has a template ([docs](https://mandrillapp.com/api/docs/messages.html#method=send-template))
 * `getMessageInfo($id)`: get all the information about a message by its Mandrill id ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=info))
+* `getScheduledMessages($to = '')`: get all the scheduled messages, optionally filtered by an email To address ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=list-scheduled))
+* `cancelScheduledMessage($id = '')`: cancel a scheduled message by its Mandrill id ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=cancel-scheduled))
+* `rescheduleMessage($id, DateTime $sendAt)`: reschedule an already scheduled message by its Mandrill id and new date ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=reschedule))
 
 Users functions:
 
