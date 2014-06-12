@@ -5,7 +5,6 @@ prices appear to be outdated, please create an issue!
 
 Provider     | Price | Example with 100 000 emails/month |
 ------------ | ----- | ---------------------------------
-Alpha Mail   | up to 6 000 emails/month: free, up to 40 000 emails/month: 9.49 $/month, up to 100 000 emails/month: 79.49$/month, 199.49 $/month, up to 700 000 emails/month: 399.49$/month | 79.49 $ / month
 Amazon SES   | 2 000 messages/day for free, then 0.10$ for 1000 | 4 $ / month
 Elastic Mail | depends on what you send AND your reputation accross time | between 95$ and 50$ / month
 Mailgun      | five plans depending on a minimum required per month. Free plan: 200 mails / day ; standard plan: 1$ for 1000, minimum of 19$ per month required ; express plan: 0.50$ per 1000, minimum of 59$ per month required ; priority plan: 0.40$ per 1000, minimum of 199$ per month required ; first-class plan: 0.10$ per 1000, minimum of 499$ per month required | 10$ / month with the first-class plan or 40$ / month with the priority plan

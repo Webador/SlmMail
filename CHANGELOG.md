@@ -6,6 +6,7 @@
 `sendTemplate` methods.
 - `getScheduledMessages`, `cancelScheduledMessage` and `rescheduleMessage` methods have been also added to the
 Mandrill service to handle those messages.
+- AlphaMail is dead and no longer operates. It is therefore removed from SlmMail.
 
 ## 1.4.1
 
