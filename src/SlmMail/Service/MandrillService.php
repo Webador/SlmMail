@@ -43,7 +43,6 @@ namespace SlmMail\Service;
 use DateTime;
 use DateTimeZone;
 use SlmMail\Mail\Message\Mandrill as MandrillMessage;
-use SlmMail\Service\AbstractMailService;
 use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mail\Address;

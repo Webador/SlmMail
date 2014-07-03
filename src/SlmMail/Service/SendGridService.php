@@ -40,7 +40,6 @@
 
 namespace SlmMail\Service;
 
-use SlmMail\Service\AbstractMailService;
 use Zend\Http\Client   as HttpClient;
 use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;
@@ -129,7 +128,7 @@ class SendGridService extends AbstractMailService
         $client = $this->prepareHttpClient('/mail.send.json');
         // Set Parameters as POST, since prepareHttpClient() put only GET parameters
         $client->setParameterPost($parameters);
-        
+
         // Eventually add files. This cannot be done before prepareHttpClient call because prepareHttpClient
         // reset all parameters (response, request...), therefore we would loose the file upload
         $post        = $client->getRequest()->getPost();
