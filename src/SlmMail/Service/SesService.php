@@ -42,7 +42,6 @@ namespace SlmMail\Service;
 
 use Aws\Ses\Exception\SesException;
 use Aws\Ses\SesClient;
-use SlmMail\Service\AbstractMailService;
 use Zend\Mail\Address;
 use Zend\Mail\Message;
 

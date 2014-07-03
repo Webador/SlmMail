@@ -41,7 +41,6 @@
 namespace SlmMail\Service;
 
 use SlmMail\Mail\Message\Mailgun as MailgunMessage;
-use SlmMail\Service\AbstractMailService;
 use Zend\Http\Client   as HttpClient;
 use Zend\Http\Request  as HttpRequest;
 use Zend\Http\Response as HttpResponse;
@@ -142,7 +141,7 @@ class MailgunService extends AbstractMailService
             if (count($tags) > 0) {
                 $parameters['o:tag'] = $tags;
             }
-            
+
             $variables = $message->getRecipientVariables();
             if (count($variables)) {
                 // It is only possible to add variables for recipients that exist in the To: field
@@ -154,7 +153,7 @@ class MailgunService extends AbstractMailService
                         ));
                     }
                 }
-    
+
                 $parameters['recipient-variables'] = json_encode($variables);
             }
         }
