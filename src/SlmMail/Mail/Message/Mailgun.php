@@ -111,7 +111,7 @@ class Mailgun extends Message
      */
     public function addTag($tag)
     {
-        if (count($this->tags)+1 > self::TAG_LIMIT) {
+        if (count($this->tags) + 1 > self::TAG_LIMIT) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Mailgun only allows up to %s tags', self::TAG_LIMIT
             ));
