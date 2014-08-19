@@ -51,7 +51,7 @@ class HttpTransport implements TransportInterface
      */
     protected $service;
 
-        /**
+    /**
      * Whatever response the mail service API sends, if any
      */
     protected $response;
