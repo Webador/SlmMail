@@ -51,6 +51,11 @@ class HttpTransport implements TransportInterface
      */
     protected $service;
 
+        /**
+     * Whatever response the mail service API sends, if any
+     */
+    protected $response;
+
     /**
      * @param MailServiceInterface $service
      */
@@ -64,6 +69,14 @@ class HttpTransport implements TransportInterface
      */
     public function send(Message $message)
     {
-        $this->service->send($message);
+        $this->response = $this->service->send($message);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastApiResponse()
+    {
+        return $this->response;
     }
 }
