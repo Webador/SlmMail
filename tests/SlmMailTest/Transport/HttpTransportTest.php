@@ -41,7 +41,7 @@
 namespace SlmMailTest\Transport;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use SlmMail\Transport\HttpTransport;
+use SlmMail\Mail\Transport\HttpTransport;
 use Zend\Mail\Message;
 
 class HttpTransportTest extends TestCase
