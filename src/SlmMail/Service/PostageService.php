@@ -306,7 +306,7 @@ class PostageService extends AbstractMailService
                 throw new Exception\RuntimeException(sprintf(
                     'An error occurred on Postage, status code: %s%s', $result['response']['status'],
                     ($errors) ? ' (' . $errors . ')' : ''
-                ));
+                ), (int) $result['response']['status']);
             }
         }
 
