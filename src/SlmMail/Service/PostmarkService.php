@@ -343,7 +343,7 @@ class PostmarkService extends AbstractMailService
             case 422:
                 throw new Exception\ValidationErrorException(sprintf(
                     'An error occured on Postmark (error code %s), message: %s', $result['ErrorCode'], $result['Message']
-                ));
+                ), (int) $result['ErrorCode']);
             case 500:
                 throw new Exception\RuntimeException('Postmark server error, please try again');
             default:
