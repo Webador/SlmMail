@@ -1,9 +1,15 @@
 # CHANGELOG
 
-## 1.5.1
+## 1.5.2
 
 - Mandrill service now properly used the `sendAt` delayed date when sending a templated mail when calling the
 `send` method.
+
+## 1.5.1
+
+- Fix small typo in README to include ~1.5
+- Remove unnecessary import statements in code base
+- Return API status codes in Postage/Postmark api exceptions
 
 ## 1.5.0
 
