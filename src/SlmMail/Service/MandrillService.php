@@ -85,7 +85,7 @@ class MandrillService extends AbstractMailService
     public function send(Message $message, DateTime $sendAt = null)
     {
         if ($message instanceof MandrillMessage && $message->getTemplate()) {
-            return $this->sendTemplate($message);
+            return $this->sendTemplate($message, $sendAt);
         }
 
         $response = $this->prepareHttpClient('/messages/send.json', $this->parseMessage($message, $sendAt))
