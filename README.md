@@ -145,7 +145,7 @@ If you want to change some options of your adapter please refer to you adapter c
 
 ### Which provider should I choose?
 
-We won't answer you :-)! Each provider have their own set of features. You should carefully read each website
-to discover which one suit your needs the most.
+We won't answer you :-)! Each provider has their own set of features. You should carefully read each website
+to discover which one suits your needs best.
 
 However, for convenience purpose, we [have wrapped a pricing table](/docs/Pricing.md) for each email provider!
