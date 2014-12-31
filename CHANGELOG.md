@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.5.1
+
+- Mandrill service now properly used the `sendAt` delayed date when sending a templated mail when calling the
+`send` method.
+
 ## 1.5.0
 
 - You can now schedule Mandrill emails in the future by using the optional `sendAt` variable in both `send` and
