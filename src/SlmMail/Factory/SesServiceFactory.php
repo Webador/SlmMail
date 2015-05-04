@@ -37,20 +37,23 @@
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://juriansluiman.nl
  */
-
 namespace SlmMail\Factory;
 
 use SlmMail\Service\SesService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Aws\Sdk;
 
 class SesServiceFactory implements FactoryInterface
 {
+
     /**
+     *
      * {@inheritDoc}
+     *
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new SesService($serviceLocator->get('Aws')->get('Ses'));
+        return new SesService($serviceLocator->get(Sdk::class)->createSes());
     }
 }
