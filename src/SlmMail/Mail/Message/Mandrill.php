@@ -61,6 +61,7 @@ class Mandrill extends Message
         'important',
         'inline_css',
         'merge',
+        'merge_language',
         'metadata',
         'preserve_recipients',
         'return_path_domain',
