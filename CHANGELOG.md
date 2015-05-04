@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.3
+
+- Add the new `merge_language` option to Mandrill service.
+
 ## 1.5.2
 
 - Mandrill service now properly used the `sendAt` delayed date when sending a templated mail when calling the
