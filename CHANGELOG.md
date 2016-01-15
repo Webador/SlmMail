@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.6.0
+
+- MailGun API now uses the `v3` endpoint. Normally, [this is BC-free](http://blog.mailgun.com/default-api-version-now-v3/), but if you are using
+MailGun, make sure to try your application before!
+
 ## 1.5.3
 
 - Add the new `merge_language` option to Mandrill service.
