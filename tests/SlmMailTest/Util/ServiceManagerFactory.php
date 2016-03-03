@@ -73,13 +73,16 @@ class ServiceManagerFactory
         $serviceManager = new ServiceManager(new ServiceManagerConfig(
             isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
         ));
+
+        $serviceManager->setAllowOverride(true);
+
         $serviceManager->setService('ApplicationConfig', static::$config);
         $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
 
         /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
-        //$serviceManager->setAllowOverride(true);
+
         return $serviceManager;
     }
 }

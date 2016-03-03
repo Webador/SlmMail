@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.7.0
+
+- PHP minimum dependency has been raised to PHP 5.5.
+- SES now uses AWS SDK v3
+
 ## 1.6.0
 
 - MailGun API now uses the `v3` endpoint. Normally, [this is BC-free](http://blog.mailgun.com/default-api-version-now-v3/), but if you are using
