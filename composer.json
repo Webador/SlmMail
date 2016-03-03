@@ -35,6 +35,7 @@
         "zendframework/zend-http": "~2.0"
     },
     "require-dev": {
+        "phpunit/phpunit": "^5.2",
         "aws/aws-sdk-php-zf2": "~2.0",
         "zendframework/zendframework": "~2.0"
     },
@@ -49,5 +50,8 @@
         "classmap": [
             "./"
         ]
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
