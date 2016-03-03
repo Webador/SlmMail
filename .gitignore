@@ -1,0 +1,5 @@
+# General
+.idea/*
+.DS_Store
+vendor/
+composer.lock

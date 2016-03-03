@@ -33,7 +33,7 @@ Here are the currently supported services:
 Requirements
 ------------
 
-* PHP 5.3
+* PHP 5.5
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [Amazon AWS ZF 2 Module](https://github.com/aws/aws-sdk-php-zf2): only if you plan to use Amazon SES service
 
@@ -49,7 +49,7 @@ file called `composer.json` and save it in the root of your project:
 ```
 {
     "require": {
-        "slm/mail": "~1.6"
+        "slm/mail": "~1.7"
     }
 }
 ```
