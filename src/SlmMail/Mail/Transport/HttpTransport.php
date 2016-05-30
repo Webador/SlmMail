@@ -64,6 +64,6 @@ class HttpTransport implements TransportInterface
      */
     public function send(Message $message)
     {
-        $this->service->send($message);
+        return $this->service->send($message);
     }
 }
