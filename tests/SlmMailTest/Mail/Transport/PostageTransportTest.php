@@ -60,7 +60,7 @@ class PostageTransportTest extends PHPUnit_Framework_TestCase
 
     public function testTransportUsesPostageService()
     {
-        $service   = $this->getMock('SlmMail\Service\PostageService', array(), array('my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\PostageService', array(), array('my-secret-key'));
         $transport = new HttpTransport($service);
         $message   = new Message();
 

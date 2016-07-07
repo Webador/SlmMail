@@ -60,7 +60,7 @@ class ElasticEmailTransportTest extends PHPUnit_Framework_TestCase
 
     public function testTransportUsesElasticEmailService()
     {
-        $service   = $this->getMock('SlmMail\Service\ElasticEmailService', array(), array('my-username', 'my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\ElasticEmailService', array(), array('my-username', 'my-secret-key'));
         $transport = new HttpTransport($service);
         $message   = new Message();
 

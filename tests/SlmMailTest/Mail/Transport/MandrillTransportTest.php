@@ -60,7 +60,7 @@ class MandrillTransportTest extends PHPUnit_Framework_TestCase
 
     public function testTransportUsesMandrillService()
     {
-        $service   = $this->getMock('SlmMail\Service\MandrillService', array(), array('my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\MandrillService', array(), array('my-secret-key'));
         $transport = new HttpTransport($service);
         $message   = new Message();
 
