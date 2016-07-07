@@ -60,7 +60,7 @@ class MailgunTransportTest extends PHPUnit_Framework_TestCase
 
     public function testTransportUsesMailgunService()
     {
-        $service   = $this->getMock('SlmMail\Service\MailgunService', array(), array('my-domain', 'my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\MailgunService', array(), array('my-domain', 'my-secret-key'));
         $transport = new HttpTransport($service);
         $message   = new Message();
 

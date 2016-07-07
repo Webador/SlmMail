@@ -52,12 +52,11 @@ class SesTransportTest extends PHPUnit_Framework_TestCase
         $serviceManager->setAllowOverride(true);
 
         $self = $this;
-        $serviceManager->setFactory('Aws', function() use ($self) {
-            $aws = $self->getMock('Guzzle\Service\Builder\ServiceBuilderInterface');
+        $serviceManager->setFactory('AwsModule', function() use ($self) {
+            $aws = $self->createMock('Guzzle\Service\Builder\ServiceBuilderInterface');
             $aws->expects($self->once())
-                ->method('get')
-                ->with($self->equalTo('Ses'))
-                ->will($self->returnValue($self->getMock('Aws\Ses\SesClient', array(), array(), '', false)));
+                ->method('createSes')
+                ->will($self->returnValue($self->createMock('Aws\Ses\SesClient', array(), array(), '', false)));
 
             return $aws;
         });
@@ -74,8 +73,8 @@ class SesTransportTest extends PHPUnit_Framework_TestCase
 
     public function testTransportUsesSesService()
     {
-        $client    = $this->getMock('Aws\Ses\SesClient', array(), array(), '', false);
-        $service   = $this->getMock('SlmMail\Service\SesService', array(), array($client));
+        $client    = $this->createMock('Aws\Ses\SesClient', array(), array(), '', false);
+        $service   = $this->createMock('SlmMail\Service\SesService', array(), array($client));
         $transport = new HttpTransport($service);
         $message   = new Message();
 

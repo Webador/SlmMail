@@ -1,4 +1,8 @@
 # CHANGELOG
+## 2.0.0
+- bump to aws-sdk-for-php ZF2 module to 2.*
+-- which in turn bumps support to AWS SDK for PHP v3
+
 
 ## 1.6.0
 
