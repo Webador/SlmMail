@@ -62,6 +62,10 @@ class ServiceManagerFactory
      */
     public static function setConfig(array $config)
     {
+        // If this MVC v3 then used Zend\Router module instead Zend\Mvc\Router
+        if (class_exists(\Zend\Router\Module::class)) {
+            $config['modules'][] = 'Zend\\Router';
+        }
         static::$config = $config;
     }
 
@@ -70,16 +74,21 @@ class ServiceManagerFactory
      */
     public static function getServiceManager()
     {
-        $serviceManager = new ServiceManager(new ServiceManagerConfig(
+        $serviceConfig = new ServiceManagerConfig(
             isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
-        ));
+        );
+        // If this ServiceManager v3 then __constructor signature pass array instead object
+        if (method_exists(new ServiceManager(), 'configure')) {
+            $serviceConfig = $serviceConfig->toArray();
+        }
+        $serviceManager = new ServiceManager($serviceConfig);
         $serviceManager->setService('ApplicationConfig', static::$config);
         //$serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
-
+        $serviceManager->setAllowOverride(true);
         /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
-        //$serviceManager->setAllowOverride(true);
+
         return $serviceManager;
     }
 }

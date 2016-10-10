@@ -34,7 +34,7 @@ Requirements
 ------------
 
 * PHP 5.6
-* [Zend Framework 2](https://github.com/zendframework/zf2)
+* [Zend Framework 2](https://github.com/zendframework/zf2) OR [ZF3 components](https://docs.zendframework.com/tutorials/)
 * [Amazon AWS ZF 2 Module](https://github.com/aws/aws-sdk-php-zf2): only if you plan to use Amazon SES service
 
 Installation
