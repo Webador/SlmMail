@@ -40,8 +40,12 @@
 
 namespace SlmMail\Factory;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use SlmMail\Factory\Exception\RuntimeException;
 use SlmMail\Service\PostageService;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -52,7 +56,25 @@ class PostageServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        return $this($serviceLocator, PostageService::class);
+    }
+
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  null|array         $options
+     *
+     * @return PostageService
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('Config');
         if (!isset($config['slm_mail']['postage'])) {
             throw new RuntimeException(
                 'Config for Postage is not set, did you copy config file into your config/autoload folder ?'
@@ -61,7 +83,7 @@ class PostageServiceFactory implements FactoryInterface
 
         $service = new PostageService($config['slm_mail']['postage']['key']);
 
-        $client  = $serviceLocator->get('SlmMail\Http\Client');
+        $client  = $container->get('SlmMail\Http\Client');
         $service->setClient($client);
 
         return $service;

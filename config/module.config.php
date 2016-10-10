@@ -37,40 +37,39 @@
  * @license     http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link        http://juriansluiman.nl
  */
+use SlmMail\Factory;
+use SlmMail\Service;
 
-return array(
-    'service_manager' => array(
-        'factories' => array(
+return [
+    'service_manager' => [
+        'factories' => [
             /**
              * Transport
              */
-            'SlmMail\Mail\Transport\ElasticEmailTransport' => 'SlmMail\Factory\ElasticEmailTransportFactory',
-            'SlmMail\Mail\Transport\MailgunTransport'      => 'SlmMail\Factory\MailgunTransportFactory',
-            'SlmMail\Mail\Transport\MandrillTransport'     => 'SlmMail\Factory\MandrillTransportFactory',
-            'SlmMail\Mail\Transport\PostageTransport'      => 'SlmMail\Factory\PostageTransportFactory',
-            'SlmMail\Mail\Transport\PostmarkTransport'     => 'SlmMail\Factory\PostmarkTransportFactory',
-            'SlmMail\Mail\Transport\SendGridTransport'     => 'SlmMail\Factory\SendGridTransportFactory',
-            'SlmMail\Mail\Transport\SesTransport'          => 'SlmMail\Factory\SesTransportFactory',
-
+            'SlmMail\Mail\Transport\ElasticEmailTransport' => Factory\ElasticEmailTransportFactory::class,
+            'SlmMail\Mail\Transport\MailgunTransport'      => Factory\MailgunTransportFactory::class,
+            'SlmMail\Mail\Transport\MandrillTransport'     => Factory\MandrillTransportFactory::class,
+            'SlmMail\Mail\Transport\PostageTransport'      => Factory\PostageTransportFactory::class,
+            'SlmMail\Mail\Transport\PostmarkTransport'     => Factory\PostmarkTransportFactory::class,
+            'SlmMail\Mail\Transport\SendGridTransport'     => Factory\SendGridTransportFactory::class,
+            'SlmMail\Mail\Transport\SesTransport'          => Factory\SesTransportFactory::class,
             /**
              * Services
              */
-            'SlmMail\Service\ElasticEmailService' => 'SlmMail\Factory\ElasticEmailServiceFactory',
-            'SlmMail\Service\MailgunService'      => 'SlmMail\Factory\MailgunServiceFactory',
-            'SlmMail\Service\MandrillService'     => 'SlmMail\Factory\MandrillServiceFactory',
-            'SlmMail\Service\PostageService'      => 'SlmMail\Factory\PostageServiceFactory',
-            'SlmMail\Service\PostmarkService'     => 'SlmMail\Factory\PostmarkServiceFactory',
-            'SlmMail\Service\SendGridService'     => 'SlmMail\Factory\SendGridServiceFactory',
-            'SlmMail\Service\SesService'          => 'SlmMail\Factory\SesServiceFactory',
-
+            Service\ElasticEmailService::class => Factory\ElasticEmailServiceFactory::class,
+            Service\MailgunService::class      => Factory\MailgunServiceFactory::class,
+            Service\MandrillService::class     => Factory\MandrillServiceFactory::class,
+            Service\PostageService::class      => Factory\PostageServiceFactory::class,
+            Service\PostmarkService::class     => Factory\PostmarkServiceFactory::class,
+            Service\SendGridService::class     => Factory\SendGridServiceFactory::class,
+            Service\SesService::class          => Factory\SesServiceFactory::class,
             /**
              * HTTP client
              */
-            'SlmMail\Http\Client' => 'SlmMail\Factory\HttpClientFactory',
-        ),
-    ),
-    
-    'slm_mail' => array(
-        'http_adapter' => 'Zend\Http\Client\Adapter\Socket',
-    ),
-);
+            'SlmMail\Http\Client' => Factory\HttpClientFactory::class,
+        ],
+    ],
+    'slm_mail' => [
+        'http_adapter' => \Zend\Http\Client\Adapter\Socket::class,
+    ],
+];
