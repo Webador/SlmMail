@@ -46,6 +46,7 @@
         "zendframework/zend-i18n": "^2.6",
         "zendframework/zend-serializer": "^2.6",
         "zendframework/zend-config": "^2.6",
+        "doctrine/instantiator": "^1.0.5",
         "phpunit/phpunit": "^5.5"
     },
     "suggest": {
