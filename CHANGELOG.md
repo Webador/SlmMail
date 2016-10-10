@@ -1,4 +1,11 @@
 # CHANGELOG
+## 2.1.0
+- Added ZF3 support
+-- which allow install zend-servicemanager both versions v2 or v3 by composer
+- Updated & reduced composer dependencies (dropped install full ZF2 framework)
+- Small PHP syntax's fixes & added gitignore file
+
+
 ## 2.0.0
 - bump to aws-sdk-for-php ZF2 module to 2.*
 -- which in turn bumps support to AWS SDK for PHP v3
