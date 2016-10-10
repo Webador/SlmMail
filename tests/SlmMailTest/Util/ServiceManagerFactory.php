@@ -66,7 +66,6 @@ class ServiceManagerFactory
         if (class_exists(\Zend\Router\Module::class)) {
             $config['modules'][] = 'Zend\\Router';
         }
-        //die(print_r($config,true));
         static::$config = $config;
     }
 
