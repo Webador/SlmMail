@@ -70,9 +70,14 @@ class ServiceManagerFactory
      */
     public static function getServiceManager()
     {
-        $serviceManager = new ServiceManager(new ServiceManagerConfig(
+        $serviceConfig = new ServiceManagerConfig(
             isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
-        ));
+        );
+        // If this ServiceManager v3 then __constructor signature pass array instead object
+        if (method_exists(new ServiceManager(), 'configure')) {
+            $serviceConfig = $serviceConfig->toArray();
+        }
+        $serviceManager = new ServiceManager($serviceConfig);
         $serviceManager->setService('ApplicationConfig', static::$config);
         //$serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
 
