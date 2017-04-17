@@ -1,4 +1,9 @@
 # CHANGELOG
+## 2.1.1
+- MailGun API endpoint `/logs` is deprecated. So, you should use the `getEvents` function instead of `getLog` from `MailGunService.php`.
+- Small fix in the ElasticMail Api return's when authentication fails.
+- Small PHP syntax's fixes 
+
 ## 2.1.0
 - Added ZF3 support
 -- which allow install zend-servicemanager both versions v2 or v3 by composer

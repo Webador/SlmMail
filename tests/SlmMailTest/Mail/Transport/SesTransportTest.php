@@ -52,7 +52,7 @@ class SesTransportTest extends PHPUnit_Framework_TestCase
         $serviceManager->setAllowOverride(true);
 
         $self = $this;
-        $serviceManager->setFactory('AwsModule', function() use ($self) {
+        $serviceManager->setFactory('AwsModule', function () use ($self) {
             $aws = $self->createMock('Guzzle\Service\Builder\ServiceBuilderInterface');
             $aws->expects($self->once())
                 ->method('createSes')

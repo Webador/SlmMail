@@ -970,7 +970,7 @@ class MandrillService extends AbstractMailService
             return $result;
         }
 
-        switch($result['name']) {
+        switch ($result['name']) {
             case 'InvalidKey':
                 throw new Exception\InvalidCredentialsException(sprintf(
                     'Mandrill authentication error (code %s): %s', $result['code'], $result['message']
