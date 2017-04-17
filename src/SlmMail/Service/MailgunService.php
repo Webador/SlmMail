@@ -200,6 +200,52 @@ class MailgunService extends AbstractMailService
     }
 
     /**
+     * Get events entries
+     *
+     * @link   http://documentation.mailgun.com/api-events.html
+     * @param  \Datetime $begin
+     * @param  \Datetime|null $end
+     * @param  int $limit
+     * @param  boolean $ascending
+     * @param array $fields
+     * @return array
+     */
+    public function getEvents(\DateTime $begin, \DateTime $end = null, $ascending = true, $limit = 300, array $fields = [])
+    {
+        // Date format like https://documentation.mailgun.com/api-intro.html#date-format
+        $parameters = array(
+            'begin' => $begin->format(\DateTime::RFC2822),
+            'limit' => $limit,
+        );
+
+        if (!empty($end)) {
+            $parameters['end'] = $end->format(\DateTime::RFC2822);
+        }
+
+        if ($ascending) {
+            $parameters['ascending'] = 'yes';
+        } else {
+            $parameters['ascending'] = 'no';
+        }
+
+        // Aditional fields to filter by
+        if (!empty($fields)) {
+            foreach ($fields as $key => $value) {
+                $parameters[$key] = $value;
+            }
+        }
+
+        // Get response
+        $response = $this->prepareHttpClient('/events')
+            ->setMethod(HttpRequest::METHOD_GET)
+            ->setParameterGet($this->filterParameters($parameters))
+            ->send();
+
+        return $this->parseResponse($response);
+    }
+
+
+    /**
      * ------------------------------------------------------------------------------------------
      * SPAM
      * ------------------------------------------------------------------------------------------
