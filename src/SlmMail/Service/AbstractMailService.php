@@ -175,7 +175,7 @@ abstract class AbstractMailService implements MailServiceInterface
             }
         }
 
-        return array_filter($parameters, function($value) {
+        return array_filter($parameters, function ($value) {
             return $value !== null && $value !== '';
         });
     }
