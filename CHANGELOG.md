@@ -1,6 +1,6 @@
 # CHANGELOG
 ## 2.1.1
-- MailGun API endpoint `/logs` is deprecated. So, you should use the `getEvents` function instead of `getLog` from `MailGunService.php`.
+- MailGun API endpoint `/logs` is deprecated. So, you should use the `getEvents` function instead of `getLogs` from `MailGunService.php`.
 - Small fix in the ElasticMail Api return's when authentication fails.
 - Small PHP syntax's fixes 
 
