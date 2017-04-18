@@ -332,18 +332,18 @@ class ElasticEmailService extends AbstractMailService
      *
      * @param  HttpResponse $response
      * @throws Exception\InvalidCredentialsException
-     * @return array
+     * @return string
      */
     private function parseResponse(HttpResponse $response)
     {
         $result = $response->getBody();
 
-        if ($result !== 'Unauthorized: ') {
-            return $result;
+        if (stripos($result, 'Unauthorized:') !== false) {
+            throw new Exception\InvalidCredentialsException(
+                'Authentication error: missing or incorrect Elastic Email API key'
+            );
         }
 
-        throw new Exception\InvalidCredentialsException(
-            'Authentication error: missing or incorrect Elastic Email API key'
-        );
+        return $result;
     }
 }
