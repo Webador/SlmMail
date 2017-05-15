@@ -343,12 +343,6 @@ class ElasticEmailService extends AbstractMailService
                 'Authentication error: missing or incorrect Elastic Email API key'
             );
         }
-<<<<<<< 2b6993b8924302c91bba02145b2f66d6fd264a08
-        
-=======
-
-<<<<<<< HEAD
->>>>>>> fix ElasticEmail error when unauthorized
 
         return $result;
     }
