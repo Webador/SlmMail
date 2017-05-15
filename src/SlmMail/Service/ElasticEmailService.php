@@ -347,7 +347,9 @@ class ElasticEmailService extends AbstractMailService
         
 =======
 
+<<<<<<< HEAD
 >>>>>>> fix ElasticEmail error when unauthorized
+
         return $result;
     }
 }
