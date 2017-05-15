@@ -38,45 +38,26 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail\Mail\Transport;
+namespace SlmMailTest\Transport;
 
-use SlmMail\Service\MailServiceInterface;
-use Zend\Mail\Transport\TransportInterface;
+use PHPUnit_Framework_TestCase as TestCase;
+use SlmMail\Mail\Transport\HttpTransport;
 use Zend\Mail\Message;
 
-class HttpTransport implements TransportInterface
+class HttpTransportTest extends TestCase
 {
-    /**
-     * @var MailServiceInterface
-     */
-    protected $service;
-
-    /**
-     * Whatever response the mail service API sends, if any
-     */
-    protected $response;
-
-    /**
-     * @param MailServiceInterface $service
-     */
-    public function __construct(MailServiceInterface $service)
+    public function testResponseIsSetAfterServiceCall()
     {
-        $this->service = $service;
-    }
+        $mock = $this->getMock('SlmMail\Service\MailServiceInterface');
+        $transport = new HttpTransport($mock);
 
-    /**
-     * {@inheritDoc}
-     */
-    public function send(Message $message)
-    {
-        $this->response = $this->service->send($message);
-    }
+        $mock->expects($this->once())
+             ->method('send')
+             ->will($this->returnValue('api-response'));
 
-    /**
-     * @return mixed
-     */
-    public function getLastApiResponse()
-    {
-        return $this->response;
+        $message = new Message;
+        $transport->send($message);
+
+        $this->assertEquals('api-response', $transport->getLastApiResponse());
     }
 }
