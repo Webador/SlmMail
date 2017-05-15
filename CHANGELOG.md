@@ -1,4 +1,7 @@
 # CHANGELOG
+## 2.1.2
+- ElasticEmail API endpoint `/send` tell us to use POST method instead of GET. So, when sending big html messages via GET it returns 414 error. Fixed to use POST in the method `send` of the `ElasticEmailService.php`
+
 ## 2.1.1
 - MailGun API endpoint `/logs` is deprecated. So, you should use the `getEvents` function instead of `getLog` from `MailGunService.php`.
 - Small fix in the ElasticMail Api return's when authentication fails.
