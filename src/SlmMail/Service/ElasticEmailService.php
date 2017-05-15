@@ -148,7 +148,7 @@ class ElasticEmailService extends AbstractMailService
             $parameters['attachments'] = implode(';', $attachmentIds);
         }
 
-        $response = $this->prepareHttpClient('/mailer/send', $parameters)
+        $response = $this->prepareHttpClient('/mailer/send', $parameters, HttpRequest::METHOD_POST)
                          ->send();
 
         return $this->parseResponse($response);
@@ -295,10 +295,10 @@ class ElasticEmailService extends AbstractMailService
     /**
      * @param  string $uri
      * @param  array $parameters
-     * @throws Exception\RuntimeException if format given is neither "xml" or "csv"
-     * @return \Zend\Http\Client
+     * @param string $method
+     * @return \Zend\Http\Client if format given is neither "xml" or "csv"
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient($uri, array $parameters = array(), $method = HttpRequest::METHOD_GET)
     {
         if (isset($parameters['format']) && !in_array($parameters['format'], array('xml', 'csv'))) {
             throw new Exception\RuntimeException(sprintf(
@@ -309,10 +309,20 @@ class ElasticEmailService extends AbstractMailService
 
         $parameters = array_merge(array('username' => $this->username, 'api_key' => $this->apiKey), $parameters);
 
-        return $this->getClient()->resetParameters()
-                                 ->setMethod(HttpRequest::METHOD_GET)
-                                 ->setUri(self::API_ENDPOINT . $uri)
-                                 ->setParameterGet($this->filterParameters($parameters));
+        // Some endpoints such as /send uses post method.
+        if ($method === HttpRequest::METHOD_GET) {
+            $client = $this->getClient()->resetParameters()
+                ->setMethod($method)
+                ->setUri(self::API_ENDPOINT . $uri)
+                ->setParameterGet($this->filterParameters($parameters));
+        } else {
+            $client = $this->getClient()->resetParameters()
+                ->setMethod(HttpRequest::METHOD_POST)
+                ->setUri(self::API_ENDPOINT . $uri)
+                ->setParameterPost($this->filterParameters($parameters));
+        }
+
+        return $client;
     }
 
     /**
