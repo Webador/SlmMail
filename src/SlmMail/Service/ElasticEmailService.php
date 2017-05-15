@@ -332,7 +332,7 @@ class ElasticEmailService extends AbstractMailService
      *
      * @param  HttpResponse $response
      * @throws Exception\InvalidCredentialsException
-     * @return array
+     * @return string
      */
     private function parseResponse(HttpResponse $response)
     {
@@ -343,7 +343,7 @@ class ElasticEmailService extends AbstractMailService
                 'Authentication error: missing or incorrect Elastic Email API key'
             );
         }
-        
+
         return $result;
     }
 }
