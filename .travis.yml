@@ -27,17 +27,14 @@ matrix:
     - php: 7.2
       env:
         - DEPS=latest
-env:
-  global:
-    - COMPOSER_ARGS=""
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer install --prefer-stable --no-interaction ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer install --prefer-stable --no-interaction --prefer-lowest ; fi
+  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --no-interaction ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --no-interaction --prefer-lowest ; fi
   - composer show --installed
 
 script:
