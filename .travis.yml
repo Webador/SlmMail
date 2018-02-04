@@ -29,17 +29,15 @@ matrix:
         - DEPS=latest
 env:
   global:
-    - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
+    - COMPOSER_ARGS=""
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --prefer-source $COMPOSER_ARGS ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable --prefer-source $COMPOSER_ARGS ; fi
-  - composer install --dev --prefer-source
-  - travis_retry composer install --dev $COMPOSER_ARGS
+  - if [[ $DEPS == 'latest' ]]; then travis_retry composer install --prefer-stable --no-interaction ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer install --prefer-stable --no-interaction --prefer-lowest ; fi
   - composer show --installed
 
 script:
