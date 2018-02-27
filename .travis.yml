@@ -15,19 +15,26 @@ matrix:
     - php: 7.0
       env:
         - DEPS=latest
-env:
-  global:
-    - COMPOSER_ARGS="--no-interaction --ignore-platform-reqs"
+    - php: 7.1
+      env:
+        - DEPS=lowest
+    - php: 7.1
+      env:
+        - DEPS=latest
+    - php: 7.2
+      env:
+        - DEPS=lowest
+    - php: 7.2
+      env:
+        - DEPS=latest
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --prefer-source $COMPOSER_ARGS ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-lowest --prefer-stable --prefer-source $COMPOSER_ARGS ; fi
-  - composer install --dev --prefer-source
-  - travis_retry composer install --dev $COMPOSER_ARGS
+  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --no-interaction ; fi
+  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --no-interaction --prefer-lowest ; fi
   - composer show --installed
 
 script:
