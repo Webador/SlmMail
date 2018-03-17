@@ -74,7 +74,7 @@ class ElasticEmailServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
 
         if (!isset($config['slm_mail']['elastic_email'])) {
             throw new RuntimeException(
