@@ -60,5 +60,11 @@
         "classmap": [
             "./"
         ]
+    },
+    "extra": {
+        "zf": {
+            "component": "SlmMail",
+            "config-provider": "SlmMail\\ConfigProvider"
+        }
     }
 }
