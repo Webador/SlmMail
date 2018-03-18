@@ -42,7 +42,7 @@ namespace SlmMail;
 
 class ConfigProvider
 {
-    public function __invoke(): array
+    public function __invoke()
     {
         $module = new Module();
         $config = $module->getConfig();
