@@ -44,7 +44,8 @@ class ConfigProvider
 {
     public function __invoke(): array
     {
-        $config = (new Module())->getConfig();
+        $module = new Module();
+        $config = $module->getConfig();
 
         return [
             'dependencies'  => $config['service_manager'],

@@ -47,7 +47,8 @@ class ConfigProviderTest extends PHPUnit_Framework_TestCase
 {
     public function testConfigProviderGetConfig()
     {
-        $config = (new \SlmMail\ConfigProvider())();
+        $configProvider = new \SlmMail\ConfigProvider();
+        $config = $configProvider();
 
         $this->assertNotEmpty($config);
     }
