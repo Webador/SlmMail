@@ -57,7 +57,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $serviceManager = ServiceManagerFactory::getServiceManager();
         $serviceManager->setAllowOverride(true);
 
-        $config                             = $serviceManager->get('Config');
+        $config                             = $serviceManager->get('config');
         $config['slm_mail']['http_adapter'] = 'Zend\Http\Client\Adapter\Test';
 
         $serviceManager->setService('Config', $config);
@@ -72,12 +72,12 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $serviceManager = ServiceManagerFactory::getServiceManager();
         $serviceManager->setAllowOverride(true);
 
-        $config                             = $serviceManager->get('Config');
+        $config                             = $serviceManager->get('config');
         $config['slm_mail']['http_options'] = array(
             'sslverifypeer' => false
         );
 
-        $serviceManager->setService('Config', $config);
+        $serviceManager->setService('config', $config);
 
         /** @var \Zend\Http\Client $client */
         $client = $serviceManager->get('SlmMail\Http\Client');
