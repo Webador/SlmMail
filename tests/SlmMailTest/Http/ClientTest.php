@@ -60,7 +60,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $config                             = $serviceManager->get('config');
         $config['slm_mail']['http_adapter'] = 'Zend\Http\Client\Adapter\Test';
 
-        $serviceManager->setService('Config', $config);
+        $serviceManager->setService('config', $config);
 
         /** @var \Zend\Http\Client $client */
         $client = $serviceManager->get('SlmMail\Http\Client');
