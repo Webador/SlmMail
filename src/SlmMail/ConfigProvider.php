@@ -49,7 +49,7 @@ class ConfigProvider
 
         return [
             'dependencies'  => $config['service_manager'],
-            'slm_mail' => $config['slm_mail'],
+            'slm_mail'      => $config['slm_mail'],
         ];
     }
 }
