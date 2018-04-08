@@ -131,9 +131,7 @@ class MailgunService extends AbstractMailService
         if (count($replyTo) > 1) {
             throw new Exception\RuntimeException('Mailgun has only support for one Reply-To address');
         } elseif (count($replyTo)) {
-            foreach ($message->getReplyTo() as $address) {
-                $parameters['h:reply-to'] = $address->toString();
-            }
+            $parameters['h:reply-to'] = $replyTo->rewind()->toString();
         }
 
         $attachments = $this->extractAttachments($message);
