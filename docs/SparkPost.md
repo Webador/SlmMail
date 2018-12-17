@@ -1,8 +1,9 @@
-SendGrid
+SparkPost
 =======
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
+The SparkPost api docks are here:  https://developers.sparkpost.com/api/ .
 
 Installation
 ------------
@@ -17,7 +18,7 @@ Usage
 
 ### Supported functionalities
 
-SlmMail consumes for SparkPosrt just the standard `Zend\Mail\Message` object.
+SlmMail consumes for SparkPost just the standard `Zend\Mail\Message` object.
 
 #### Attachments
 
