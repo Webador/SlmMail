@@ -22,7 +22,7 @@ SlmMail consumes for SparkPost just the standard `Zend\Mail\Message` object.
 
 #### Attachments
 
-You can add any attachment to a SendGrid message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
+You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
 $text = new \Zend\Mime\Part($textContent);
