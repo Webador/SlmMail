@@ -70,11 +70,11 @@ $sparkpostService = $locator->get('SlmMail\Service\SparkPostService');
 
 ### Error handling
 
-If an error occurs when a request is made to the SendGrid API using `SlmMail\Service\SendGridService`, some exceptions
+If an error occurs when a request is made to the SparkPost API using `SlmMail\Service\SparkPostService`, some exceptions
 are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
 exceptions.
 
-SendGrid error handling is rather poor, therefore only one, generic exception is thrown for each error:
+SparkPost error handling is rather poor, therefore only one, generic exception is thrown for each error:
 
 * `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.
 
