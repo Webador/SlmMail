@@ -1,9 +1,11 @@
+
 SparkPost
-=======
+
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 The SparkPost api docks are here:  https://developers.sparkpost.com/api/ .
+
 
 Installation
 ------------
@@ -20,9 +22,17 @@ Usage
 
 SlmMail consumes for SparkPost just the standard `Zend\Mail\Message` object.
 
+
 #### Attachments
 
 You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
+=======
+SlmMail consumes for SparkPosrt just the standard `Zend\Mail\Message` object.
+
+#### Attachments
+
+You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
+>>>>>>> Temporary merge branch 2
 
 ```php
 $text = new \Zend\Mime\Part($textContent);
