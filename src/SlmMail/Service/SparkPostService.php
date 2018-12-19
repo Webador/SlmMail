@@ -10,7 +10,6 @@ namespace SlmMail\Service;
 
 use Zend\Http\Response;
 use Zend\Mail\Message;
-use Zend\Mail\Transport\Exception;
 use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
 use Zend\Mail\Address;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
