@@ -81,7 +81,7 @@ class SparkPostServiceFactory implements FactoryInterface
                 'Config for SparkPost is not set, did you copy config file into your config/autoload folder ?'
             );
         }
-
+      
         $service = new SparkPostService($config['slm_mail']['spark_post']['key']);
 
         $client  = $container->get('SlmMail\Http\Client');

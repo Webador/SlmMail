@@ -35,6 +35,7 @@ class SparkPostServiceTest extends PHPUnit_Framework_TestCase
             array(200, null, null),
             array(400, '{"name":"UnknownError","message":"An error occured on SparkPost (http code 400), message: Unknown error", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
             array(500, '{"name":"GeneralError","message":"SparkPost server error, please try again", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
+
         );
     }
 

@@ -1,8 +1,9 @@
-SendGrid
-=======
+
+SparkPost
 
 This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
+The SparkPost api docks are here:  https://developers.sparkpost.com/api/ .
 
 Installation
 ------------
@@ -17,11 +18,12 @@ Usage
 
 ### Supported functionalities
 
-SlmMail consumes for SparkPosrt just the standard `Zend\Mail\Message` object.
+
+SlmMail consumes for SparkPost just the standard `Zend\Mail\Message` object.
 
 #### Attachments
 
-You can add any attachment to a SendGrid message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
+You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
 $text = new \Zend\Mime\Part($textContent);
@@ -69,11 +71,11 @@ $sparkpostService = $locator->get('SlmMail\Service\SparkPostService');
 
 ### Error handling
 
-If an error occurs when a request is made to the SendGrid API using `SlmMail\Service\SendGridService`, some exceptions
+If an error occurs when a request is made to the SparkPost API using `SlmMail\Service\SparkPostService`, some exceptions
 are thrown. Each exception implements the `SlmMail\Exception\ExceptionInterface`, so you can easily filter each SlmMail
 exceptions.
 
-SendGrid error handling is rather poor, therefore only one, generic exception is thrown for each error:
+SparkPost error handling is rather poor, therefore only one, generic exception is thrown for each error:
 
 * `SlmMail\Service\Exception\RuntimeException`: this exception is thrown for other exceptions.
 

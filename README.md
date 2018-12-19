@@ -29,6 +29,7 @@ Here are the currently supported services:
 * [Postmark](https://postmarkapp.com) (complete)
 * [Postage](http://postageapp.com) (complete)
 * [Send Grid](http://sendgrid.com) (nearly complete)
+* [Spark Post](http://sparkpost.com) (nearly complete)
 
 Requirements
 ------------
@@ -81,6 +82,7 @@ Documentation for SlmMail is splitted for each provider:
 * [Postage](/docs/Postage.md)
 * [Postmark](/docs/Postmark.md)
 * [SendGrid](/docs/SendGrid.md)
+* [SparkPost](/docs/SparkPost.md)
 
 Cook-book
 ---------
