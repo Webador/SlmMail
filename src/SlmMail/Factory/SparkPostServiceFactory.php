@@ -76,7 +76,7 @@ class SparkPostServiceFactory implements FactoryInterface
     {
         $config = $container->get('Config');
 
-        if (!isset($config['slm_mail']['sparkpost'])) {
+        if (!isset($config['slm_mail']['spark_post'])) {
             throw new RuntimeException(
                 'Config for SparkPost is not set, did you copy config file into your config/autoload folder ?'
             );
