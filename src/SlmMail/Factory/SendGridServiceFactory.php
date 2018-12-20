@@ -54,9 +54,9 @@ class SendGridServiceFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createService(ContainerInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this->__invoke($container, SendGridService::class);
+        return $this($serviceLocator, SendGridService::class);
     }
 
     /**
