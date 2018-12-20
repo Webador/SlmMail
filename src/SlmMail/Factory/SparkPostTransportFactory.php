@@ -54,9 +54,9 @@ class SparkPostTransportFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ContainerInterface $container)
     {
-        return $this($serviceLocator, 'SlmMail\Mail\Transport\SparkPostTransport');
+        return $this->__invoke($container, 'SlmMail\Mail\Transport\SparkPostTransport');
     }
 
     /**

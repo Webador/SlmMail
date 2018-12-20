@@ -134,6 +134,7 @@ class SparkPostService extends AbstractMailService
 
         $recipients = [];
         $recipients['recipients'] = $this->prepareAddresses($message->getTo());
+        //preparing email recipients we set $recipients['xx'] to be equal to prepareAddress() for different messages
         !($cc = $this->prepareAddresses($message->getCc())) || $recipients['cc'] = $cc;
         !($bcc = $this->prepareAddresses($message->getBcc())) || $recipients['bcc'] = $bcc;
 
@@ -180,7 +181,6 @@ class SparkPostService extends AbstractMailService
     {
         return $message->getBodyText();
     }
-
 
     /**
      * @param string $uri

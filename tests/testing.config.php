@@ -29,7 +29,6 @@ return array(
         ),
 
         'spark_post' => array(
-            'username' => 'my-username',
             'key' => 'my-secret-key'
         )
     ),

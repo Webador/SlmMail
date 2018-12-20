@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: niki
- * Date: 11/15/18
- * Time: 2:30 PM
- */
 
 namespace SlmMail\Mail\Message;
 

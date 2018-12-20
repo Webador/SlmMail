@@ -1,7 +1,4 @@
 <?php
-/**
- * @author niki
- */
 
 namespace SlmMailTest\Service;
 

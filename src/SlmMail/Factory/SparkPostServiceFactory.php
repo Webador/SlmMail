@@ -56,7 +56,7 @@ class SparkPostServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, SparkPostService::class);
+        return $this->__invoke($serviceLocator, SparkPostService::class);
     }
 
     /**
@@ -84,7 +84,7 @@ class SparkPostServiceFactory implements FactoryInterface
 
         $service = new SparkPostService($config['slm_mail']['spark_post']['key']);
 
-        $client  = $container->get('SlmMail\Http\Client');
+        $client = $container->get('SlmMail\Http\Client');
         $service->setClient($client);
 
         return $service;
