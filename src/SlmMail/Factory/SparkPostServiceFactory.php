@@ -54,9 +54,9 @@ class SparkPostServiceFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createService(ContainerInterface $container)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this->__invoke($container, SparkPostService::class);
+        return $this($serviceLocator, SparkPostService::class);
     }
 
     /**
