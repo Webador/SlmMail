@@ -20,7 +20,8 @@ return array(
         
         'mailgun' => array(
             'domain' => 'my-domain',
-            'key' => 'my-key'
+            'key' => 'my-key',
+            'api_endpoint' => 'mailgun-api-endpoint',
         ),
         
         'send_grid' => array(
