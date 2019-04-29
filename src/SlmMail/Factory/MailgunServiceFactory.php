@@ -83,7 +83,7 @@ class MailgunServiceFactory implements FactoryInterface
         }
 
         $config  = $config['slm_mail']['mailgun'];
-        $service = new MailgunService($config['domain'], $config['key']);
+        $service = new MailgunService($config['domain'], $config['key'], $config['api_endpoint']);
 
         $client  = $container->get('SlmMail\Http\Client');
         $service->setClient($client);

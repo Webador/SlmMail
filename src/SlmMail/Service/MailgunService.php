@@ -51,11 +51,6 @@ use Zend\Mail\Message;
 class MailgunService extends AbstractMailService
 {
     /**
-     * API endpoint
-     */
-    const API_ENDPOINT = 'https://api.mailgun.net/v3';
-
-    /**
      * Mailgun domain to use
      *
      * @var string
@@ -70,13 +65,21 @@ class MailgunService extends AbstractMailService
     protected $apiKey;
 
     /**
+     * Mailgun API endpoint
+     *
+     * @var string
+     */
+    protected $apiEndpoint;
+
+    /**
      * @param string $domain
      * @param string $apiKey
      */
-    public function __construct($domain, $apiKey)
+    public function __construct($domain, $apiKey, $apiEndpoint)
     {
         $this->domain = (string)$domain;
         $this->apiKey = (string)$apiKey;
+        $this->apiEndpoint = (string)$apiEndpoint;
     }
 
     /**
@@ -194,9 +197,9 @@ class MailgunService extends AbstractMailService
             ->addHeaderLine('Authorization', 'Basic ' . base64_encode('api:' . $this->apiKey));
 
         if ($perDomain) {
-            $client->setUri(self::API_ENDPOINT . '/' . $this->domain . $uri);
+            $client->setUri($this->apiEndpoint . '/' . $this->domain . $uri);
         } else {
-            $client->setUri(self::API_ENDPOINT . $uri);
+            $client->setUri($this->apiEndpoint . $uri);
         }
 
         return $client->setMethod(HttpRequest::METHOD_POST)

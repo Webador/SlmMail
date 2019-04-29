@@ -55,7 +55,7 @@ class MailgunServiceTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->service = new MailgunService('my-domain', 'my-secret-key');
+        $this->service = new MailgunService('my-domain', 'my-secret-key', 'mail-api-endpoint');
     }
 
     public function testCreateFromFactory()
