@@ -38,56 +38,29 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail\Factory;
+namespace SlmMail;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
-use SlmMail\Factory\Exception\RuntimeException;
-use SlmMail\Service\ElasticEmailService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use SlmMail\Module;
+use PHPUnit_Framework_TestCase;
 
-class ElasticEmailServiceFactory implements FactoryInterface
+class ConfigProviderTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function testConfigProviderGetConfig()
     {
-        return $this($serviceLocator, ElasticEmailService::class);
+        $configProvider = new \SlmMail\ConfigProvider();
+        $config         = $configProvider();
+
+        $this->assertNotEmpty($config);
     }
 
-    /**
-     * Create an object
-     *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     *
-     * @return ElasticEmailService
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
-     */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function testConfigEqualsToModuleConfig()
     {
-        $config = $container->get('config');
+        $module         = new Module();
+        $moduleConfig   = $module->getConfig();
+        $configProvider = new \SlmMail\ConfigProvider();
+        $config         = $configProvider();
 
-        if (!isset($config['slm_mail']['elastic_email'])) {
-            throw new RuntimeException(
-                'Config for Elastic Email is not set, did you copy config file into your config/autoload folder ?'
-            );
-        }
-
-        $config  = $config['slm_mail']['elastic_email'];
-        $service = new ElasticEmailService($config['username'], $config['key']);
-
-        $client  = $container->get('SlmMail\Http\Client');
-        $service->setClient($client);
-
-        return $service;
+        $this->assertEquals($moduleConfig['service_manager'], $config['dependencies']);
+        $this->assertEquals($moduleConfig['slm_mail'], $config['slm_mail']);
     }
 }

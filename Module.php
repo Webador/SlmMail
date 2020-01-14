@@ -40,11 +40,7 @@
 
 namespace SlmMail;
 
-use Zend\ModuleManager\Feature;
-
-class Module implements
-    Feature\AutoloaderProviderInterface,
-    Feature\ConfigProviderInterface
+class Module
 {
     /**
      * {@inheritDoc}

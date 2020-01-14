@@ -38,56 +38,18 @@
  * @link        http://juriansluiman.nl
  */
 
-namespace SlmMail\Factory;
+namespace SlmMail;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
-use SlmMail\Factory\Exception\RuntimeException;
-use SlmMail\Service\ElasticEmailService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-class ElasticEmailServiceFactory implements FactoryInterface
+class ConfigProvider
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke()
     {
-        return $this($serviceLocator, ElasticEmailService::class);
-    }
+        $module = new Module();
+        $config = $module->getConfig();
 
-    /**
-     * Create an object
-     *
-     * @param  ContainerInterface $container
-     * @param  string             $requestedName
-     * @param  null|array         $options
-     *
-     * @return ElasticEmailService
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
-     */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
-    {
-        $config = $container->get('config');
-
-        if (!isset($config['slm_mail']['elastic_email'])) {
-            throw new RuntimeException(
-                'Config for Elastic Email is not set, did you copy config file into your config/autoload folder ?'
-            );
-        }
-
-        $config  = $config['slm_mail']['elastic_email'];
-        $service = new ElasticEmailService($config['username'], $config['key']);
-
-        $client  = $container->get('SlmMail\Http\Client');
-        $service->setClient($client);
-
-        return $service;
+        return [
+            'dependencies'  => $config['service_manager'],
+            'slm_mail'      => $config['slm_mail'],
+        ];
     }
 }

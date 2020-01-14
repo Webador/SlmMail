@@ -5,6 +5,7 @@
     "type": "library",
     "keywords": [
         "zf2",
+        "expressive",
         "email",
         "elastic email",
         "elasticemail",
@@ -60,5 +61,11 @@
         "classmap": [
             "./"
         ]
+    },
+    "extra": {
+        "zf": {
+            "component": "SlmMail",
+            "config-provider": "SlmMail\\ConfigProvider"
+        }
     }
 }
