@@ -27,6 +27,10 @@ return array(
         'send_grid' => array(
             'username' => 'my-username',
             'key' => 'my-key'
+        ),
+
+        'spark_post' => array(
+            'key' => 'my-secret-key'
         )
     ),
     

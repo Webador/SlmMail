@@ -53,6 +53,7 @@ return [
             'SlmMail\Mail\Transport\PostmarkTransport'     => Factory\PostmarkTransportFactory::class,
             'SlmMail\Mail\Transport\SendGridTransport'     => Factory\SendGridTransportFactory::class,
             'SlmMail\Mail\Transport\SesTransport'          => Factory\SesTransportFactory::class,
+            'SlmMail\Mail\Transport\SparkPostTransport'    => Factory\SparkPostTransportFactory::class,
             /**
              * Services
              */
@@ -63,6 +64,7 @@ return [
             Service\PostmarkService::class     => Factory\PostmarkServiceFactory::class,
             Service\SendGridService::class     => Factory\SendGridServiceFactory::class,
             Service\SesService::class          => Factory\SesServiceFactory::class,
+            Service\SparkPostService::class    => Factory\SparkPostServiceFactory::class,
             /**
              * HTTP client
              */
