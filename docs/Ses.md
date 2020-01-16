@@ -1,7 +1,7 @@
 Amazon SES
 ==========
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Amazon SES](http://aws.amazon.com/ses/).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [Amazon SES](http://aws.amazon.com/ses/).
 The transport is a drop-in component and can be used to send email messages with Cc & Bcc addresses (please note that
 currently, Amazon SES does not support attachments).
 
@@ -29,7 +29,7 @@ Usage
 
 ### Supported functionalities
 
-Amazon SES scope is very basic and does not support more feature than what is provided by default by `Zend\Mail\Message` class.
+Amazon SES scope is very basic and does not support more feature than what is provided by default by `Laminas\Mail\Message` class.
 Therefore, contrary to other email providers, no message class was defined for SES.
 
 ### Use service locator
@@ -37,7 +37,7 @@ Therefore, contrary to other email providers, no message class was defined for S
 If you have access to the service locator, you can retrieve the Amazon SES transport:
 
 ```php
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -61,7 +61,7 @@ $bounce     = $sesService->verifyEmailIdentity('myaddress@gmail.com'); // Exampl
 
 Message functions:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
+* `send(Message $message)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
 * `getSendQuota`: get the user's current sending limits ([docs](http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendQuota.html))
 * `getSendStatistics`: get the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity ([docs](http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendStatistics.html))
 

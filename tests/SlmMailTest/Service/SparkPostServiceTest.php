@@ -6,7 +6,7 @@ use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use SlmMail\Service\SparkPostService;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Response as HttpResponse;
 
 class SparkPostServiceTest extends PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 Postage
 =======
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Postage](http://postageapp.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [Postage](http://postageapp.com).
 The transport is a drop-in component and can be used to send email messages including attachments but *without* Cc & Bcc
 addresses.
 
@@ -19,29 +19,29 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Postage`, that you can use to take advantage of
-specific Postage features. The Postage transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Postage message class. Here are a list of supported features.
+specific Postage features. The Postage transport from SlmMail can work with the standard `Laminas\Mail\Message` objects, but if you want to use channels or templates, you must use the Postage message class. Here are a list of supported features.
 
 #### Attachments
 
 You can add any attachment to a Postage message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
 // You can use the \SlmMail\Mail\Message\Postage class
-// But attachments work with Zend\Mail\Message too
-$message = new \Zend\Mail\Message;
+// But attachments work with Laminas\Mail\Message too
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -63,7 +63,7 @@ If you have access to the service locator, you can retrieve the Postage transpor
 
 ```php
 // As stated above, you can also create a specialized Postage message for more features
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -88,7 +88,7 @@ $bounce         = $postage->getMessageReceipt($uid); // Example
 
 The complete list of methods is:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
+* `send(Message $message)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
 * `getMessageReceipt($uid)`: get receipt of message, $uid the returned uid from `send()` ([docs](http://help.postageapp.com/kb/api/get_message_receipt))
 * `getMessageTransmission($uid)`: get data on individual recipients' delivery and open status ([docs](http://help.postageapp.com/kb/api/get_message_transmissions))
 * `getMetrics`: get metrics for a project ([docs](http://help.postageapp.com/kb/api/get_metrics))

@@ -40,10 +40,10 @@
 
 namespace SlmMail\Service;
 
-use Zend\Http\Client as HttpClient;
-use Zend\Mail\Message;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Mime;
+use Laminas\Http\Client as HttpClient;
+use Laminas\Mail\Message;
+use Laminas\Mime\Message as MimeMessage;
+use Laminas\Mime\Mime;
 
 /**
  * Class AbstractMailService
@@ -114,7 +114,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * text/html.
      *
      * @param  Message $message
-     * @return \Zend\Mime\Part[]|array
+     * @return \Laminas\Mime\Part[]|array
      */
     protected function extractAttachments(Message $message)
     {

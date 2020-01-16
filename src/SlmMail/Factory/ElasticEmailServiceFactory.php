@@ -44,10 +44,10 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use SlmMail\Factory\Exception\RuntimeException;
 use SlmMail\Service\ElasticEmailService;
-use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class ElasticEmailServiceFactory implements FactoryInterface
 {

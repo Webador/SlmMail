@@ -43,7 +43,7 @@ namespace SlmMailTest\Service;
 use PHPUnit_Framework_TestCase;
 use SlmMail\Service\ElasticEmailService;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Response as HttpResponse;
 
 class ElasticEmailServiceTest extends PHPUnit_Framework_TestCase
 {

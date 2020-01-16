@@ -1,7 +1,7 @@
 Mandrill
 ========
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Mandrill](http://mandrill.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [Mandrill](http://mandrill.com).
 The transport is a drop-in component and can be used to send email messages.
 
 Mandrill supports To, Cc and Bcc recipients, but you can also hide the recipients using your Mandrill preferences ([learn here how to do it](http://help.mandrill.com/entries/21751312-Can-I-send-to-more-than-one-recipient-at-a-time-)),
@@ -21,29 +21,29 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Mandrill`, that you can use to take advantage of
-specific Mandrill features. The Mandrill transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mandrill message class. Here are a list of supported features.
+specific Mandrill features. The Mandrill transport from SlmMail can work with the standard `Laminas\Mail\Message` objects, but if you want to use channels or templates, you must use the Mandrill message class. Here are a list of supported features.
 
 #### Attachments
 
 You can add any attachment to a Mandrill message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
 // You can use the \SlmMail\Mail\Message\Mandrill class
-// But attachments work with Zend\Mail\Message too
-$message = new \Zend\Mail\Message;
+// But attachments work with Laminas\Mail\Message too
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -57,7 +57,7 @@ of the image you add) for visual purposes.
 Note that the MIME-Type of images must start with `image/`.
 
 ```php
-$image = new \Zend\Mime\Part(fopen($pathToImage, 'r'));
+$image = new \Laminas\Mime\Part(fopen($pathToImage, 'r'));
 $image->type     = "image/png";
 $image->filename = "my-image.png";
 
@@ -173,7 +173,7 @@ If you have access to the service locator, you can retrieve the Mandrill transpo
 
 ```php
 // As stated above, you can also create a specialized Mandrill message for more features
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -199,7 +199,7 @@ $ping            = $mandrillService->pingUser(); // Example
 
 Messages functions:
 
-* `send(Message $message, DateTime $sendAt = null)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](https://mandrillapp.com/api/docs/messages.html#method=send))
+* `send(Message $message, DateTime $sendAt = null)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](https://mandrillapp.com/api/docs/messages.html#method=send))
 * `sendTemplate(Message $message, DateTime $sendAt = null)`: used by transport layer if a $message has a template ([docs](https://mandrillapp.com/api/docs/messages.html#method=send-template))
 * `getMessageInfo($id)`: get all the information about a message by its Mandrill id ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=info))
 * `getScheduledMessages($to = '')`: get all the scheduled messages, optionally filtered by an email To address ([docs](https://mandrillapp.com/api/docs/messages.JSON.html#method=list-scheduled))

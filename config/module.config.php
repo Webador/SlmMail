@@ -72,6 +72,6 @@ return [
         ],
     ],
     'slm_mail' => [
-        'http_adapter' => \Zend\Http\Client\Adapter\Socket::class,
+        'http_adapter' => \Laminas\Http\Client\Adapter\Socket::class,
     ],
 ];

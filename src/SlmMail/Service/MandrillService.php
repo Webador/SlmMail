@@ -43,10 +43,10 @@ namespace SlmMail\Service;
 use DateTime;
 use DateTimeZone;
 use SlmMail\Mail\Message\Mandrill as MandrillMessage;
-use Zend\Http\Request  as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mail\Address;
-use Zend\Mail\Message;
+use Laminas\Http\Request  as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
 
 class MandrillService extends AbstractMailService
 {
@@ -938,7 +938,7 @@ class MandrillService extends AbstractMailService
     /**
      * @param string $uri
      * @param array $parameters
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     private function prepareHttpClient($uri, array $parameters = array())
     {

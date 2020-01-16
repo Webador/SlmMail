@@ -1,7 +1,7 @@
 Elastic Email
 ============
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Elastic Email](http://elasticemail.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [Elastic Email](http://elasticemail.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 
 Installation
@@ -18,29 +18,29 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\ElasticEmail`, that you can use to take advantage of
-specific Elastic Email features. The Elastic Email transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Elastic Email message class. Here are a list of supported features.
+specific Elastic Email features. The Elastic Email transport from SlmMail can work with the standard `Laminas\Mail\Message` objects, but if you want to use channels or templates, you must use the Elastic Email message class. Here are a list of supported features.
 
 #### Attachments
 
 You can add any attachment to an Elastic Email message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
 // You can use the \SlmMail\Mail\Message\ElasticEmail class
-// But attachments work with Zend\Mail\Message too
-$message = new \Zend\Mail\Message;
+// But attachments work with Laminas\Mail\Message too
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -75,7 +75,7 @@ If you have access to the service locator, you can retrieve the Elastic Email tr
 
 ```php
 // You can also use the Elastic Email message class
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -96,7 +96,7 @@ $accountDetails      = $elasticEmailService->getAccountDetails(); // Example
 
 The complete list of methods is:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://elasticemail.com/api-documentation/send))
+* `send(Message $message)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](http://elasticemail.com/api-documentation/send))
 * `getEmailStatus($id)`: get status for sent email. You can retrieve the identifier as a return value of `send` method ([docs](http://elasticemail.com/api-documentation/status))
 * `uploadAttachment(Attachment $attachment)`: upload an attachment to Elastic Email ([docs](http://elasticemail.com/api-documentation/attachments-upload))
 * `getAccountDetails()`: get account details (credit left...) ([docs](http://elasticemail.com/api-documentation/account-details))

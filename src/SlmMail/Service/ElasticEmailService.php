@@ -41,11 +41,11 @@
 namespace SlmMail\Service;
 
 use SlmMail\Mail\Message\ElasticEmail as ElasticEmailMessage;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mail\Address;
-use Zend\Mail\Message;
-use Zend\Mime\Part;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
+use Laminas\Mime\Part;
 use SimpleXMLElement;
 use DateTime;
 
@@ -296,7 +296,7 @@ class ElasticEmailService extends AbstractMailService
      * @param  string $uri
      * @param  array $parameters
      * @param string $method
-     * @return \Zend\Http\Client if format given is neither "xml" or "csv"
+     * @return \Laminas\Http\Client if format given is neither "xml" or "csv"
      */
     private function prepareHttpClient($uri, array $parameters = array(), $method = HttpRequest::METHOD_GET)
     {

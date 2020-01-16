@@ -8,13 +8,13 @@
 
 namespace SlmMail\Service;
 
-use Zend\Http\Response;
-use Zend\Mail\Message;
+use Laminas\Http\Response;
+use Laminas\Mail\Message;
 use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
-use Zend\Mail\Address;
+use Laminas\Mail\Address;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
 
 class SparkPostService extends AbstractMailService
 {
@@ -186,7 +186,7 @@ class SparkPostService extends AbstractMailService
      * @param string $uri
      * @param array  $parameters
      *
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     private function prepareHttpClient($uri, array $parameters = array())
     {

@@ -41,10 +41,10 @@
 namespace SlmMail\Service;
 
 use SlmMail\Mail\Message\Postage as PostageMessage;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mail\Address;
-use Zend\Mail\Message;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
 
 class PostageService extends AbstractMailService
 {
@@ -262,7 +262,7 @@ class PostageService extends AbstractMailService
     /**
      * @param string $uri
      * @param array $parameters
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     private function prepareHttpClient($uri, array $parameters = array())
     {

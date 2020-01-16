@@ -2,7 +2,7 @@
 
 namespace SlmMail\Mail\Message;
 
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 
 class SparkPost extends Message

@@ -42,7 +42,7 @@ namespace SlmMail\Mail\Transport;
 
 use PHPUnit_Framework_TestCase;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 class ElasticEmailTransportTest extends PHPUnit_Framework_TestCase
 {

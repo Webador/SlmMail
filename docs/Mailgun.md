@@ -1,7 +1,7 @@
 Mailgun
 ========
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [Mailgun](http://www.mailgun.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [Mailgun](http://www.mailgun.com).
 The transport is a drop-in component and can be used to send email messages with Cc & Bcc addresses and attachments.
 
 Installation
@@ -18,29 +18,29 @@ Usage
 ### Supported functionalities
 
 SlmMail defines a new Message class, `SlmMail\Mail\Message\Mailgun`, that you can use to take advantage of
-specific Mailgun features. The Mailgun transport from SlmMail can work with the standard `Zend\Mail\Message` objects, but if you want to use channels or templates, you must use the Mailgun message class. Here are a list of supported features.
+specific Mailgun features. The Mailgun transport from SlmMail can work with the standard `Laminas\Mail\Message` objects, but if you want to use channels or templates, you must use the Mailgun message class. Here are a list of supported features.
 
 #### Attachments
 
 You can add any attachment to a Mailgun message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
 // You can use the \SlmMail\Mail\Message\Mailgun class
-// But attachments work with Zend\Mail\Message too
-$message = new \Zend\Mail\Message;
+// But attachments work with Laminas\Mail\Message too
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -106,7 +106,7 @@ If you have access to the service locator, you can retrieve the Mailgun transpor
 
 ```php
 // As stated above, you can also create a specialized Mailgun message for more features
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -132,7 +132,7 @@ $bounce         = $mailgunService->getBounce('my@example.com'); // Example
 
 Messages functions:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
+* `send(Message $message)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](http://help.postageapp.com/kb/api/send_message))
 * `getLogs($limit = 100, $offset = 0)`: get log entries ([docs](http://documentation.mailgun.com/api-logs.html))
 
 Spam functions:

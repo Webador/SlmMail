@@ -40,7 +40,7 @@
 
 namespace SlmMail\Service;
 
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 interface MailServiceInterface
 {

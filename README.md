@@ -93,7 +93,7 @@ Every email providers used in SlmMail allow to send HTML emails. However, by def
 using the `setBody` content, this content will be considered as the plain text version as shown below:
 
 ```php
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // This will be considered as plain text message, even if the string is valid HTML code
 $message->setBody('Hello world');
@@ -103,15 +103,15 @@ To send a HTML version, you must specify the body as a MimeMessage, and add the 
 shown below:
 
 ```php
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
-$htmlPart = new \Zend\Mime\Part('<html><body><h1>Hello world</h1></body></html>');
+$htmlPart = new \Laminas\Mime\Part('<html><body><h1>Hello world</h1></body></html>');
 $htmlPart->type = "text/html";
 
-$textPart = new \Zend\Mime\Part('Hello world');
+$textPart = new \Laminas\Mime\Part('Hello world');
 $textPart->type = "text/plain";
 
-$body = new \Zend\Mime\Message();
+$body = new \Laminas\Mime\Message();
 $body->setParts(array($textPart, $htmlPart));
 
 $message->setBody($body);
@@ -121,13 +121,13 @@ $message->setBody($body);
 
 ### How to configure HttpClient with http_options and http_adapter
 
-By defaut the adapter is Zend\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
+By defaut the adapter is Laminas\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
 
 ```php
 'slm_mail' => array(
         // Here your email service provider options
 
-        'http_adapter' => 'Zend\Http\Client\Adapter\Proxy' // for example
+        'http_adapter' => 'Laminas\Http\Client\Adapter\Proxy' // for example
     )
 ```
 
