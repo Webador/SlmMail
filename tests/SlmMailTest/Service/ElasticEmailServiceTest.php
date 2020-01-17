@@ -40,19 +40,19 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SlmMail\Service\ElasticEmailService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class ElasticEmailServiceTest extends PHPUnit_Framework_TestCase
+class ElasticEmailServiceTest extends TestCase
 {
     /**
      * @var ElasticEmailService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new ElasticEmailService('my-username', 'my-secret-key');
     }

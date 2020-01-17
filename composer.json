@@ -1,11 +1,11 @@
 {
     "name": "slm/mail",
-    "description": "Integration of various email service providers in the Zend Framework Laminas\\Mail",
+    "description": "Integration of various email service providers in the Laminas\\Mail",
     "license": "BSD-3-Clause",
     "type": "library",
     "keywords": [
-        "zf2",
-        "expressive",
+        "laminas",
+        "mezzio",
         "email",
         "elastic email",
         "elasticemail",
@@ -31,12 +31,11 @@
         }
     ],
     "require": {
-        "php": "^5.6 || ^7.0",
+        "php": "^7.2",
         "laminas/laminas-mail": "^2.6",
         "laminas/laminas-http": "^2.5",
         "laminas/laminas-mime": "^2.6",
-        "laminas/laminas-servicemanager": "^2.7 || ^3.1",
-        "laminas/laminas-dependency-plugin": "^1.0"
+        "laminas/laminas-servicemanager": "^2.7 || ^3.1"
     },
     "require-dev": {
         "aws/aws-sdk-php-zf2": "~2.0",
@@ -49,7 +48,7 @@
         "laminas/laminas-serializer": "^2.6",
         "laminas/laminas-config": "^2.6",
         "doctrine/instantiator": "^1.0.5",
-        "phpunit/phpunit": "^5.5"
+        "phpunit/phpunit": "^8.5"
     },
     "suggest": {
         "aws/aws-sdk-php-zf2": "If you need to use Amazon SES"

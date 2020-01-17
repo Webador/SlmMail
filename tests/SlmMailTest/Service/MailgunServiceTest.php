@@ -40,20 +40,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\MailgunService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class MailgunServiceTest extends PHPUnit_Framework_TestCase
+class MailgunServiceTest extends TestCase
 {
     /**
      * @var MailgunService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new MailgunService('my-domain', 'my-secret-key', 'mail-api-endpoint');
     }
@@ -86,8 +86,11 @@ class MailgunServiceTest extends PHPUnit_Framework_TestCase
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);
+        $actual = $method->invoke($this->service, $response);
+        $this->assertNull($actual);
     }
 }

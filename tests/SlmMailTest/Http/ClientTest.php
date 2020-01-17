@@ -40,10 +40,10 @@
 
 namespace SlmMailTest\Http;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SlmMailTest\Util\ServiceManagerFactory;
 
-class ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     public function testAssertSocketAdapterIsUsedByDefault()
     {

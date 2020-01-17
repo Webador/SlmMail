@@ -40,20 +40,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\PostageService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class PostageServiceTest extends PHPUnit_Framework_TestCase
+class PostageServiceTest extends TestCase
 {
     /**
      * @var PostageService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new PostageService('my-secret-key');
     }
@@ -84,8 +84,11 @@ class PostageServiceTest extends PHPUnit_Framework_TestCase
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals([], $actual);
     }
 }
