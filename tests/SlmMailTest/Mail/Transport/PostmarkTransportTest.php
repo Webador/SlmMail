@@ -40,11 +40,11 @@
 
 namespace SlmMail\Mail\Transport;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Mail\Message;
 
-class PostmarkTransportTest extends PHPUnit_Framework_TestCase
+class PostmarkTransportTest extends TestCase
 {
     public function testCreateFromFactory()
     {

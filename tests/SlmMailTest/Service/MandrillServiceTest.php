@@ -40,20 +40,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\MandrillService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class MandrillServiceTest extends PHPUnit_Framework_TestCase
+class MandrillServiceTest extends TestCase
 {
     /**
      * @var MandrillService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new MandrillService('my-secret-key');
     }
@@ -87,8 +87,11 @@ class MandrillServiceTest extends PHPUnit_Framework_TestCase
         $response->setStatusCode($statusCode);
         $response->setContent($content);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);
+        $actual = $method->invoke($this->service, $response);
+        $this->assertNull($actual);
     }
 }

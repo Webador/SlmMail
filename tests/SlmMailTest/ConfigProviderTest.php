@@ -41,9 +41,9 @@
 namespace SlmMail;
 
 use SlmMail\Module;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigProviderTest extends PHPUnit_Framework_TestCase
+class ConfigProviderTest extends TestCase
 {
     public function testConfigProviderGetConfig()
     {

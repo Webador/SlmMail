@@ -49,7 +49,7 @@
         "laminas/laminas-serializer": "^2.6",
         "laminas/laminas-config": "^2.6",
         "doctrine/instantiator": "^1.0.5",
-        "phpunit/phpunit": "^5.5"
+        "phpunit/phpunit": "^8.5"
     },
     "suggest": {
         "aws/aws-sdk-php-zf2": "If you need to use Amazon SES"

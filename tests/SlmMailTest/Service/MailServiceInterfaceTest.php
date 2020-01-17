@@ -40,7 +40,7 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMailTest\Asset\SimpleMailService;
 use Laminas\Mail\Message;
@@ -48,14 +48,14 @@ use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 use Laminas\Mime\Part as MimePart;
 
-class MailServiceInterfaceTest extends PHPUnit_Framework_testCase
+class MailServiceInterfaceTest extends TestCase
 {
     /**
      * @var SimpleMailService
      */
     protected $simpleMailService;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->simpleMailService = new SimpleMailService();
     }

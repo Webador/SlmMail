@@ -2,20 +2,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\SparkPostService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class SparkPostServiceTest extends PHPUnit_Framework_TestCase
+class SparkPostServiceTest extends TestCase
 {
     /**
      * @var SparkPostService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new SparkPostService('my-secret-key');
     }
@@ -47,8 +47,11 @@ class SparkPostServiceTest extends PHPUnit_Framework_TestCase
         $response->setStatusCode($statusCode);
         $response->setContent($content);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);
+        $actual = $method->invoke($this->service, $response);
+        $this->assertNull($actual);
     }
 }

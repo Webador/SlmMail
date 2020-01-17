@@ -40,19 +40,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use SlmMail\Service\SendGridService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class SendGridServiceTest extends PHPUnit_Framework_TestCase
+class SendGridServiceTest extends TestCase
 {
     /**
      * @var SendGridService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new SendGridService('my-username', 'my-secret-key');
     }
@@ -79,14 +80,17 @@ class SendGridServiceTest extends PHPUnit_Framework_TestCase
      */
     public function testExceptionsAreThrownOnErrors($statusCode, $expectedException)
     {
-        /*$method = new ReflectionMethod('SlmMail\Service\MailgunService', 'parseResponse');
+        /*$method = new ReflectionMethod(SendGridService::class, 'parseResponse');
         $method->setAccessible(true);
 
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);*/
+        $actual = $method->invoke($this->service, $response);
+        $this->assertNull($actual);*/
     }
 }

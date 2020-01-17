@@ -40,20 +40,20 @@
 
 namespace SlmMailTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\PostmarkService;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Http\Response as HttpResponse;
 
-class PostmarkServiceTest extends PHPUnit_Framework_TestCase
+class PostmarkServiceTest extends TestCase
 {
     /**
      * @var PostmarkService
      */
     protected $service;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = new PostmarkService('my-secret-key');
     }
@@ -86,8 +86,11 @@ class PostmarkServiceTest extends PHPUnit_Framework_TestCase
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        $this->setExpectedException($expectedException);
+        if ($expectedException !== null) {
+            $this->expectException($expectedException);
+        }
 
-        $method->invoke($this->service, $response);
+        $actual = $method->invoke($this->service, $response);
+        $this->assertNull($actual);
     }
 }
