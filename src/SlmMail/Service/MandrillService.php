@@ -970,22 +970,26 @@ class MandrillService extends AbstractMailService
             return $result;
         }
 
-        switch ($result['name']) {
+        $name = $result['name'] ?? '';
+        $code = $result['code'] ?? '';
+        $message = $result['message'] ?? '';
+        
+        switch ($name) {
             case 'InvalidKey':
                 throw new Exception\InvalidCredentialsException(sprintf(
-                    'Mandrill authentication error (code %s): %s', $result['code'], $result['message']
+                    'Mandrill authentication error (code %s): %s', $code, $message
                 ));
             case 'ValidationError':
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $result['code'], $result['message']
+                    'An error occurred on Mandrill (code %s): %s', $code, $message
                 ));
             case 'Unknown_Template':
                 throw new Exception\UnknownTemplateException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $result['code'], $result['message']
+                    'An error occurred on Mandrill (code %s): %s', $code, $message
                 ));
             default:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $result['code'], $result['message']
+                    'An error occurred on Mandrill (code %s): %s', $code, $message
                 ));
         }
     }
