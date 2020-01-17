@@ -291,7 +291,8 @@ class PostageService extends AbstractMailService
             return isset($result['data']) ? $result['data'] : array();
         }
 
-        if ($result['response']['status'] !== 'ok') {
+        $status = $result['response']['status'] ?? '';
+        if ($status !== 'ok') {
             $errors = false;
             if (isset($result['data']) && isset($result['data']['errors'])) {
                 $errors = implode(', ', $result['data']['errors']);
@@ -304,9 +305,9 @@ class PostageService extends AbstractMailService
                 ));
             } else {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, status code: %s%s', $result['response']['status'],
+                    'An error occurred on Postage, status code: %s%s', $status,
                     ($errors) ? ' (' . $errors . ')' : ''
-                ), (int) $result['response']['status']);
+                ), (int) $status);
             }
         }
 
