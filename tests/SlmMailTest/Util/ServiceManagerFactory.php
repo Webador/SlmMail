@@ -40,8 +40,8 @@
 
 namespace SlmMailTest\Util;
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
 
 /**
  * Utility used to retrieve a freshly bootstrapped application's service manager
@@ -62,9 +62,9 @@ class ServiceManagerFactory
      */
     public static function setConfig(array $config)
     {
-        // If this MVC v3 then used Zend\Router module instead Zend\Mvc\Router
-        if (class_exists(\Zend\Router\Module::class)) {
-            $config['modules'][] = 'Zend\\Router';
+        // If this MVC v3 then used Laminas\Router module instead Laminas\Mvc\Router
+        if (class_exists(\Laminas\Router\Module::class)) {
+            $config['modules'][] = 'Laminas\\Router';
         }
         static::$config = $config;
     }
@@ -83,9 +83,9 @@ class ServiceManagerFactory
         }
         $serviceManager = new ServiceManager($serviceConfig);
         $serviceManager->setService('ApplicationConfig', static::$config);
-        //$serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
+        //$serviceManager->setFactory('ServiceListener', 'Laminas\Mvc\Service\ServiceListenerFactory');
         $serviceManager->setAllowOverride(true);
-        /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
+        /** @var $moduleManager \Laminas\ModuleManager\ModuleManager */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
 

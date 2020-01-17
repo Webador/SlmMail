@@ -43,7 +43,7 @@ namespace SlmMailTest\Service;
 use PHPUnit_Framework_TestCase;
 use SlmMail\Service\SendGridService;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Response as HttpResponse;
 
 class SendGridServiceTest extends PHPUnit_Framework_TestCase
 {

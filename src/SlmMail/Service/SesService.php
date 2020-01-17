@@ -42,8 +42,8 @@ namespace SlmMail\Service;
 
 use Aws\Ses\Exception\SesException;
 use Aws\Ses\SesClient;
-use Zend\Mail\Address;
-use Zend\Mail\Message;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
 
 class SesService extends AbstractMailService
 {

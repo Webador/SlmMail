@@ -40,8 +40,8 @@
 
 namespace SlmMail\Mail\Message;
 
-use Zend\Mail\Message;
-use Zend\Mime\Part;
+use Laminas\Mail\Message;
+use Laminas\Mime\Part;
 
 class Mandrill extends Message
 {

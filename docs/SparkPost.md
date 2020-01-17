@@ -2,7 +2,7 @@
 SparkPost
 
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 The SparkPost api docks are here:  https://developers.sparkpost.com/api/ .
 
@@ -20,14 +20,14 @@ Usage
 
 ### Supported functionalities
 
-SlmMail consumes for SparkPost just the standard `Zend\Mail\Message` object.
+SlmMail consumes for SparkPost just the standard `Laminas\Mail\Message` object.
 
 
 #### Attachments
 
 You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 =======
-SlmMail consumes for SparkPosrt just the standard `Zend\Mail\Message` object.
+SlmMail consumes for SparkPosrt just the standard `Laminas\Mail\Message` object.
 
 #### Attachments
 
@@ -35,20 +35,20 @@ You can add any attachment to a SparkPost message. Attachments are handled just 
 >>>>>>> Temporary merge branch 2
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
-$message = new \Zend\Mail\Message;
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -58,7 +58,7 @@ If you have access to the service locator, you can retrieve the SparkPost transp
 
 ```php
 // As stated above, you can also create a specialized SparkPost message for more features
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 

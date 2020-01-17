@@ -41,7 +41,7 @@
 namespace SlmMailTest\Asset;
 
 use SlmMail\Service\AbstractMailService;
-use Zend\Mail\Message;
+use Laminas\Mail\Message;
 
 class SimpleMailService extends AbstractMailService
 {

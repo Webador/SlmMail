@@ -42,11 +42,11 @@ namespace SlmMail\Service;
 
 use DateTime;
 use SlmMail\Mail\Message\Mailgun as MailgunMessage;
-use Zend\Http\Client as HttpClient;
-use Zend\Http\Request as HttpRequest;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mail\Address;
-use Zend\Mail\Message;
+use Laminas\Http\Client as HttpClient;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
 
 class MailgunService extends AbstractMailService
 {
@@ -194,7 +194,7 @@ class MailgunService extends AbstractMailService
      * @param string $uri
      * @param array $parameters
      * @param bool $perDomain
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     private function prepareHttpClient($uri, array $parameters = array(), $perDomain = true)
     {

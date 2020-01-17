@@ -1,7 +1,7 @@
 SendGrid
 =======
 
-This transport layer forms the coupling between Zend\Mail and the Email Service Provider [SendGrid](http://sendgrid.com).
+This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [SendGrid](http://sendgrid.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
 
 Installation
@@ -17,27 +17,27 @@ Usage
 
 ### Supported functionalities
 
-SlmMail consumes for SendGrid just the standard `Zend\Mail\Message` object.
+SlmMail consumes for SendGrid just the standard `Laminas\Mail\Message` object.
 
 #### Attachments
 
 You can add any attachment to a SendGrid message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
 
 ```php
-$text = new \Zend\Mime\Part($textContent);
+$text = new \Laminas\Mime\Part($textContent);
 $text->type = "text/plain";
 
-$html = new \Zend\Mime\Part($htmlMarkup);
+$html = new \Laminas\Mime\Part($htmlMarkup);
 $html->type = "text/html";
 
-$pdf = new \Zend\Mime\Part(fopen($pathToPdf, 'r'));
+$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
 $pdf->type     = "application/pdf";
 $pdf->filename = "my-attachment.pdf";
 
-$body = new \Zend\Mime\Message;
+$body = new \Laminas\Mime\Message;
 $body->setParts(array($text, $html, $pdf));
 
-$message = new \Zend\Mail\Message;
+$message = new \Laminas\Mail\Message;
 $message->setBody($body);
 ```
 
@@ -47,7 +47,7 @@ If you have access to the service locator, you can retrieve the SendGrid transpo
 
 ```php
 // As stated above, you can also create a specialized SendGrid message for more features
-$message = new \Zend\Mail\Message();
+$message = new \Laminas\Mail\Message();
 
 // set up Message here
 
@@ -72,7 +72,7 @@ $bounce          = $sendgrid->getStatistics(); // Example
 
 The complete list of methods is:
 
-* `send(Message $message)`: used by transport layer, $message instance of `Zend\Mail\Message` ([docs](http://sendgrid.com/docs/API_Reference/Web_API/mail.html))
+* `send(Message $message)`: used by transport layer, $message instance of `Laminas\Mail\Message` ([docs](http://sendgrid.com/docs/API_Reference/Web_API/mail.html))
 * `getStatistics($date, $startDate, $endDate, $aggregate)`: get statistics of your account ([docs](http://sendgrid.com/docs/API_Reference/Web_API/statistics.html))
 * `getBounces($date, $days, $startDate, $endDate, $email, $limit, $offset)`: get the list of bounces ([docs](http://sendgrid.com/docs/API_Reference/Web_API/bounces.html))
 * `deleteBounces($startDate, $endDate, $email)`: delete an address from the bounce list ([docs](http://sendgrid.com/docs/API_Reference/Web_API/bounces.html))

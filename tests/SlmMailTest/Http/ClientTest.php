@@ -47,9 +47,9 @@ class ClientTest extends PHPUnit_Framework_TestCase
 {
     public function testAssertSocketAdapterIsUsedByDefault()
     {
-        /** @var \Zend\Http\Client $client */
+        /** @var \Laminas\Http\Client $client */
         $client = ServiceManagerFactory::getServiceManager()->get('SlmMail\Http\Client');
-        $this->assertInstanceOf('Zend\Http\Client\Adapter\Socket', $client->getAdapter());
+        $this->assertInstanceOf('Laminas\Http\Client\Adapter\Socket', $client->getAdapter());
     }
 
     public function testAssertCanChangeAdapter()
@@ -58,13 +58,13 @@ class ClientTest extends PHPUnit_Framework_TestCase
         $serviceManager->setAllowOverride(true);
 
         $config                             = $serviceManager->get('config');
-        $config['slm_mail']['http_adapter'] = 'Zend\Http\Client\Adapter\Test';
+        $config['slm_mail']['http_adapter'] = 'Laminas\Http\Client\Adapter\Test';
 
         $serviceManager->setService('config', $config);
 
-        /** @var \Zend\Http\Client $client */
+        /** @var \Laminas\Http\Client $client */
         $client = $serviceManager->get('SlmMail\Http\Client');
-        $this->assertInstanceOf('Zend\Http\Client\Adapter\Test', $client->getAdapter());
+        $this->assertInstanceOf('Laminas\Http\Client\Adapter\Test', $client->getAdapter());
     }
 
     public function testCanSetOptionsForHttpAdapter()
@@ -79,7 +79,7 @@ class ClientTest extends PHPUnit_Framework_TestCase
 
         $serviceManager->setService('config', $config);
 
-        /** @var \Zend\Http\Client $client */
+        /** @var \Laminas\Http\Client $client */
         $client = $serviceManager->get('SlmMail\Http\Client');
         $config = $client->getAdapter()->getConfig();
         $this->assertFalse($config['sslverifypeer']);

@@ -44,7 +44,7 @@ use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use SlmMail\Service\MailgunService;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Response as HttpResponse;
 
 class MailgunServiceTest extends PHPUnit_Framework_TestCase
 {

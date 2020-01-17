@@ -44,7 +44,7 @@ use PHPUnit_Framework_TestCase;
 use ReflectionMethod;
 use SlmMail\Service\MandrillService;
 use SlmMailTest\Util\ServiceManagerFactory;
-use Zend\Http\Response as HttpResponse;
+use Laminas\Http\Response as HttpResponse;
 
 class MandrillServiceTest extends PHPUnit_Framework_TestCase
 {

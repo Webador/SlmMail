@@ -41,8 +41,8 @@
 namespace SlmMail\Mail\Transport;
 
 use SlmMail\Service\MailServiceInterface;
-use Zend\Mail\Transport\TransportInterface;
-use Zend\Mail\Message;
+use Laminas\Mail\Transport\TransportInterface;
+use Laminas\Mail\Message;
 
 class HttpTransport implements TransportInterface
 {
