@@ -32,10 +32,10 @@
     ],
     "require": {
         "php": "^7.2",
-        "laminas/laminas-mail": "^2.10",
-        "laminas/laminas-http": "^2.11",
+        "laminas/laminas-mail": "^2.9",
+        "laminas/laminas-http": "^2.8",
         "laminas/laminas-mime": "^2.7",
-        "laminas/laminas-servicemanager": "^3.4"
+        "laminas/laminas-servicemanager": "^3.3"
     },
     "require-dev": {
         "aws/aws-sdk-php-zf2": "~4.2",
