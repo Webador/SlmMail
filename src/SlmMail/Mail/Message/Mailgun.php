@@ -45,7 +45,7 @@ use Laminas\Mail\Message;
 
 class Mailgun extends Message
 {
-    const TAG_LIMIT = 3;
+    public const TAG_LIMIT = 3;
 
     /**
      * @var array

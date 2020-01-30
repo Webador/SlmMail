@@ -53,7 +53,7 @@ class PostageService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.postageapp.com/v.1.0';
+    protected const API_ENDPOINT = 'https://api.postageapp.com/v.1.0';
 
     /**
      * Postage API key

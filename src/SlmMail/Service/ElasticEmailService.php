@@ -56,7 +56,7 @@ class ElasticEmailService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.elasticemail.com';
+    public const API_ENDPOINT = 'https://api.elasticemail.com';
 
     /**
      * Elastic Email username

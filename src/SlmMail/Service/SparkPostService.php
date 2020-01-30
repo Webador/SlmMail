@@ -23,7 +23,7 @@ class SparkPostService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.eu.sparkpost.com/api/v1';
+    protected const API_ENDPOINT = 'https://api.eu.sparkpost.com/api/v1';
 
     /**
      * SparkPost API key

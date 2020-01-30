@@ -52,7 +52,7 @@ class SendGridService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://sendgrid.com/api';
+    protected const API_ENDPOINT = 'https://sendgrid.com/api';
 
     /**
      * SendGrid username

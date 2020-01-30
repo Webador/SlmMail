@@ -51,14 +51,14 @@ use Laminas\Mail\Message;
 class PostmarkService extends AbstractMailService
 {
     /**
-     * API endpoint
-     */
-    const API_ENDPOINT = 'https://api.postmarkapp.com';
-
-    /**
      * Postmark supports a maximum of 20 recipients per messages
      */
-    const RECIPIENT_LIMIT = 20;
+    public const RECIPIENT_LIMIT = 20;
+
+    /**
+     * API endpoint
+     */
+    protected const API_ENDPOINT = 'https://api.postmarkapp.com';
 
     /**
      * Postmark API key

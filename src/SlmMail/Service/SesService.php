@@ -51,7 +51,7 @@ class SesService extends AbstractMailService
     /**
      * SES supports a maximum of 50 recipients per messages
      */
-    const RECIPIENT_LIMIT = 50;
+    public const RECIPIENT_LIMIT = 50;
 
     /**
      * @param SesClient $client
