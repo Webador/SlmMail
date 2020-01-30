@@ -53,7 +53,7 @@ class Postage extends Message
     /**
      * @var array
      */
-    protected $variables = array();
+    protected $variables = [];
 
     /**
      * Set Postage template name to use

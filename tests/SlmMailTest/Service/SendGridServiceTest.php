@@ -103,37 +103,37 @@ class SendGridServiceTest extends TestCase
 
     public function exceptionDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 400,
                 'some jiberish, non-JSON',
                 'SlmMail\Service\Exception\RuntimeException',
                 'An error occured on SendGrid (http code 400), could not interpret result as JSON. Body: some jiberish, non-JSON'
-            ),
-            array(
+            ],
+            [
                 400,
                 json_encode(['errors' => 'some error message']),
                 'SlmMail\Service\Exception\RuntimeException',
                 'An error occured on SendGrid (http code 400), message: Unknown error'
-            ),
-            array(
+            ],
+            [
                 401,
                 json_encode(['errors' => 'some error message']),
                 'SlmMail\Service\Exception\RuntimeException',
                 'An error occured on SendGrid (http code 401), message: Unknown error'
-            ),
-            array(
+            ],
+            [
                 402,
                 json_encode(['errors' => 'some error message']),
                 'SlmMail\Service\Exception\RuntimeException',
                 'An error occured on SendGrid (http code 402), message: Unknown error'
-            ),
-            array(
+            ],
+            [
                 500,
                 json_encode(['errors' => 'some error message']),
                 'SlmMail\Service\Exception\RuntimeException',
                 'SendGrid server error, please try again'
-            ),
-        );
+            ],
+        ];
     }
 }

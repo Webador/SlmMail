@@ -104,28 +104,28 @@ class MailgunService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'from' => $from->rewind()->toString(),
             'subject' => $message->getSubject(),
             'text' => $this->extractText($message),
             'html' => $this->extractHtml($message)
-        );
+        ];
 
-        $to = array();
+        $to = [];
         foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
 
         $parameters['to'] = implode(',', $to);
 
-        $cc = array();
+        $cc = [];
         foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();
         }
 
         $parameters['cc'] = implode(',', $cc);
 
-        $bcc = array();
+        $bcc = [];
         foreach ($message->getBcc() as $address) {
             $bcc[] = $address->toString();
         }
@@ -198,7 +198,7 @@ class MailgunService extends AbstractMailService
      * @param bool $perDomain
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array(), bool $perDomain = true): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = [], bool $perDomain = true): HttpClient
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -270,7 +270,7 @@ class MailgunService extends AbstractMailService
      */
     public function getLogs(int $limit = 100, int $offset = 0): array
     {
-        $parameters = array('limit' => $limit, 'skip' => $offset);
+        $parameters = ['limit' => $limit, 'skip' => $offset];
 
         $response = $this->prepareHttpClient('/log')
             ->setMethod(HttpRequest::METHOD_GET)
@@ -340,7 +340,7 @@ class MailgunService extends AbstractMailService
      */
     public function getSpamComplaints(int $limit = 100, int $offset = 0): array
     {
-        $parameters = array('limit' => $limit, 'skip' => $offset);
+        $parameters = ['limit' => $limit, 'skip' => $offset];
 
         $response = $this->prepareHttpClient('/complaints')
             ->setMethod(HttpRequest::METHOD_GET)
@@ -382,7 +382,7 @@ class MailgunService extends AbstractMailService
      */
     public function addSpamComplaint(string $address): array
     {
-        $response = $this->prepareHttpClient('/complaints', array('address' => $address))
+        $response = $this->prepareHttpClient('/complaints', ['address' => $address])
             ->send();
 
         return $this->parseResponse($response);
@@ -414,7 +414,7 @@ class MailgunService extends AbstractMailService
      */
     public function getBounces(int $limit = 100, int $offset = 0): array
     {
-        $parameters = array('limit' => $limit, 'skip' => $offset);
+        $parameters = ['limit' => $limit, 'skip' => $offset];
 
         $response = $this->prepareHttpClient('/bounces')
             ->setMethod(HttpRequest::METHOD_GET)
@@ -493,14 +493,14 @@ class MailgunService extends AbstractMailService
     {
         $actions = (array)$actions;
 
-        $parameters = array(
+        $parameters = [
             'description' => $description,
             'expression' => $expression,
             'action' => array_reverse($actions), // For unknown reasons, Mailgun API saves
             // routes in the opposite order as you specify
             // them, hence the array_reverse
             'priority' => $priority
-        );
+        ];
 
         $response = $this->prepareHttpClient('/routes', $parameters, false)
             ->send();
@@ -517,7 +517,7 @@ class MailgunService extends AbstractMailService
      */
     public function deleteRoute(string $id): array
     {
-        $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
+        $response = $this->prepareHttpClient('/routes/' . $id, [], false)
             ->setMethod(HttpRequest::METHOD_DELETE)
             ->send();
 
@@ -534,9 +534,9 @@ class MailgunService extends AbstractMailService
      */
     public function getRoutes(int $limit = 100, int $offset = 0): array
     {
-        $parameters = array('limit' => $limit, 'skip' => $offset);
+        $parameters = ['limit' => $limit, 'skip' => $offset];
 
-        $response = $this->prepareHttpClient('/routes', array(), false)
+        $response = $this->prepareHttpClient('/routes', [], false)
             ->setMethod(HttpRequest::METHOD_GET)
             ->setParameterGet($this->filterParameters($parameters))
             ->send();
@@ -553,7 +553,7 @@ class MailgunService extends AbstractMailService
      */
     public function getRoute(string $id): array
     {
-        $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
+        $response = $this->prepareHttpClient('/routes/' . $id, [], false)
             ->setMethod(HttpRequest::METHOD_GET)
             ->send();
 
@@ -571,18 +571,18 @@ class MailgunService extends AbstractMailService
      * @param  int $priority Optional priority (smaller number indicates higher priority)
      * @return array
      */
-    public function updateRoute(string $id, string $description = '', string $expression = '', $actions = array(), int $priority = 0): array
+    public function updateRoute(string $id, string $description = '', string $expression = '', $actions = [], int $priority = 0): array
     {
         $actions = (array)$actions;
 
-        $parameters = array(
+        $parameters = [
             'description' => $description,
             'expression' => $expression,
             'action' => array_reverse($actions), // For unknown reasons, Mailgun API saves
             // routes in the opposite order as you specify
             // them, hence the array_reverse
             'priority' => $priority
-        );
+        ];
 
         $response = $this->prepareHttpClient('/routes/' . $id, $parameters, false)
             ->setMethod(HttpRequest::METHOD_PUT)

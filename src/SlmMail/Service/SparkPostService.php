@@ -187,7 +187,7 @@ class SparkPostService extends AbstractMailService
      * @param array  $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
         $parameters = json_encode($parameters);
         $return = $this->getClient()

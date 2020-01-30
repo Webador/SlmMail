@@ -76,7 +76,7 @@ class ServiceManagerFactory
     public static function getServiceManager()
     {
         $serviceConfig = new ServiceManagerConfig(
-            isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
+            isset(static::$config['service_manager']) ? static::$config['service_manager'] : []
         );
         // If this ServiceManager v3 then __constructor signature pass array instead object
         if (method_exists(new ServiceManager(), 'configure')) {

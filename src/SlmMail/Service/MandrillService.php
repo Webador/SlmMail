@@ -121,7 +121,7 @@ class MandrillService extends AbstractMailService
      */
     public function getMessageInfo(string $id): array
     {
-        $response = $this->prepareHttpClient('/messages/info.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/messages/info.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -136,7 +136,7 @@ class MandrillService extends AbstractMailService
      */
     public function getScheduledMessages(string $to = ''): array
     {
-        $response = $this->prepareHttpClient('/messages/list-scheduled.json', array('to' => $to))
+        $response = $this->prepareHttpClient('/messages/list-scheduled.json', ['to' => $to])
                          ->send();
 
         return $this->parseResponse($response);
@@ -151,7 +151,7 @@ class MandrillService extends AbstractMailService
      */
     public function cancelScheduledMessage(string $id): array
     {
-        $response = $this->prepareHttpClient('/messages/cancel-scheduled.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/messages/cancel-scheduled.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -170,7 +170,7 @@ class MandrillService extends AbstractMailService
         // Mandrill needs to have date in UTC, using this format
         $sendAt->setTimezone(new DateTimeZone('UTC'));
 
-        $parameters = array('id' => $id, 'send_at' => $sendAt->format('Y-m-d H:i:s'));
+        $parameters = ['id' => $id, 'send_at' => $sendAt->format('Y-m-d H:i:s')];
 
         $response = $this->prepareHttpClient('/messages/reschedule.json', $parameters)
                          ->send();
@@ -255,7 +255,7 @@ class MandrillService extends AbstractMailService
      */
     public function getSenderInfo(string $address): array
     {
-        $response = $this->prepareHttpClient('/senders/info.json', array('address' => $address))
+        $response = $this->prepareHttpClient('/senders/info.json', ['address' => $address])
                          ->send();
 
         return $this->parseResponse($response);
@@ -270,7 +270,7 @@ class MandrillService extends AbstractMailService
      */
     public function getRecentSenderInfo(string $address): array
     {
-        $response = $this->prepareHttpClient('/senders/time-series.json', array('address' => $address))
+        $response = $this->prepareHttpClient('/senders/time-series.json', ['address' => $address])
                          ->send();
 
         return $this->parseResponse($response);
@@ -291,7 +291,7 @@ class MandrillService extends AbstractMailService
      */
     public function deleteTag(string $tag): array
     {
-        $response = $this->prepareHttpClient('/tags/delete.json', array('tag' => $tag))
+        $response = $this->prepareHttpClient('/tags/delete.json', ['tag' => $tag])
                          ->send();
 
         return $this->parseResponse($response);
@@ -306,7 +306,7 @@ class MandrillService extends AbstractMailService
      */
     public function getRecentTagInfo(string $tag): array
     {
-        $response = $this->prepareHttpClient('/tags/time-series.json', array('tag' => $tag))
+        $response = $this->prepareHttpClient('/tags/time-series.json', ['tag' => $tag])
                          ->send();
 
         return $this->parseResponse($response);
@@ -321,7 +321,7 @@ class MandrillService extends AbstractMailService
      */
     public function getTagInfo(string $tag): array
     {
-        $response = $this->prepareHttpClient('/tags/info.json', array('tag' => $tag))
+        $response = $this->prepareHttpClient('/tags/info.json', ['tag' => $tag])
                          ->send();
 
         return $this->parseResponse($response);
@@ -392,11 +392,11 @@ class MandrillService extends AbstractMailService
      */
     public function getRejectionBlacklist(string $email = '', bool $includeExpired = false, string $subaccount = ''): array
     {
-        $parameters = array(
+        $parameters = [
             'email'           => $email,
             'include_expired' => $includeExpired,
             'subaccount'      => $subaccount
-        );
+        ];
 
         $response = $this->prepareHttpClient('/rejects/list.json', $parameters)
                          ->send();
@@ -419,7 +419,7 @@ class MandrillService extends AbstractMailService
      */
     public function addRejectionWhitelist(string $email): array
     {
-        $response = $this->prepareHttpClient('/whitelists/add.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/whitelists/add.json', ['email' => $email])
                          ->send();
 
         return $this->parseResponse($response);
@@ -434,7 +434,7 @@ class MandrillService extends AbstractMailService
      */
     public function deleteRejectionWhitelist(string $email): array
     {
-        $response = $this->prepareHttpClient('/whitelists/delete.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/whitelists/delete.json', ['email' => $email])
                          ->send();
 
         return $this->parseResponse($response);
@@ -449,7 +449,7 @@ class MandrillService extends AbstractMailService
      */
     public function getRejectionWhitelist(string $email = ''): array
     {
-        $response = $this->prepareHttpClient('/whitelists/list.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/whitelists/list.json', ['email' => $email])
                          ->send();
 
         return $this->parseResponse($response);
@@ -475,7 +475,7 @@ class MandrillService extends AbstractMailService
             $response = $this->prepareHttpClient('/urls/list.json')
                              ->send();
         } else {
-            $response = $this->prepareHttpClient('/urls/search.json', array('q' => $query))
+            $response = $this->prepareHttpClient('/urls/search.json', ['q' => $query])
                              ->send();
         }
 
@@ -491,7 +491,7 @@ class MandrillService extends AbstractMailService
      */
     public function getRecentUrlInfo(string $url): array
     {
-        $response = $this->prepareHttpClient('/url/time-series.json', array('url' => $url))
+        $response = $this->prepareHttpClient('/url/time-series.json', ['url' => $url])
                          ->send();
 
         return $this->parseResponse($response);
@@ -515,12 +515,12 @@ class MandrillService extends AbstractMailService
      */
     public function addSubaccount(string $id, string $name = '', string $notes = '', $customQuota = null): array
     {
-        $parameters = array(
+        $parameters = [
             'id'           => $id,
             'name'         => $name,
             'notes'        => $notes,
             'custom_quota' => $customQuota
-        );
+        ];
 
         $response = $this->prepareHttpClient('/subaccounts/add.json', $parameters)
                          ->send();
@@ -537,7 +537,7 @@ class MandrillService extends AbstractMailService
      */
     public function deleteSubaccount(string $id): array
     {
-        $response = $this->prepareHttpClient('/subaccounts/delete.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/subaccounts/delete.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -552,7 +552,7 @@ class MandrillService extends AbstractMailService
      */
     public function getSubaccountInfo(string $id): array
     {
-        $response = $this->prepareHttpClient('/subaccounts/info.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/subaccounts/info.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -567,7 +567,7 @@ class MandrillService extends AbstractMailService
      */
     public function getSubaccounts(string $prefix = ''): array
     {
-        $response = $this->prepareHttpClient('/subaccounts/list.json', array('q' => $prefix))
+        $response = $this->prepareHttpClient('/subaccounts/list.json', ['q' => $prefix])
                          ->send();
 
         return $this->parseResponse($response);
@@ -582,7 +582,7 @@ class MandrillService extends AbstractMailService
      */
     public function pauseSubaccount(string $id): array
     {
-        $response = $this->prepareHttpClient('/subaccounts/pause.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/subaccounts/pause.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -597,7 +597,7 @@ class MandrillService extends AbstractMailService
      */
     public function resumeSubaccount(string $id): array
     {
-        $response = $this->prepareHttpClient('/subaccounts/resume.json', array('id' => $id))
+        $response = $this->prepareHttpClient('/subaccounts/resume.json', ['id' => $id])
                          ->send();
 
         return $this->parseResponse($response);
@@ -615,12 +615,12 @@ class MandrillService extends AbstractMailService
      */
     public function updateSubaccount(string $id, string $name = '', string $notes = '', $customQuota = null): array
     {
-        $parameters = array(
+        $parameters = [
             'id'           => $id,
             'name'         => $name,
             'notes'        => $notes,
             'custom_quota' => $customQuota
-        );
+        ];
 
         $response = $this->prepareHttpClient('/subaccounts/update.json', $parameters)
                          ->send();
@@ -653,7 +653,7 @@ class MandrillService extends AbstractMailService
         string $subject = '',
         string $html = '',
         string $text = '',
-        array $labels = array()
+        array $labels = []
     ): array {
         if (count($labels) > 10) {
             throw new Exception\RuntimeException(
@@ -661,7 +661,7 @@ class MandrillService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'name'       => $name,
             'from_email' => ($address !== null) ? $address->getEmail() : '',
             'from_name'  => ($address !== null) ? $address->getName() : '',
@@ -669,7 +669,7 @@ class MandrillService extends AbstractMailService
             'code'       => $html,
             'text'       => $text,
             'labels'     => $labels
-        );
+        ];
 
         $response = $this->prepareHttpClient('/templates/add.json', $parameters)
                          ->send();
@@ -696,7 +696,7 @@ class MandrillService extends AbstractMailService
         string $subject = '',
         string $html = '',
         string $text = '',
-        array $labels = array()
+        array $labels = []
     ): array {
         if (count($labels) > 10) {
             throw new Exception\RuntimeException(
@@ -704,7 +704,7 @@ class MandrillService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'name'       => $name,
             'from_email' => ($address !== null) ? $address->getEmail() : '',
             'from_name'  => ($address !== null) ? $address->getName() : '',
@@ -712,7 +712,7 @@ class MandrillService extends AbstractMailService
             'code'       => $html,
             'text'       => $text,
             'labels'     => $labels
-        );
+        ];
 
         $response = $this->prepareHttpClient('/templates/update.json', $parameters)
                          ->send();
@@ -729,7 +729,7 @@ class MandrillService extends AbstractMailService
      */
     public function deleteTemplate(string $name): array
     {
-        $response = $this->prepareHttpClient('/templates/delete.json', array('name' => $name))
+        $response = $this->prepareHttpClient('/templates/delete.json', ['name' => $name])
                          ->send();
 
         return $this->parseResponse($response);
@@ -744,7 +744,7 @@ class MandrillService extends AbstractMailService
      */
     public function getTemplates(string $label = ''): array
     {
-        $response = $this->prepareHttpClient('/templates/list.json', array('label' => $label))
+        $response = $this->prepareHttpClient('/templates/list.json', ['label' => $label])
                          ->send();
 
         return $this->parseResponse($response);
@@ -759,7 +759,7 @@ class MandrillService extends AbstractMailService
      */
     public function getTemplateInfo(string $name): array
     {
-        $response = $this->prepareHttpClient('/templates/info.json', array('name' => $name))
+        $response = $this->prepareHttpClient('/templates/info.json', ['name' => $name])
                          ->send();
 
         return $this->parseResponse($response);
@@ -774,7 +774,7 @@ class MandrillService extends AbstractMailService
      */
     public function getRecentTemplateInfo(string $name): array
     {
-        $response = $this->prepareHttpClient('/templates/time-series.json', array('name' => $name))
+        $response = $this->prepareHttpClient('/templates/time-series.json', ['name' => $name])
                          ->send();
 
         return $this->parseResponse($response);
@@ -789,13 +789,13 @@ class MandrillService extends AbstractMailService
      * @param  array $variables
      * @return array
      */
-    public function renderTemplate(string $name, array $content = array(), array $variables = array()): array
+    public function renderTemplate(string $name, array $content = [], array $variables = []): array
     {
-        $parameters = array(
+        $parameters = [
             'template_name'    => $name,
             'template_content' => $content,
             'merge_vars'       => $variables
-        );
+        ];
 
         $response = $this->prepareHttpClient('/templates/render.json', $parameters)
                          ->send();
@@ -822,36 +822,36 @@ class MandrillService extends AbstractMailService
 
         $from = $from->rewind();
 
-        $parameters['message'] = array(
+        $parameters['message'] = [
             'subject'    => $message->getSubject(),
             'text'       => $this->extractText($message),
             'html'       => $this->extractHtml($message),
             'from_email' => ($from ? $from->getEmail() : ''),
             'from_name'  => ($from ? $from->getName() : '')
-        );
+        ];
 
         foreach ($message->getTo() as $to) {
-            $parameters['message']['to'][] = array(
+            $parameters['message']['to'][] = [
                 'email' => $to->getEmail(),
                 'name'  => $to->getName(),
                 'type'  => 'to'
-            );
+            ];
         }
 
         foreach ($message->getCc() as $cc) {
-            $parameters['message']['to'][] = array(
+            $parameters['message']['to'][] = [
                 'email' => $cc->getEmail(),
                 'name'  => $cc->getName(),
                 'type'  => 'cc'
-            );
+            ];
         }
 
         foreach ($message->getBcc() as $bcc) {
-            $parameters['message']['to'][] = array(
+            $parameters['message']['to'][] = [
                 'email' => $bcc->getEmail(),
                 'name'  => $bcc->getName(),
                 'type'  => 'bcc'
-            );
+            ];
         }
 
         $replyTo = $message->getReplyTo();
@@ -867,49 +867,49 @@ class MandrillService extends AbstractMailService
                 $parameters['template_name'] = $message->getTemplate();
 
                 foreach ($message->getTemplateContent() as $key => $value) {
-                    $parameters['template_content'][] = array(
+                    $parameters['template_content'][] = [
                         'name'    => $key,
                         'content' => $value
-                    );
+                    ];
                 }
 
                 // Currently, Mandrill API requires a content for template_content, even if it is an
                 // empty array
                 if (!isset($parameters['template_content'])) {
-                    $parameters['template_content'] = array();
+                    $parameters['template_content'] = [];
                 }
             }
 
             foreach ($message->getGlobalVariables() as $key => $value) {
-                $parameters['message']['global_merge_vars'][] = array(
+                $parameters['message']['global_merge_vars'][] = [
                     'name'    => $key,
                     'content' => $value
-                );
+                ];
             }
 
             foreach ($message->getVariables() as $recipient => $variables) {
-                $recipientVariables = array();
+                $recipientVariables = [];
 
                 foreach ($variables as $key => $value) {
-                    $recipientVariables[] = array(
+                    $recipientVariables[] = [
                         'name'    => $key,
                         'content' => $value
-                    );
+                    ];
                 }
 
-                $parameters['message']['merge_vars'][] = array(
+                $parameters['message']['merge_vars'][] = [
                     'rcpt' => $recipient,
                     'vars' => $recipientVariables
-                );
+                ];
             }
 
             $parameters['message']['metadata'] = $message->getGlobalMetadata();
 
             foreach ($message->getMetadata() as $recipient => $variables) {
-                $parameters['message']['recipient_metadata'][] = array(
+                $parameters['message']['recipient_metadata'][] = [
                     'rcpt'   => $recipient,
                     'values' => $variables
-                );
+                ];
             }
 
             foreach ($message->getOptions() as $key => $value) {
@@ -921,21 +921,21 @@ class MandrillService extends AbstractMailService
             }
 
             foreach ($message->getImages() as $image) {
-                $parameters['message']['images'][] = array(
+                $parameters['message']['images'][] = [
                     'type'    => $image->type,
                     'name'    => $image->filename,
                     'content' => base64_encode($image->getRawContent())
-                );
+                ];
             }
         }
 
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $parameters['message']['attachments'][] = array(
+            $parameters['message']['attachments'][] = [
                 'type'    => $attachment->type,
                 'name'    => $attachment->filename,
                 'content' => base64_encode($attachment->getRawContent())
-            );
+            ];
         }
 
         if (null !== $sendAt) {
@@ -952,9 +952,9 @@ class MandrillService extends AbstractMailService
      * @param array $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
-        $parameters = array_merge(array('key' => $this->apiKey), $parameters);
+        $parameters = array_merge(['key' => $this->apiKey], $parameters);
 
         $client = $this->getClient()->resetParameters();
         $client->getRequest()

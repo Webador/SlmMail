@@ -123,11 +123,11 @@ abstract class AbstractMailService implements MailServiceInterface
 
         // If body is not a MimeMessage object, then the body is just the text version
         if (is_string($body) || !$body instanceof MimeMessage) {
-            return array();
+            return [];
         }
 
-        $filter      = array('text/plain', 'text/html');
-        $attachments = array();
+        $filter      = ['text/plain', 'text/html'];
+        $attachments = [];
         foreach ($body->getParts() as $part) {
             if (!in_array($part->type, $filter) || $part->disposition === Mime::DISPOSITION_ATTACHMENT) {
                 $attachments[] = $part;

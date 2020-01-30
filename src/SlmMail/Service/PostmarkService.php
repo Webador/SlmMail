@@ -72,7 +72,7 @@ class PostmarkService extends AbstractMailService
      *
      * @var array
      */
-    protected $filters = array(
+    protected $filters = [
         'HardBounce',
         'Transient',
         'Unsubscribe',
@@ -91,7 +91,7 @@ class PostmarkService extends AbstractMailService
         'ManuallyDeactivated',
         'Unconfirmed',
         'Blocked'
-    );
+    ];
 
     /**
      * @param string $apiKey
@@ -122,16 +122,16 @@ class PostmarkService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'From'     => $from->rewind()->toString(),
             'Subject'  => $message->getSubject(),
             'TextBody' => $this->extractText($message),
             'HtmlBody' => $this->extractHtml($message)
-        );
+        ];
 
         $countRecipients = count($message->getTo());
 
-        $to = array();
+        $to = [];
         foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
@@ -140,7 +140,7 @@ class PostmarkService extends AbstractMailService
 
         $countRecipients += count($message->getCc());
 
-        $cc = array();
+        $cc = [];
         foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();
         }
@@ -149,7 +149,7 @@ class PostmarkService extends AbstractMailService
 
         $countRecipients += count($message->getBcc());
 
-        $bcc = array();
+        $bcc = [];
         foreach ($message->getBcc() as $address) {
             $bcc[] = $address->toString();
         }
@@ -179,11 +179,11 @@ class PostmarkService extends AbstractMailService
 
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $parameters['Attachments'][] = array(
+            $parameters['Attachments'][] = [
                 'Name'        => $attachment->filename,
                 'ContentType' => $attachment->type,
                 'Content'     => base64_encode($attachment->getRawContent())
-            );
+            ];
         }
 
         $response = $this->prepareHttpClient('/email')
@@ -316,7 +316,7 @@ class PostmarkService extends AbstractMailService
      * @param array $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()

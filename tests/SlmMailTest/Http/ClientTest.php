@@ -74,9 +74,9 @@ class ClientTest extends TestCase
         $serviceManager->setAllowOverride(true);
 
         $config                             = $serviceManager->get('config');
-        $config['slm_mail']['http_options'] = array(
+        $config['slm_mail']['http_options'] = [
             'sslverifypeer' => false
-        );
+        ];
 
         $serviceManager->setService('config', $config);
 

@@ -57,7 +57,7 @@ class SesTransportTest extends TestCase
             $aws = $self->createMock('Guzzle\Service\Builder\ServiceBuilderInterface');
             $aws->expects($self->once())
                 ->method('createSes')
-                ->will($self->returnValue($self->createMock('Aws\Ses\SesClient', array(), array(), '', false)));
+                ->will($self->returnValue($self->createMock('Aws\Ses\SesClient', [], [], '', false)));
 
             return $aws;
         });
@@ -74,8 +74,8 @@ class SesTransportTest extends TestCase
 
     public function testTransportUsesSesService()
     {
-        $client    = $this->createMock('Aws\Ses\SesClient', array(), array(), '', false);
-        $service   = $this->createMock('SlmMail\Service\SesService', array(), array($client));
+        $client    = $this->createMock('Aws\Ses\SesClient', [], [], '', false);
+        $service   = $this->createMock('SlmMail\Service\SesService', [], [$client]);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

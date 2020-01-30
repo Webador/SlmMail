@@ -102,15 +102,15 @@ class ElasticEmailService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'from'      => $from->rewind()->getEmail(),
             'from_name' => $from->rewind()->getName(),
             'subject'   => $message->getSubject(),
             'body_text' => $this->extractText($message),
             'body_html' => $this->extractHtml($message)
-        );
+        ];
 
-        $to = array();
+        $to = [];
         foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
@@ -141,7 +141,7 @@ class ElasticEmailService extends AbstractMailService
 
         // Attachments are handled using a very strange way in Elastic Email. They must first be uploaded
         // to their API and THEN appended here. Therefore, you should limit how many attachments you have
-        $attachmentIds = array();
+        $attachmentIds = [];
         $attachments   = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
             $attachmentIds[] = $this->uploadAttachment($attachment);
@@ -182,14 +182,14 @@ class ElasticEmailService extends AbstractMailService
         }
 
         $xml = new SimpleXMLElement($result);
-        return array(
+        return [
             'id'         => (string) $xml->attributes()->id,
             'status'     => (string) $xml->status,
             'recipients' => (int)    $xml->recipients,
             'failed'     => (int)    $xml->failed,
             'delivered'  => (int)    $xml->delivered,
             'pending'    => (int)    $xml->pending,
-        );
+        ];
     }
 
     /**
@@ -201,7 +201,7 @@ class ElasticEmailService extends AbstractMailService
      */
     public function uploadAttachment(Part $attachment): int
     {
-        $request = $this->prepareHttpClient('/attachments/upload', array('file' => $attachment->filename))
+        $request = $this->prepareHttpClient('/attachments/upload', ['file' => $attachment->filename])
                         ->setMethod(HttpRequest::METHOD_PUT)
                         ->setRawBody($attachment->getRawContent())
                         ->getRequest();
@@ -237,10 +237,10 @@ class ElasticEmailService extends AbstractMailService
                          ->send();
 
         $xml = new SimpleXMLElement($this->parseResponse($response));
-        return array(
+        return [
             'id'     => (string) $xml->attributes()->id,
             'credit' => (float)  $xml->credit,
-        );
+        ];
     }
 
     /**
@@ -258,7 +258,7 @@ class ElasticEmailService extends AbstractMailService
      */
     public function getActiveChannels(string $format = 'xml'): array
     {
-        $response = $this->prepareHttpClient('/mailer/channel/list', array('format' => $format))
+        $response = $this->prepareHttpClient('/mailer/channel/list', ['format' => $format])
                          ->send();
 
         if ($format === 'csv') {
@@ -267,13 +267,13 @@ class ElasticEmailService extends AbstractMailService
 
         $xml = new SimpleXMLElement($this->parseResponse($response));
 
-        $channels = array();
+        $channels = [];
         foreach ($xml->children() as $channel) {
-            $channels[] = array(
+            $channels[] = [
                 'date' => new DateTime((string) $channel->attributes()->date),
                 'name' => (string) $channel->attributes()->name,
                 'info' => (string) $channel->attributes()->info,
-            );
+            ];
         }
 
         return $channels;
@@ -289,7 +289,7 @@ class ElasticEmailService extends AbstractMailService
      */
     public function deleteChannel(string $name, string $format = 'xml'): array
     {
-        $response = $this->prepareHttpClient('/mailer/channel/delete', array('name' => $name, 'format' => $format))
+        $response = $this->prepareHttpClient('/mailer/channel/delete', ['name' => $name, 'format' => $format])
                          ->send();
 
         return $this->parseResponse($response);
@@ -301,16 +301,16 @@ class ElasticEmailService extends AbstractMailService
      * @param string $method
      * @return \Laminas\Http\Client
      */
-    private function prepareHttpClient(string $uri, array $parameters = array(), string $method = HttpRequest::METHOD_GET): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = [], string $method = HttpRequest::METHOD_GET): HttpClient
     {
-        if (isset($parameters['format']) && !in_array($parameters['format'], array('xml', 'csv'))) {
+        if (isset($parameters['format']) && !in_array($parameters['format'], ['xml', 'csv'])) {
             throw new Exception\RuntimeException(sprintf(
                 'Formats supported by Elastic Email API are either "xml" or "csv", "%s" given',
                 $parameters['format']
             ));
         }
 
-        $parameters = array_merge(array('username' => $this->username, 'api_key' => $this->apiKey), $parameters);
+        $parameters = array_merge(['username' => $this->username, 'api_key' => $this->apiKey], $parameters);
 
         // Some endpoints such as /send uses post method.
         if ($method === HttpRequest::METHOD_GET) {

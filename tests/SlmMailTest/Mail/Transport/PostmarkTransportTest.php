@@ -61,7 +61,7 @@ class PostmarkTransportTest extends TestCase
 
     public function testTransportUsesPostmarkService()
     {
-        $service   = $this->createMock('SlmMail\Service\PostmarkService', array(), array('my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\PostmarkService', [], ['my-secret-key']);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

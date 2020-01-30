@@ -50,29 +50,29 @@ class Mailgun extends Message
     /**
      * @var array
      */
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $validOptions = array(
+    protected $validOptions = [
         'dkim'            => 'o:dkim',
         'delivery_time'   => 'o:deliverytime',
         'test_mode'       => 'o:testmode',
         'tracking'        => 'o:tracking',
         'tracking_clicks' => 'o:tracking-clicks',
         'tracking_opens'  => 'o:tracking-opens',
-    );
+    ];
 
     /**
      * @var array
      */
-    protected $recipientVariables = array();
+    protected $recipientVariables = [];
 
     /**
      * Get all tags for this message

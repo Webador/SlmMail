@@ -79,7 +79,7 @@ class MailServiceInterfaceTest extends TestCase
         $htmlPart->type = 'text/html';
 
         $body = new MimeMessage();
-        $body->setParts(array($htmlPart));
+        $body->setParts([$htmlPart]);
 
         $message->setBody($body);
         $this->assertNull($reflMethod->invoke($this->simpleMailService, $message));
@@ -107,7 +107,7 @@ class MailServiceInterfaceTest extends TestCase
         $textPart->disposition = Mime::DISPOSITION_ATTACHMENT;
 
         $body = new MimeMessage();
-        $body->setParts(array($textPart));
+        $body->setParts([$textPart]);
 
         $message->setBody($body);
 
@@ -133,7 +133,7 @@ class MailServiceInterfaceTest extends TestCase
         $htmlPart->type = 'text/html';
 
         $body = new MimeMessage();
-        $body->setParts(array($htmlPart));
+        $body->setParts([$htmlPart]);
 
         $message = new Message();
         $message->setBody($body);
