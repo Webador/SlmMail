@@ -21,6 +21,7 @@ matrix:
     - php: 7.4
       env:
         - DEPS=latest
+        - EXECUTE_CS_CHECK=true
 
 cache:
   directories:
@@ -33,3 +34,4 @@ install:
 
 script:
   - phpunit --configuration tests/phpunit.xml
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/phpcs; fi
