@@ -6,10 +6,7 @@ SlmMail
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/?branch=master)
 
 SlmMail is a module that integrates with various third-parties API to send mails. Integration is provided with the
-API of those services. It does not handle SMTP.
-
-Please note that SlmMail only supports Transactional services. Services for campaign marketing emails (like MailChimp
-or MailJet) are out-of-the scope of this module.
+API of those services. It does _not_ handle SMTP.
 
 Here are the currently supported services:
 
@@ -32,27 +29,38 @@ Requirements
 Installation
 ------------
 
-First install using composer:
-
-`composer require slm/mail`
-
-Now there are multiple ways to install and use this repo:
+There are multiple ways to install and use this repo:
 
 ### Laminas MVC
 
+1. Install with `composer require slm/mail`
 1. Enable `SlmMail` in your `application.config.php`.
 2. To use one of the transport layers, see the documentation in the [docs](https://github.com/JouwWeb/SlmMail/tree/master/docs) folder.
 
 ### Mezzio
 
-TODO. [See This this tracking issue](https://github.com/JouwWeb/SlmMail/issues/128).
+1. Install with `composer require slm/mail`.
+2. Because we register a _config-provider_ in the composer file, this will trigger an automatic installation. 
+3. Copy one of the `.dist` files in the `./config/` directory of this repo, and move it to your `config/autoload` directory.
 
--------------------
 
-### Amazon SES
+Usage 
+-----
 
-If you want to use Amazon SES, you need to install the official AWS ZF 2 module. Please refer to the documentation
-of Amazon SES in the [docs](https://github.com/JouwWeb/SlmMail/tree/master/docs) folder.
+One can now fetch the dependencies from the service manager. And now compose a message:
+
+
+```php
+$message = new \Laminas\Mail\Message();
+$message
+    ->setTo('send@to')
+    ->setFrom('send@by')
+    ->setSubject('Subject')
+    ->setBody('Contents');
+
+$mandrillService = $container->get(\SlmMail\Service\MandrillService::class);
+$mandrillService->send($message);
+```` 
 
 Documentation
 -------------
@@ -105,7 +113,7 @@ $message->setBody($body);
 
 ### How to configure HttpClient with http_options and http_adapter
 
-By defaut the adapter is Laminas\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
+By default the adapter is Laminas\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
 
 ```php
 'slm_mail' => array(
