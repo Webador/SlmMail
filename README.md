@@ -29,26 +29,25 @@ Requirements
 Installation
 ------------
 
-There are multiple ways to install and use this repo:
+1. First install the repo: 
 
-### Laminas MVC
+   `composer require slm/mail`
+    
+   - For Laminas MVC add `SlmMail` in your `application.config.php` file.
+   - For Mezzio it should prompt whether we want to autoconfigure. Accept this. 
 
-1. Install with `composer require slm/mail`
-1. Enable `SlmMail` in your `application.config.php`.
-2. To use one of the transport layers, see the documentation in the [docs](https://github.com/JouwWeb/SlmMail/tree/master/docs) folder.
+2. In order to use a mail service, you now need to configure it. We have provided a sample configuration file per mail server.
 
-### Mezzio
-
-1. Install with `composer require slm/mail`.
-2. Because we register a _config-provider_ in the composer file, this will trigger an automatic installation. 
-3. Copy one of the `.dist` files in the `./config/` directory of this repo, and move it to your `config/autoload` directory.
-
+   Copy the sample configuration file to your autoload directory. For example for _Mandrill_ one would use
+   
+   `cp vendor/slm/mail/config/slm_mail.mandrill.local.php.dist config/autoload/slm_mail.mandrill.local.php`
+  
+   Please tweak the dummy contents in this file. This file will contain the credentials.
 
 Usage 
 -----
 
 One can now fetch the dependencies from the service manager. And now compose a message:
-
 
 ```php
 $message = new \Laminas\Mail\Message();
