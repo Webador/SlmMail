@@ -78,7 +78,7 @@ class Mailgun extends Message
      *
      * @return array
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
@@ -90,7 +90,7 @@ class Mailgun extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setTags(array $tags)
+    public function setTags(array $tags): Mailgun
     {
         if (count($tags) > self::TAG_LIMIT) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -109,7 +109,7 @@ class Mailgun extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function addTag($tag)
+    public function addTag(string $tag): Mailgun
     {
         if (count($this->tags) + 1 > self::TAG_LIMIT) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -128,7 +128,7 @@ class Mailgun extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): Mailgun
     {
         foreach ($options as $key => $value) {
             if (!array_key_exists($key, $this->getValidOptions())) {
@@ -150,7 +150,7 @@ class Mailgun extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, string $value): Mailgun
     {
         if (!array_key_exists($key, $this->getValidOptions())) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -167,7 +167,7 @@ class Mailgun extends Message
      *
      * @return string[]
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -177,7 +177,7 @@ class Mailgun extends Message
      *
      * @return array
      */
-    public function getValidOptions()
+    public function getValidOptions(): array
     {
         return $this->validOptions;
     }
@@ -185,26 +185,28 @@ class Mailgun extends Message
     /**
      * @param string $recipient
      * @param array $variables
+     * @return void
      */
-    public function setRecipientVariables($recipient, array $variables)
+    public function setRecipientVariables(string $recipient, array $variables): void
     {
-        $this->recipientVariables[(string) $recipient] = $variables;
+        $this->recipientVariables[$recipient] = $variables;
     }
 
     /**
      * @param string $recipient
      * @param string $key
      * @param string $value
+     * @return void
      */
-    public function addRecipientVariable($recipient, $key, $value)
+    public function addRecipientVariable(string $recipient, string $key, string $value): void
     {
-        $this->recipientVariables[(string) $recipient][(string) $key] = (string) $value;
+        $this->recipientVariables[$recipient][$key] = $value;
     }
 
     /**
      * @return array
      */
-    public function getRecipientVariables()
+    public function getRecipientVariables(): array
     {
         return $this->recipientVariables;
     }

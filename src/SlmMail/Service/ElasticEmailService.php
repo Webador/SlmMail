@@ -40,6 +40,7 @@
 
 namespace SlmMail\Service;
 
+use Laminas\Http\Client as HttpClient;
 use SlmMail\Mail\Message\ElasticEmail as ElasticEmailMessage;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
@@ -74,10 +75,10 @@ class ElasticEmailService extends AbstractMailService
      * @param string $username
      * @param string $apiKey
      */
-    public function __construct($username, $apiKey)
+    public function __construct(string $username, string $apiKey)
     {
-        $this->username = (string) $username;
-        $this->apiKey   = (string) $apiKey;
+        $this->username = $username;
+        $this->apiKey   = $apiKey;
     }
 
     /**
@@ -162,7 +163,7 @@ class ElasticEmailService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    public function getEmailStatus($id)
+    public function getEmailStatus(string $id): array
     {
         $response = $this->prepareHttpClient('/mailer/status/' . $id)
                          ->send();
@@ -196,7 +197,7 @@ class ElasticEmailService extends AbstractMailService
      * @param  Part $attachment
      * @return int The attachment id
      */
-    public function uploadAttachment(Part $attachment)
+    public function uploadAttachment(Part $attachment): int
     {
         $request = $this->prepareHttpClient('/attachments/upload', array('file' => $attachment->filename))
                         ->setMethod(HttpRequest::METHOD_PUT)
@@ -213,7 +214,7 @@ class ElasticEmailService extends AbstractMailService
 
         $response = $this->client->send($request);
 
-        return $this->parseResponse($response);
+        return (int)$this->parseResponse($response);
     }
 
     /**
@@ -228,7 +229,7 @@ class ElasticEmailService extends AbstractMailService
      * @link   http://elasticemail.com/api-documentation/account-details
      * @return array
      */
-    public function getAccountDetails()
+    public function getAccountDetails(): array
     {
         $response = $this->prepareHttpClient('/mailer/account-details')
                          ->send();
@@ -253,7 +254,7 @@ class ElasticEmailService extends AbstractMailService
      * @param  string $format can be either 'xml' or 'csv'
      * @return array
      */
-    public function getActiveChannels($format = 'xml')
+    public function getActiveChannels(string $format = 'xml'): array
     {
         $response = $this->prepareHttpClient('/mailer/channel/list', array('format' => $format))
                          ->send();
@@ -284,7 +285,7 @@ class ElasticEmailService extends AbstractMailService
      * @param  string $format can be either 'xml' or 'csv'
      * @return array
      */
-    public function deleteChannel($name, $format = 'xml')
+    public function deleteChannel(string $name, string $format = 'xml'): array
     {
         $response = $this->prepareHttpClient('/mailer/channel/delete', array('name' => $name, 'format' => $format))
                          ->send();
@@ -293,12 +294,12 @@ class ElasticEmailService extends AbstractMailService
     }
 
     /**
-     * @param  string $uri
-     * @param  array $parameters
+     * @param string $uri
+     * @param array $parameters
      * @param string $method
-     * @return \Laminas\Http\Client if format given is neither "xml" or "csv"
+     * @return \Laminas\Http\Client
      */
-    private function prepareHttpClient($uri, array $parameters = array(), $method = HttpRequest::METHOD_GET)
+    private function prepareHttpClient(string $uri, array $parameters = array(), string $method = HttpRequest::METHOD_GET): HttpClient
     {
         if (isset($parameters['format']) && !in_array($parameters['format'], array('xml', 'csv'))) {
             throw new Exception\RuntimeException(sprintf(
@@ -334,7 +335,7 @@ class ElasticEmailService extends AbstractMailService
      * @throws Exception\InvalidCredentialsException
      * @return string
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): string
     {
         $result = $response->getBody();
 

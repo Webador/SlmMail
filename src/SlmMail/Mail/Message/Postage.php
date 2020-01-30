@@ -57,21 +57,21 @@ class Postage extends Message
     /**
      * Set Postage template name to use
      *
-     * @param  string $template
+     * @param  string|null $template
      * @return self
      */
-    public function setTemplate($template)
+    public function setTemplate(?string $template): Postage
     {
-        $this->template = (string) $template;
+        $this->template = $template;
         return $this;
     }
 
     /**
      * Get Postage template name to use
      *
-     * @return string
+     * @return string|null
      */
-    public function getTemplate()
+    public function getTemplate(): ?string
     {
         return $this->template;
     }
@@ -80,9 +80,9 @@ class Postage extends Message
      * Set the template global variables
      *
      * @param  array $variables
-     * @return Mandrill
+     * @return Postage
      */
-    public function setVariables(array $variables)
+    public function setVariables(array $variables): Postage
     {
         $this->variables = $variables;
         return $this;
@@ -93,7 +93,7 @@ class Postage extends Message
      *
      * @return array
      */
-    public function getVariables()
+    public function getVariables(): array
     {
         return $this->variables;
     }

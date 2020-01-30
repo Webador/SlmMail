@@ -64,15 +64,19 @@ class PostmarkServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\PostmarkService', $service);
     }
 
-    public function exceptionDataProvider()
+    public function testResultIsProperlyParsed()
     {
-        return array(
-            array(200, null),
-            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(422, 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-            array(404, 'SlmMail\Service\Exception\RuntimeException')
-        );
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\PostmarkService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode($payload));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
     }
 
     /**
@@ -86,11 +90,19 @@ class PostmarkServiceTest extends TestCase
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        if ($expectedException !== null) {
-            $this->expectException($expectedException);
-        }
+        $this->expectException($expectedException);
 
         $actual = $method->invoke($this->service, $response);
         $this->assertNull($actual);
+    }
+
+    public function exceptionDataProvider()
+    {
+        return array(
+            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
+            array(422, 'SlmMail\Service\Exception\ValidationErrorException'),
+            array(500, 'SlmMail\Service\Exception\RuntimeException'),
+            array(404, 'SlmMail\Service\Exception\RuntimeException')
+        );
     }
 }

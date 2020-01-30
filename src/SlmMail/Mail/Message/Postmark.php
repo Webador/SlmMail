@@ -52,9 +52,9 @@ class Postmark extends Message
     /**
      * Get tag for the message
      *
-     * @return string
+     * @return string|null
      */
-    public function getTag()
+    public function getTag(): ?string
     {
         return $this->tag;
     }
@@ -65,7 +65,7 @@ class Postmark extends Message
      * @param  string $tag Value to set
      * @return self
      */
-    public function setTag($tag)
+    public function setTag(?string $tag): Postmark
     {
         $this->tag = (string) $tag;
         return $this;

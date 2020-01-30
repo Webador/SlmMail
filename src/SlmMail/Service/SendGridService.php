@@ -72,10 +72,10 @@ class SendGridService extends AbstractMailService
      * @param string $username
      * @param string $apiKey
      */
-    public function __construct($username, $apiKey)
+    public function __construct(string $username, string $apiKey)
     {
-        $this->username = (string) $username;
-        $this->apiKey   = (string) $apiKey;
+        $this->username = $username;
+        $this->apiKey   = $apiKey;
     }
 
     /**
@@ -87,9 +87,9 @@ class SendGridService extends AbstractMailService
     /**
      * {@inheritDoc}
      * @link http://sendgrid.com/docs/API_Reference/Web_API/mail.html
-     * @return mixed
+     * @return array
      */
-    public function send(Message $message)
+    public function send(Message $message): array
     {
         $from = $message->getFrom();
         if (count($from) !== 1) {
@@ -153,7 +153,12 @@ class SendGridService extends AbstractMailService
      * @param  bool   $aggregate true if you are interested in all-time totals
      * @return array
      */
-    public function getStatistics($date = 1, $startDate = '', $endDate = '', $aggregate = false)
+    public function getStatistics(
+        int $date = 1,
+        string $startDate = '',
+        string $endDate = '',
+        bool $aggregate = false
+    ): array
     {
         $parameters = array('date' => $date, 'start_date' => $startDate, 'end_date' => $endDate, 'aggregate' => (int)$aggregate);
 
@@ -181,7 +186,15 @@ class SendGridService extends AbstractMailService
      * @param  int $offset       optional beginning point to retrieve results
      * @return array
      */
-    public function getBounces($date = 1, $days = 1, $startDate = '', $endDate = '', $email = '', $limit = 100, $offset = 0)
+    public function getBounces(
+        int $date = 1,
+        int $days = 1,
+        string $startDate = '',
+        string $endDate = '',
+        string $email = '',
+        int $limit = 100,
+        int $offset = 0
+    ): array
     {
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
@@ -200,7 +213,7 @@ class SendGridService extends AbstractMailService
      * @param  string $email     optional email to search for
      * @return array
      */
-    public function deleteBounces($startDate = '', $endDate = '', $email = '')
+    public function deleteBounces(string $startDate = '', string $endDate = '', string $email = ''): array
     {
         $parameters = array('start_date' => $startDate, 'end_date' => $endDate, 'email' => $email);
 
@@ -215,7 +228,7 @@ class SendGridService extends AbstractMailService
      * @param  string $endDate   if specified, must be in YYYY-MM-DD format and > $startDate
      * @return array
      */
-    public function countBounces($startDate = '', $endDate = '')
+    public function countBounces(string $startDate = '', string $endDate = ''): array
     {
         $parameters = array('start_date' => $startDate, 'end_date' => $endDate);
 
@@ -243,7 +256,15 @@ class SendGridService extends AbstractMailService
      * @param  int $offset       optional beginning point to retrieve results
      * @return array
      */
-    public function getSpamReports($date = 1, $days = 1, $startDate = '', $endDate = '', $email = '', $limit = 100, $offset = 0)
+    public function getSpamReports(
+        int $date = 1,
+        int $days = 1,
+        string $startDate = '',
+        string $endDate = '',
+        string $email = '',
+        int $limit = 100,
+        int $offset = 0
+    ): array
     {
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
@@ -260,7 +281,7 @@ class SendGridService extends AbstractMailService
      * @param  string $email email to search for
      * @return array
      */
-    public function deleteSpamReport($email = '')
+    public function deleteSpamReport(string $email = ''): array
     {
         $response = $this->prepareHttpClient('/spamreports.delete.json', array('email' => $email))
                          ->send();
@@ -284,7 +305,12 @@ class SendGridService extends AbstractMailService
      * @param  string $endDate   if specified, must be in YYYY-MM-DD format and > $startDate
      * @return array
      */
-    public function getBlocks($date = 1, $days = 1, $startDate = '', $endDate = '')
+    public function getBlocks(
+        int $date = 1,
+        int $days = 1,
+        string $startDate = '',
+        string $endDate = ''
+    ): array
     {
         $parameters = array(
             'date'       => $date,
@@ -306,7 +332,7 @@ class SendGridService extends AbstractMailService
      * @param  string $email
      * @return array
      */
-    public function deleteBlock($email)
+    public function deleteBlock(string $email): array
     {
         $response = $this->prepareHttpClient('/blocks.delete', array('email' => $email))
                          ->send();
@@ -319,7 +345,7 @@ class SendGridService extends AbstractMailService
      * @param array $parameters
      * @return \Laminas\Http\Client
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
     {
         $parameters = array_merge(array('api_user' => $this->username, 'api_key' => $this->apiKey), $parameters);
 
@@ -335,9 +361,15 @@ class SendGridService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
+
+        if (!is_array($result)) {
+            throw new Exception\RuntimeException(sprintf(
+                'An error occured on SendGrid (http code %s), could not interpret result as JSON. Body: %s', $response->getStatusCode(), $response->getBody()
+            ));
+        }
 
         if ($response->isSuccess()) {
             return $result;

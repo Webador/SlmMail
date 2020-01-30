@@ -4,10 +4,8 @@ namespace SlmMail\Mail\Message;
 
 use Laminas\Mail\Message;
 
-
 class SparkPost extends Message
 {
-
     /**
      * SMTP array config
      *
@@ -32,7 +30,7 @@ class SparkPost extends Message
      *
      * @return self
      */
-    public function setOptions($options)
+    public function setOptions($options): SparkPost
     {
         $this->options = $options;
 
@@ -44,7 +42,7 @@ class SparkPost extends Message
      *
      * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }

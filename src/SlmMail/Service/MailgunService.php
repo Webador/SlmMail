@@ -74,12 +74,13 @@ class MailgunService extends AbstractMailService
     /**
      * @param string $domain
      * @param string $apiKey
+     * @param string $apiEndpoint
      */
-    public function __construct($domain, $apiKey, $apiEndpoint)
+    public function __construct(string $domain, string $apiKey, string $apiEndpoint)
     {
-        $this->domain = (string)$domain;
-        $this->apiKey = (string)$apiKey;
-        $this->apiEndpoint = (string)$apiEndpoint;
+        $this->domain = $domain;
+        $this->apiKey = $apiKey;
+        $this->apiEndpoint = $apiEndpoint;
     }
 
     /**
@@ -91,9 +92,9 @@ class MailgunService extends AbstractMailService
     /**
      * {@inheritDoc}
      * @link http://documentation.mailgun.com/api-sending.html
-     * @return string id of message (if sent correctly)
+     * @return string id of message
      */
-    public function send(Message $message)
+    public function send(Message $message): string
     {
         $from = $message->getFrom();
         if (count($from) !== 1) {
@@ -194,9 +195,9 @@ class MailgunService extends AbstractMailService
      * @param string $uri
      * @param array $parameters
      * @param bool $perDomain
-     * @return \Laminas\Http\Client
+     * @return HttpClient
      */
-    private function prepareHttpClient($uri, array $parameters = array(), $perDomain = true)
+    private function prepareHttpClient(string $uri, array $parameters = array(), bool $perDomain = true): HttpClient
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -220,7 +221,7 @@ class MailgunService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
 
@@ -264,7 +265,7 @@ class MailgunService extends AbstractMailService
      * @param  int $offset
      * @return array
      */
-    public function getLogs($limit = 100, $offset = 0)
+    public function getLogs(int $limit = 100, int $offset = 0): array
     {
         $parameters = array('limit' => $limit, 'skip' => $offset);
 
@@ -279,21 +280,22 @@ class MailgunService extends AbstractMailService
     /**
      * Get events entries
      *
-     * @link   http://documentation.mailgun.com/api-events.html
-     * @param  Datetime $begin
-     * @param  Datetime|null $end
-     * @param  int $limit
-     * @param  boolean $ascending
+     * @link  http://documentation.mailgun.com/api-events.html
+     * @param Datetime $begin
+     * @param Datetime|null $end
+     * @param boolean $ascending
+     * @param int $limit
      * @param array $fields
      * @return array
      */
     public function getEvents(
         DateTime $begin,
-        DateTime $end = null,
-        $ascending = true,
-        $limit = 300,
+        ?DateTime $end = null,
+        bool $ascending = true,
+        int $limit = 300,
         array $fields = []
-    ) {
+    ): array
+    {
         // Date format like https://documentation.mailgun.com/api-intro.html#date-format
         $parameters = [
             'begin' => $begin->format(DateTime::RFC2822),
@@ -334,7 +336,7 @@ class MailgunService extends AbstractMailService
      * @param  int $offset
      * @return array
      */
-    public function getSpamComplaints($limit = 100, $offset = 0)
+    public function getSpamComplaints(int $limit = 100, int $offset = 0): array
     {
         $parameters = array('limit' => $limit, 'skip' => $offset);
 
@@ -354,7 +356,7 @@ class MailgunService extends AbstractMailService
      * @param  string $address
      * @return array
      */
-    public function getSpamComplaint($address)
+    public function getSpamComplaint(string $address): array
     {
         $response = $this->prepareHttpClient('/complaints/' . $address)
             ->setMethod(HttpRequest::METHOD_GET)
@@ -376,7 +378,7 @@ class MailgunService extends AbstractMailService
      * @param  string $address
      * @return array
      */
-    public function addSpamComplaint($address)
+    public function addSpamComplaint(string $address): array
     {
         $response = $this->prepareHttpClient('/complaints', array('address' => $address))
             ->send();
@@ -391,7 +393,7 @@ class MailgunService extends AbstractMailService
      * @param  string $address
      * @return array
      */
-    public function deleteSpamComplaint($address)
+    public function deleteSpamComplaint(string $address): array
     {
         $response = $this->prepareHttpClient('/complaints/' . $address)
             ->setMethod(HttpRequest::METHOD_DELETE)
@@ -408,7 +410,7 @@ class MailgunService extends AbstractMailService
      * @param  int $offset
      * @return array
      */
-    public function getBounces($limit = 100, $offset = 0)
+    public function getBounces(int $limit = 100, int $offset = 0): array
     {
         $parameters = array('limit' => $limit, 'skip' => $offset);
 
@@ -427,7 +429,7 @@ class MailgunService extends AbstractMailService
      * @param  string $address
      * @return array
      */
-    public function getBounce($address)
+    public function getBounce(string $address): array
     {
         $response = $this->prepareHttpClient('/bounces/' . $address)
             ->setMethod(HttpRequest::METHOD_GET)
@@ -451,7 +453,7 @@ class MailgunService extends AbstractMailService
      * @param  string $error
      * @return array
      */
-    public function addBounce($address, $code = 550, $error = '')
+    public function addBounce(string $address, int $code = 550, string $error = ''): array
     {
         $response = $this->prepareHttpClient('/bounces', compact('address', 'code', 'error'))
             ->send();
@@ -466,7 +468,7 @@ class MailgunService extends AbstractMailService
      * @param  string $address
      * @return array
      */
-    public function deleteBounce($address)
+    public function deleteBounce(string $address): array
     {
         $response = $this->prepareHttpClient('/bounces/' . $address)
             ->setMethod(HttpRequest::METHOD_DELETE)
@@ -485,7 +487,7 @@ class MailgunService extends AbstractMailService
      * @param  int $priority Optional priority (smaller number indicates higher priority)
      * @return array
      */
-    public function addRoute($description, $expression, $actions, $priority = 0)
+    public function addRoute(string $description, string $expression, $actions, int $priority = 0): array
     {
         $actions = (array)$actions;
 
@@ -507,11 +509,11 @@ class MailgunService extends AbstractMailService
     /**
      * Delete an existing route
      *
-     * @link @link http://documentation.mailgun.com/api-routes.html
+     * @link http://documentation.mailgun.com/api-routes.html
      * @param  string $id
      * @return array
      */
-    public function deleteRoute($id)
+    public function deleteRoute(string $id): array
     {
         $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
             ->setMethod(HttpRequest::METHOD_DELETE)
@@ -528,7 +530,7 @@ class MailgunService extends AbstractMailService
      * @param  int $offset
      * @return array
      */
-    public function getRoutes($limit = 100, $offset = 0)
+    public function getRoutes(int $limit = 100, int $offset = 0): array
     {
         $parameters = array('limit' => $limit, 'skip' => $offset);
 
@@ -547,7 +549,7 @@ class MailgunService extends AbstractMailService
      * @param  string $id
      * @return array
      */
-    public function getRoute($id)
+    public function getRoute(string $id): array
     {
         $response = $this->prepareHttpClient('/routes/' . $id, array(), false)
             ->setMethod(HttpRequest::METHOD_GET)
@@ -567,7 +569,7 @@ class MailgunService extends AbstractMailService
      * @param  int $priority Optional priority (smaller number indicates higher priority)
      * @return array
      */
-    public function updateRoute($id, $description = '', $expression = '', $actions = array(), $priority = 0)
+    public function updateRoute(string $id, string $description = '', string $expression = '', $actions = array(), int $priority = 0): array
     {
         $actions = (array)$actions;
 

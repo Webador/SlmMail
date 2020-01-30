@@ -64,33 +64,75 @@ class SendGridServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\SendGridService', $service);
     }
 
-    public function exceptionDataProvider()
+    public function testResultIsProperlyParsed()
     {
-        return array(
-            array(200, null),
-            array(400, 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(402, 'SlmMail\Service\Exception\RuntimeException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\SendGridService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode($payload));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
     }
 
     /**
      * @dataProvider exceptionDataProvider
      */
-    public function testExceptionsAreThrownOnErrors($statusCode, $expectedException)
+    public function testExceptionsAreThrownOnErrors($statusCode, $payload, $expectedException, $expectedExceptionMessage)
     {
-        /*$method = new ReflectionMethod(SendGridService::class, 'parseResponse');
+        $method = new ReflectionMethod(SendGridService::class, 'parseResponse');
         $method->setAccessible(true);
 
         $response = new HttpResponse();
+        $response->setContent($payload);
         $response->setStatusCode($statusCode);
 
         if ($expectedException !== null) {
             $this->expectException($expectedException);
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
         $actual = $method->invoke($this->service, $response);
-        $this->assertNull($actual);*/
+        $this->assertNull($actual);
+    }
+
+    public function exceptionDataProvider()
+    {
+        return array(
+            array(
+                400,
+                'some jiberish, non-JSON',
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occured on SendGrid (http code 400), could not interpret result as JSON. Body: some jiberish, non-JSON'
+            ),
+            array(
+                400,
+                json_encode(['errors' => 'some error message']),
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occured on SendGrid (http code 400), message: Unknown error'
+            ),
+            array(
+                401,
+                json_encode(['errors' => 'some error message']),
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occured on SendGrid (http code 401), message: Unknown error'
+            ),
+            array(
+                402,
+                json_encode(['errors' => 'some error message']),
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occured on SendGrid (http code 402), message: Unknown error'
+            ),
+            array(
+                500,
+                json_encode(['errors' => 'some error message']),
+                'SlmMail\Service\Exception\RuntimeException',
+                'SendGrid server error, please try again'
+            ),
+        );
     }
 }

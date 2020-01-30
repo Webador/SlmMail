@@ -64,15 +64,19 @@ class MandrillServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\MandrillService', $service);
     }
 
-    public function exceptionDataProvider()
+    public function testResultIsProperlyParsed()
     {
-        return array(
-            array(200, null, null),
-            array(401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'),
-            array(500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\MandrillService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode($payload));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
     }
 
     /**
@@ -93,5 +97,15 @@ class MandrillServiceTest extends TestCase
 
         $actual = $method->invoke($this->service, $response);
         $this->assertNull($actual);
+    }
+
+    public function exceptionDataProvider()
+    {
+        return array(
+            array(401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'),
+            array(400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'),
+            array(400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'),
+            array(500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
+        );
     }
 }
