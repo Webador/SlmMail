@@ -17,8 +17,13 @@
         "sendgrid",
         "transactional email"
     ],
-    "homepage": "https://github.com/juriansluiman/SlmMail",
+    "homepage": "https://github.com/JouwWeb/SlmMail",
     "authors": [
+        {
+            "name": "Roel van Duijnhoven",
+            "email": "roel@jouwweb.nl",
+            "homepage": "https://www.jouwweb.nl"
+        },
         {
             "name": "Jurian Sluiman",
             "email": "jurian@juriansluiman.nl",

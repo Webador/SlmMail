@@ -61,7 +61,7 @@ Mandrill service to handle those messages.
 
 ## 1.3.1
 
-- Fix a bug when extracting errors for SendGrid ([#60](https://github.com/juriansluiman/SlmMail/pull/60))
+- Fix a bug when extracting errors for SendGrid ([#60](https://github.com/JouwWeb/SlmMail/pull/60))
 
 ## 1.3.0
 
