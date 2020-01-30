@@ -61,7 +61,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * @param  Message $message
      * @return string|null
      */
-    protected function extractText(Message $message)
+    protected function extractText(Message $message): ?string
     {
         $body = $message->getBody();
 
@@ -88,7 +88,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * @param  Message $message
      * @return string|null
      */
-    protected function extractHtml(Message $message)
+    protected function extractHtml(Message $message): ?string
     {
         $body = $message->getBody();
 
@@ -114,9 +114,9 @@ abstract class AbstractMailService implements MailServiceInterface
      * text/html.
      *
      * @param  Message $message
-     * @return \Laminas\Mime\Part[]|array
+     * @return \Laminas\Mime\Part[]
      */
-    protected function extractAttachments(Message $message)
+    protected function extractAttachments(Message $message): array
     {
         $body = $message->getBody();
 
@@ -141,7 +141,7 @@ abstract class AbstractMailService implements MailServiceInterface
      *
      * @return HttpClient
      */
-    protected function getClient()
+    protected function getClient(): HttpClient
     {
         if (null === $this->client) {
             $this->setClient(new HttpClient);
@@ -156,7 +156,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * @param HttpClient $client
      * @return void
      */
-    public function setClient(HttpClient $client)
+    public function setClient(HttpClient $client): void
     {
         $this->client = $client;
     }
@@ -167,7 +167,7 @@ abstract class AbstractMailService implements MailServiceInterface
      * @param  array $parameters
      * @return array
      */
-    protected function filterParameters(array $parameters)
+    protected function filterParameters(array $parameters): array
     {
         foreach ($parameters as &$value) {
             if (is_array($value)) {

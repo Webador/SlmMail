@@ -61,21 +61,21 @@ class ElasticEmail extends Message
     /**
      * Set the channel id to use when the mail is sent
      *
-     * @param  string $channel
+     * @param  string|null $channel
      * @return self
      */
-    public function setChannel($channel)
+    public function setChannel(?string $channel): ElasticEmail
     {
-        $this->channel = (string) $channel;
+        $this->channel = $channel;
         return $this;
     }
 
     /**
      * Get channel id to use when the mail is sent
      *
-     * @return string
+     * @return string|null
      */
-    public function getChannel()
+    public function getChannel(): ?string
     {
         return $this->channel;
     }
@@ -83,21 +83,21 @@ class ElasticEmail extends Message
     /**
      * Set the template name to use
      *
-     * @param  string $template
+     * @param string|null $template
      * @return self
      */
-    public function setTemplate($template)
+    public function setTemplate(?string $template): ElasticEmail
     {
-        $this->template = (string) $template;
+        $this->template = $template;
         return $this;
     }
 
     /**
      * Get the template name to use
      *
-     * @return string
+     * @return string|null
      */
-    public function getTemplate()
+    public function getTemplate(): ?string
     {
         return $this->template;
     }

@@ -64,15 +64,19 @@ class MailgunServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\MailgunService', $service);
     }
 
-    public function exceptionDataProvider()
+    public function testResultIsProperlyParsed()
     {
-        return array(
-            array(200, null),
-            array(400, 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(402, 'SlmMail\Service\Exception\RuntimeException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\MailgunService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode($payload));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
     }
 
     /**
@@ -92,5 +96,15 @@ class MailgunServiceTest extends TestCase
 
         $actual = $method->invoke($this->service, $response);
         $this->assertNull($actual);
+    }
+
+    public function exceptionDataProvider()
+    {
+        return array(
+            array(400, 'SlmMail\Service\Exception\ValidationErrorException'),
+            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
+            array(402, 'SlmMail\Service\Exception\RuntimeException'),
+            array(500, 'SlmMail\Service\Exception\RuntimeException'),
+        );
     }
 }

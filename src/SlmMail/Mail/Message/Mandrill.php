@@ -110,7 +110,7 @@ class Mandrill extends Message
     protected $metadata = array();
 
     /**
-     * @var Part[]|array
+     * @var Part[]
      */
     protected $images = array();
 
@@ -121,7 +121,7 @@ class Mandrill extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOptions(array $options)
+    public function setOptions(array $options): Mandrill
     {
         foreach ($options as $key => $value) {
             if (!in_array($key, $this->validOptions)) {
@@ -143,7 +143,7 @@ class Mandrill extends Message
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOption($key, $value)
+    public function setOption(string $key, string $value): Mandrill
     {
         if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -160,7 +160,7 @@ class Mandrill extends Message
      *
      * @return string[]
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }
@@ -170,7 +170,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getTags()
+    public function getTags(): array
     {
         return $this->tags;
     }
@@ -181,7 +181,7 @@ class Mandrill extends Message
      * @param  array $tags
      * @return self
      */
-    public function setTags(array $tags)
+    public function setTags(array $tags): Mandrill
     {
         $this->tags = $tags;
         return $this;
@@ -193,30 +193,30 @@ class Mandrill extends Message
      * @param string $tag
      * @return self
      */
-    public function addTag($tag)
+    public function addTag(string $tag): Mandrill
     {
-        $this->tags[] = (string) $tag;
+        $this->tags[] = $tag;
         return $this;
     }
 
     /**
      * Set Mandrill template name to use
      *
-     * @param  string $template
+     * @param  string|null $template
      * @return self
      */
-    public function setTemplate($template)
+    public function setTemplate(?string $template): Mandrill
     {
-        $this->template = (string) $template;
+        $this->template = $template;
         return $this;
     }
 
     /**
      * Get Mandrill template name to use
      *
-     * @return string
+     * @return string|null
      */
-    public function getTemplate()
+    public function getTemplate(): ?string
     {
         return $this->template;
     }
@@ -227,7 +227,7 @@ class Mandrill extends Message
      * @param  array $templateContent
      * @return Mandrill
      */
-    public function setTemplateContent(array $templateContent)
+    public function setTemplateContent(array $templateContent): Mandrill
     {
         $this->templateContent = $templateContent;
         return $this;
@@ -238,7 +238,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getTemplateContent()
+    public function getTemplateContent(): array
     {
         return $this->templateContent;
     }
@@ -249,7 +249,7 @@ class Mandrill extends Message
      * @param  array $globalVariables
      * @return self
      */
-    public function setGlobalVariables(array $globalVariables)
+    public function setGlobalVariables(array $globalVariables): Mandrill
     {
         $this->globalVariables = $globalVariables;
         return $this;
@@ -260,7 +260,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getGlobalVariables()
+    public function getGlobalVariables(): array
     {
         return $this->globalVariables;
     }
@@ -272,7 +272,7 @@ class Mandrill extends Message
      * @param  array  $variables
      * @return Mandrill
      */
-    public function setVariables($recipient, array $variables)
+    public function setVariables(string $recipient, array $variables): Mandrill
     {
         $this->variables[$recipient] = $variables;
         return $this;
@@ -283,7 +283,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getVariables()
+    public function getVariables(): array
     {
         return $this->variables;
     }
@@ -291,10 +291,10 @@ class Mandrill extends Message
     /**
      * Set the global metadata to send with with message
      *
-     * @param  array $globalVariables
+     * @param array $globalMetadata
      * @return self
      */
-    public function setGlobalMetadata(array $globalMetadata)
+    public function setGlobalMetadata(array $globalMetadata): Mandrill
     {
         $this->globalMetadata = $globalMetadata;
         return $this;
@@ -305,7 +305,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getGlobalMetadata()
+    public function getGlobalMetadata(): array
     {
         return $this->globalMetadata;
     }
@@ -314,10 +314,10 @@ class Mandrill extends Message
      * Set the metadata for a given recipient address
      *
      * @param  string $recipient
-     * @param  array  $variables
+     * @param  array $metadata
      * @return Mandrill
      */
-    public function setMetadata($recipient, array $metadata)
+    public function setMetadata(string $recipient, array $metadata): Mandrill
     {
         $this->metadata[$recipient] = $metadata;
         return $this;
@@ -328,7 +328,7 @@ class Mandrill extends Message
      *
      * @return array
      */
-    public function getMetadata()
+    public function getMetadata(): array
     {
         return $this->metadata;
     }
@@ -336,10 +336,10 @@ class Mandrill extends Message
     /**
      * Set attachments to the message
      *
-     * @param  Part[]|array $images
+     * @param  Part[] $images
      * @return self
      */
-    public function setImages(array $images)
+    public function setImages(array $images): Mandrill
     {
         $this->images = $images;
         return $this;
@@ -351,7 +351,7 @@ class Mandrill extends Message
      * @param  Part $image
      * @return self
      */
-    public function addImage(Part $image)
+    public function addImage(Part $image): Mandrill
     {
         $this->images[] = $image;
         return $this;
@@ -360,9 +360,9 @@ class Mandrill extends Message
     /**
      * Get images of the message
      *
-     * @return array|Part[]
+     * @return Part[]
      */
-    public function getImages()
+    public function getImages(): array
     {
         return $this->images;
     }

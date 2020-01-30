@@ -8,6 +8,7 @@
 
 namespace SlmMail\Service;
 
+use Laminas\Http\Client as HttpClient;
 use Laminas\Http\Response;
 use Laminas\Mail\Message;
 use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
@@ -30,21 +31,19 @@ class SparkPostService extends AbstractMailService
      */
     protected $apiKey;
 
-
     /**
      * Constructor.
      *
      * @param string $apiKey
      */
-    public function __construct($apiKey)
+    public function __construct(string $apiKey)
     {
-        $this->apiKey = (string)$apiKey;
+        $this->apiKey = $apiKey;
     }
 
 
-    public function send(Message $message)
+    public function send(Message $message): array
     {
-
         if ($message instanceof SparkPostMessage) {
             $options = $message->getOptions();
         }
@@ -91,7 +90,7 @@ class SparkPostService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return string
      */
-    protected function prepareFromAddress(Message $message)
+    protected function prepareFromAddress(Message $message): string
     {
         #if ($this->getEnvelope() && $this->getEnvelope()->getFrom()) {
         #    return $this->getEnvelope()->getFrom();
@@ -126,7 +125,7 @@ class SparkPostService extends AbstractMailService
      *
      * @return array
      */
-    protected function prepareRecipients(Message $message)
+    protected function prepareRecipients(Message $message): array
     {
         #if ($this->getEnvelope() && $this->getEnvelope()->getTo()) {
         #    return (array) $this->getEnvelope()->getTo();
@@ -162,7 +161,7 @@ class SparkPostService extends AbstractMailService
      *
      * @return string
      */
-    protected function prepareHeaders(Message $message)
+    protected function prepareHeaders(Message $message): string
     {
         $headers = clone $message->getHeaders();
         $headers->removeHeader('Bcc');
@@ -177,7 +176,7 @@ class SparkPostService extends AbstractMailService
      *
      * @return string
      */
-    protected function prepareBody(Message $message)
+    protected function prepareBody(Message $message): string
     {
         return $message->getBodyText();
     }
@@ -185,10 +184,9 @@ class SparkPostService extends AbstractMailService
     /**
      * @param string $uri
      * @param array  $parameters
-     *
-     * @return \Laminas\Http\Client
+     * @return HttpClient
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
     {
         $parameters = json_encode($parameters);
         $return = $this->getClient()
@@ -208,7 +206,7 @@ class SparkPostService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
         if ($response->isSuccess()) {

@@ -26,10 +26,24 @@ class SparkPostServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\SparkPostService', $service);
     }
 
+    public function testResultIsProperlyParsed()
+    {
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\SparkPostService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode($payload));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
+    }
+
     public function exceptionDataProvider()
     {
         return array(
-            array(200, null, null),
             array(400, '{"name":"UnknownError","message":"An error occured on SparkPost (http code 400), message: Unknown error", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
             array(500, '{"name":"GeneralError","message":"SparkPost server error, please try again", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
         );

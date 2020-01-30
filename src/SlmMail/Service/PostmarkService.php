@@ -40,6 +40,7 @@
 
 namespace SlmMail\Service;
 
+use Laminas\Http\Client as HttpClient;
 use SlmMail\Mail\Message\Postmark as PostmarkMessage;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
@@ -94,9 +95,9 @@ class PostmarkService extends AbstractMailService
     /**
      * @param string $apiKey
      */
-    public function __construct($apiKey)
+    public function __construct(string $apiKey)
     {
-        $this->apiKey = (string) $apiKey;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -111,7 +112,7 @@ class PostmarkService extends AbstractMailService
      * @throws Exception\RuntimeException if the mail is sent to more than 20 recipients (Postmark limit)
      * @return array The id and UID of the sent message (if sent correctly)
      */
-    public function send(Message $message)
+    public function send(Message $message): array
     {
         $from = $message->getFrom();
         if (count($from) !== 1) {
@@ -204,7 +205,7 @@ class PostmarkService extends AbstractMailService
      * @link http://developer.postmarkapp.com/developer-bounces.html#get-delivery-stats
      * @return array
      */
-    public function getDeliveryStats()
+    public function getDeliveryStats(): array
     {
         $response = $this->prepareHttpClient('/deliverystats')
                          ->send();
@@ -227,7 +228,13 @@ class PostmarkService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    public function getBounces($count, $offset, $type = null, $inactive = null, $emailFilter = null)
+    public function getBounces(
+        int $count,
+        int $offset,
+        string $type = null,
+        string $inactive = null,
+        string $emailFilter = null
+    ): array
     {
         if (null !== $type && !in_array($type, $this->filters)) {
             throw new Exception\RuntimeException(sprintf(
@@ -250,7 +257,7 @@ class PostmarkService extends AbstractMailService
      * @param  int $id
      * @return array
      */
-    public function getBounce($id)
+    public function getBounce(int $id): array
     {
         $response = $this->prepareHttpClient('/bounces/' . $id)
                          ->send();
@@ -265,7 +272,7 @@ class PostmarkService extends AbstractMailService
      * @param  int $id
      * @return string
      */
-    public function getBounceDump($id)
+    public function getBounceDump(int $id): array
     {
         $response = $this->prepareHttpClient('/bounces/' . $id . '/dump')
                          ->send();
@@ -280,7 +287,7 @@ class PostmarkService extends AbstractMailService
      * @link http://developer.postmarkapp.com/developer-bounces.html#get-bounce-tags
      * @return array
      */
-    public function getBounceTags()
+    public function getBounceTags(): array
     {
         $response = $this->prepareHttpClient('/bounces/tags')
                          ->send();
@@ -295,7 +302,7 @@ class PostmarkService extends AbstractMailService
      * @param  int $id
      * @return array
      */
-    public function activateBounce($id)
+    public function activateBounce(int $id): array
     {
         $response = $this->prepareHttpClient('/bounces/' . $id . '/activate')
                          ->setMethod(HttpRequest::METHOD_PUT)
@@ -307,9 +314,9 @@ class PostmarkService extends AbstractMailService
     /**
      * @param string $uri
      * @param array $parameters
-     * @return \Laminas\Http\Client
+     * @return HttpClient
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -329,7 +336,7 @@ class PostmarkService extends AbstractMailService
      * @throws Exception\RuntimeException
      * @return array
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
 

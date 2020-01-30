@@ -72,7 +72,7 @@ class SesService extends AbstractMailService
      * @throws Exception\RuntimeException if the mail is sent to more than 50 recipients (Amazon SES limit)
      * @return array The id and UID of the sent message (if sent correctly)
      */
-    public function send(Message $message)
+    public function send(Message $message): array
     {
         $from = $message->getFrom();
         if (count($from) !== 1) {
@@ -153,7 +153,7 @@ class SesService extends AbstractMailService
      * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendQuota.html
      * @return array
      */
-    public function getSendQuota()
+    public function getSendQuota(): array
     {
         try {
             return $this->client->getSendQuota()->toArray();
@@ -169,7 +169,7 @@ class SesService extends AbstractMailService
      * @link http://docs.aws.amazon.com/ses/latest/APIReference/API_GetSendStatistics.html
      * @return array
      */
-    public function getSendStatistics()
+    public function getSendStatistics(): array
     {
         try {
             return $this->client->getSendStatistics()->toArray();
@@ -194,7 +194,7 @@ class SesService extends AbstractMailService
      * @param  string $nextToken token to use for pagination
      * @return array
      */
-    public function getIdentities($identityType = '', $maxItems = 50, $nextToken = '')
+    public function getIdentities(string $identityType = '', int $maxItems = 50, string $nextToken = ''): array
     {
         $parameters = array(
             'IdentityType' => $identityType,
@@ -216,7 +216,7 @@ class SesService extends AbstractMailService
      * @param  string $identity
      * @return void
      */
-    public function deleteIdentity($identity)
+    public function deleteIdentity(string $identity): void
     {
         try {
             $this->client->deleteIdentity(array('Identity' => $identity));
@@ -232,7 +232,7 @@ class SesService extends AbstractMailService
      * @param  array $identities
      * @return array
      */
-    public function getIdentityDkimAttributes(array $identities)
+    public function getIdentityDkimAttributes(array $identities): array
     {
         try {
             return $this->client->getIdentityDkimAttributes(array('Identities' => $identities))->toArray();
@@ -249,7 +249,7 @@ class SesService extends AbstractMailService
      * @param  array $identities
      * @return array
      */
-    public function getIdentityNotificationAttributes(array $identities)
+    public function getIdentityNotificationAttributes(array $identities): array
     {
         try {
             return $this->client->getIdentityNotificationAttributes(array('Identities' => $identities))->toArray();
@@ -266,7 +266,7 @@ class SesService extends AbstractMailService
      * @param  array $identities
      * @return array
      */
-    public function getIdentityVerificationAttributes(array $identities)
+    public function getIdentityVerificationAttributes(array $identities): array
     {
         try {
             return $this->client->getIdentityVerificationAttributes(array('Identities' => $identities))->toArray();
@@ -283,7 +283,7 @@ class SesService extends AbstractMailService
      * @param  bool $dkimEnabled
      * @return void
      */
-    public function setIdentityDkimEnabled($identity, $dkimEnabled)
+    public function setIdentityDkimEnabled(string $identity, bool $dkimEnabled): void
     {
         try {
             $this->client->setIdentityDkimEnabled(array(
@@ -304,7 +304,7 @@ class SesService extends AbstractMailService
      * @param  bool $forwardingEnabled
      * @return void
      */
-    public function setIdentityFeedbackForwardingEnabled($identity, $forwardingEnabled)
+    public function setIdentityFeedbackForwardingEnabled(string $identity, bool $forwardingEnabled): void
     {
         try {
             $this->client->setIdentityFeedbackForwardingEnabled(array(
@@ -326,7 +326,7 @@ class SesService extends AbstractMailService
      * @param string $snsTopic
      * @return void
      */
-    public function setIdentityNotificationTopic($identity, $notificationType, $snsTopic = '')
+    public function setIdentityNotificationTopic(string $identity, string $notificationType, string $snsTopic = ''): void
     {
         $parameters = array(
             'Identity'         => $identity,
@@ -352,7 +352,7 @@ class SesService extends AbstractMailService
      * @param  string $domain
      * @return array
      */
-    public function verifyDomainDkim($domain)
+    public function verifyDomainDkim(string $domain): array
     {
         try {
             return $this->client->verifyDomainDkim(array('Domain' => $domain))->toArray();
@@ -368,7 +368,7 @@ class SesService extends AbstractMailService
      * @param string $domain
      * @return void
      */
-    public function verifyDomainIdentity($domain)
+    public function verifyDomainIdentity(string $domain): void
     {
         try {
             $this->client->verifyDomainIdentity(array('Domain' => $domain));
@@ -384,7 +384,7 @@ class SesService extends AbstractMailService
      * @param  string $email
      * @return void
      */
-    public function verifyEmailIdentity($email)
+    public function verifyEmailIdentity(string $email): void
     {
         try {
             $this->client->verifyEmailIdentity(array('EmailAddress' => $email));

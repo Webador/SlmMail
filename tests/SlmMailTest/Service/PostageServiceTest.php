@@ -64,13 +64,19 @@ class PostageServiceTest extends TestCase
         $this->assertInstanceOf('SlmMail\Service\PostageService', $service);
     }
 
-    public function exceptionDataProvider()
+    public function testResultIsProperlyParsed()
     {
-        return array(
-            array(200, null),
-            array(401, 'SlmMail\Service\Exception\RuntimeException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        $payload = ['success' => 123];
+
+        $method = new ReflectionMethod('SlmMail\Service\PostageService', 'parseResponse');
+        $method->setAccessible(true);
+
+        $response = new HttpResponse();
+        $response->setStatusCode(200);
+        $response->setContent(json_encode(['data' => $payload]));
+
+        $actual = $method->invoke($this->service, $response);
+        $this->assertEquals($payload, $actual);
     }
 
     /**
@@ -84,11 +90,17 @@ class PostageServiceTest extends TestCase
         $response = new HttpResponse();
         $response->setStatusCode($statusCode);
 
-        if ($expectedException !== null) {
-            $this->expectException($expectedException);
-        }
+        $this->expectException($expectedException);
 
         $actual = $method->invoke($this->service, $response);
         $this->assertEquals([], $actual);
+    }
+
+    public function exceptionDataProvider()
+    {
+        return array(
+            array(401, 'SlmMail\Service\Exception\RuntimeException'),
+            array(500, 'SlmMail\Service\Exception\RuntimeException'),
+        );
     }
 }

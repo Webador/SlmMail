@@ -40,6 +40,7 @@
 
 namespace SlmMail\Service;
 
+use Laminas\Http\Client as HttpClient;
 use SlmMail\Mail\Message\Postage as PostageMessage;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
@@ -63,9 +64,9 @@ class PostageService extends AbstractMailService
     /**
      * @param string $apiKey
      */
-    public function __construct($apiKey)
+    public function __construct(string $apiKey)
     {
-        $this->apiKey = (string) $apiKey;
+        $this->apiKey = $apiKey;
     }
 
     /**
@@ -79,7 +80,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/send_message
      * @return array The id and UID of the sent message (if sent correctly)
      */
-    public function send(Message $message)
+    public function send(Message $message): array
     {
         $from = $message->getFrom();
         if (count($from) !== 1) {
@@ -161,7 +162,7 @@ class PostageService extends AbstractMailService
      * @param  string $uid
      * @return array Id and url of message
      */
-    public function getMessageReceipt($uid)
+    public function getMessageReceipt(string $uid): array
     {
         $response = $this->prepareHttpClient('/get_message_receipt.json', array('uid' => $uid))
                          ->send();
@@ -177,7 +178,7 @@ class PostageService extends AbstractMailService
      * @param  string $uid
      * @return array
      */
-    public function getMessageTransmissions($uid)
+    public function getMessageTransmissions(string $uid): array
     {
         $response = $this->prepareHttpClient('/get_message_transmissions.json', array('uid' => $uid))
                          ->send();
@@ -191,7 +192,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/get_metrics
      * @return array
      */
-    public function getMetrics()
+    public function getMetrics(): array
     {
         $response = $this->prepareHttpClient('/get_metrics.json')
                          ->send();
@@ -206,7 +207,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/get_method_list
      * @return array
      */
-    public function getMethodList()
+    public function getMethodList(): array
     {
         $response = $this->prepareHttpClient('/get_method_list.json')
                          ->send();
@@ -222,7 +223,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/get_account_info
      * @return array
      */
-    public function getAccountInfo()
+    public function getAccountInfo(): array
     {
         $response = $this->prepareHttpClient('/get_account_info.json')
                          ->send();
@@ -236,7 +237,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/get_project_info
      * @return array
      */
-    public function getProjectInfo()
+    public function getProjectInfo(): array
     {
         $response = $this->prepareHttpClient('/get_project_info.json')
                          ->send();
@@ -251,7 +252,7 @@ class PostageService extends AbstractMailService
      * @link http://help.postageapp.com/kb/api/get_messages
      * @return array
      */
-    public function getMessageUids()
+    public function getMessageUids(): array
     {
         $response = $this->prepareHttpClient('/get_messages.json')
                          ->send();
@@ -262,9 +263,9 @@ class PostageService extends AbstractMailService
     /**
      * @param string $uri
      * @param array $parameters
-     * @return \Laminas\Http\Client
+     * @return HttpClient
      */
-    private function prepareHttpClient($uri, array $parameters = array())
+    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
     {
         $parameters = array_merge(array('api_key' => $this->apiKey), $parameters);
 
@@ -283,7 +284,7 @@ class PostageService extends AbstractMailService
      * @throws Exception\RuntimeException if an error occurred on Postage side
      * @return array
      */
-    private function parseResponse(HttpResponse $response)
+    private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
 
