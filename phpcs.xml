@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <ruleset name="Coding Standard">
     <rule ref="PSR2"/>
-    <rule ref="PSR12"/>
+    <rule ref="PSR12">
+        <exclude name="Generic.Files.LineLength"/>
+    </rule>
 
     <arg name="extensions" value="php"/>
 
