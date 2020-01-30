@@ -32,22 +32,23 @@
     ],
     "require": {
         "php": "^7.2",
-        "laminas/laminas-mail": "^2.6",
-        "laminas/laminas-http": "^2.5",
-        "laminas/laminas-mime": "^2.6",
-        "laminas/laminas-servicemanager": "^2.7 || ^3.1"
+        "laminas/laminas-mail": "^2.9",
+        "laminas/laminas-http": "^2.8",
+        "laminas/laminas-mime": "^2.7",
+        "laminas/laminas-servicemanager": "^3.3"
     },
     "require-dev": {
-        "aws/aws-sdk-php-zf2": "~2.0",
+        "aws/aws-sdk-php-zf2": "~4.2",
         "container-interop/container-interop": "^1.1",
-        "laminas/laminas-modulemanager": "^2.7",
-        "laminas/laminas-mvc": "^2.7 || ^3.0",
-        "laminas/laminas-view": "^2.6",
-        "laminas/laminas-log": "^2.6",
-        "laminas/laminas-i18n": "^2.6",
-        "laminas/laminas-serializer": "^2.6",
-        "laminas/laminas-config": "^2.6",
-        "doctrine/instantiator": "^1.0.5",
+        "guzzlehttp/guzzle": "^6.5",
+        "laminas/laminas-modulemanager": "^2.8",
+        "laminas/laminas-mvc": "^3.1",
+        "laminas/laminas-view": "^2.11",
+        "laminas/laminas-log": "^2.12",
+        "laminas/laminas-i18n": "^2.10",
+        "laminas/laminas-serializer": "^2.9",
+        "laminas/laminas-config": "^3.3",
+        "doctrine/instantiator": "^1.3",
         "phpunit/phpunit": "^8.5"
     },
     "suggest": {
