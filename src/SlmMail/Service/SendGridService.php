@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -158,8 +159,7 @@ class SendGridService extends AbstractMailService
         string $startDate = '',
         string $endDate = '',
         bool $aggregate = false
-    ): array
-    {
+    ): array {
         $parameters = array('date' => $date, 'start_date' => $startDate, 'end_date' => $endDate, 'aggregate' => (int)$aggregate);
 
         $response = $this->prepareHttpClient('/stats.get.json', $parameters)
@@ -194,8 +194,7 @@ class SendGridService extends AbstractMailService
         string $email = '',
         int $limit = 100,
         int $offset = 0
-    ): array
-    {
+    ): array {
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
 
@@ -264,8 +263,7 @@ class SendGridService extends AbstractMailService
         string $email = '',
         int $limit = 100,
         int $offset = 0
-    ): array
-    {
+    ): array {
         $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
                             'email' => $email, 'limit' => $limit, 'offset' => $offset);
 
@@ -310,8 +308,7 @@ class SendGridService extends AbstractMailService
         int $days = 1,
         string $startDate = '',
         string $endDate = ''
-    ): array
-    {
+    ): array {
         $parameters = array(
             'date'       => $date,
             'days'       => $days,
@@ -367,7 +364,9 @@ class SendGridService extends AbstractMailService
 
         if (!is_array($result)) {
             throw new Exception\RuntimeException(sprintf(
-                'An error occured on SendGrid (http code %s), could not interpret result as JSON. Body: %s', $response->getStatusCode(), $response->getBody()
+                'An error occured on SendGrid (http code %s), could not interpret result as JSON. Body: %s',
+                $response->getStatusCode(),
+                $response->getBody()
             ));
         }
 
@@ -386,7 +385,9 @@ class SendGridService extends AbstractMailService
             }
 
             throw new Exception\RuntimeException(sprintf(
-                'An error occured on SendGrid (http code %s), message: %s', $response->getStatusCode(), $message
+                'An error occured on SendGrid (http code %s), message: %s',
+                $response->getStatusCode(),
+                $message
             ));
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -126,7 +127,8 @@ class Mandrill extends Message
         foreach ($options as $key => $value) {
             if (!in_array($key, $this->validOptions)) {
                 throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid option "%s" given', $key
+                    'Invalid option "%s" given',
+                    $key
                 ));
             }
         }
@@ -147,7 +149,8 @@ class Mandrill extends Message
     {
         if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option "%s" given', $key
+                'Invalid option "%s" given',
+                $key
             ));
         }
 

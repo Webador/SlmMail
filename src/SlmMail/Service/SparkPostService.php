@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: niki
@@ -193,7 +194,7 @@ class SparkPostService extends AbstractMailService
             ->resetParameters()
             ->setHeaders(['Authorization' => $this->apiKey])
             ->setMethod(HttpRequest::METHOD_POST)
-            ->setUri(self::API_ENDPOINT.$uri)
+            ->setUri(self::API_ENDPOINT . $uri)
             ->setRawBody($parameters, 'application/json')
         ;
 

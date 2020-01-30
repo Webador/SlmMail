@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -232,13 +233,15 @@ class MailgunService extends AbstractMailService
         switch ($response->getStatusCode()) {
             case 400:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occured on Mailgun, reason: %s', $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s',
+                    $response->getReasonPhrase()
                 ));
             case 401:
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Mailgun authorization');
             case 402:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occured on Mailgun, reason: %s', $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s',
+                    $response->getReasonPhrase()
                 ));
             case 500:
             case 502:
@@ -294,8 +297,7 @@ class MailgunService extends AbstractMailService
         bool $ascending = true,
         int $limit = 300,
         array $fields = []
-    ): array
-    {
+    ): array {
         // Date format like https://documentation.mailgun.com/api-intro.html#date-format
         $parameters = [
             'begin' => $begin->format(DateTime::RFC2822),

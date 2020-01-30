@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -234,8 +235,7 @@ class PostmarkService extends AbstractMailService
         string $type = null,
         string $inactive = null,
         string $emailFilter = null
-    ): array
-    {
+    ): array {
         if (null !== $type && !in_array($type, $this->filters)) {
             throw new Exception\RuntimeException(sprintf(
                 'Type %s is not a supported filter',
@@ -351,7 +351,9 @@ class PostmarkService extends AbstractMailService
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Postmark API Key header');
             case 422:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occured on Postmark (error code %s), message: %s', $errorCode, $message
+                    'An error occured on Postmark (error code %s), message: %s',
+                    $errorCode,
+                    $message
                 ), (int) $errorCode);
             case 500:
                 throw new Exception\RuntimeException('Postmark server error, please try again');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -175,7 +176,8 @@ class ElasticEmailService extends AbstractMailService
         // is returned. So check if the message could be XML, if not: exception
         if (strpos($result, '<') !== 0) {
             throw new Exception\RuntimeException(sprintf(
-                'An error occurred on ElasticEmail: %s', $result
+                'An error occurred on ElasticEmail: %s',
+                $result
             ));
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -404,15 +405,21 @@ class SesService extends AbstractMailService
         switch ($exception->getStatusCode()) {
             case 400:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occurred on Amazon SES (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                    'An error occurred on Amazon SES (code %s): %s',
+                    $exception->getStatusCode(),
+                    $exception->getMessage()
                 ));
             case 403:
                 throw new Exception\InvalidCredentialsException(sprintf(
-                    'Amazon SES authentication error (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                    'Amazon SES authentication error (code %s): %s',
+                    $exception->getStatusCode(),
+                    $exception->getMessage()
                 ));
             default:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Amazon SES (code %s): %s', $exception->getStatusCode(), $exception->getMessage()
+                    'An error occurred on Amazon SES (code %s): %s',
+                    $exception->getStatusCode(),
+                    $exception->getMessage()
                 ));
         }
     }

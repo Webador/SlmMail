@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -301,12 +302,14 @@ class PostageService extends AbstractMailService
 
             if (isset($result['response']['message'])) {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, message: %s%s', $result['response']['message'],
+                    'An error occurred on Postage, message: %s%s',
+                    $result['response']['message'],
                     ($errors) ? ' (' . $errors . ')' : ''
                 ));
             } else {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, status code: %s%s', $status,
+                    'An error occurred on Postage, status code: %s%s',
+                    $status,
                     ($errors) ? ' (' . $errors . ')' : ''
                 ), (int) $status);
             }

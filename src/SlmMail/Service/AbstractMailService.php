@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -144,7 +145,7 @@ abstract class AbstractMailService implements MailServiceInterface
     protected function getClient(): HttpClient
     {
         if (null === $this->client) {
-            $this->setClient(new HttpClient);
+            $this->setClient(new HttpClient());
         }
 
         return $this->client;

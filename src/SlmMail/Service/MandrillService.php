@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -653,8 +654,7 @@ class MandrillService extends AbstractMailService
         string $html = '',
         string $text = '',
         array $labels = array()
-    ): array
-    {
+    ): array {
         if (count($labels) > 10) {
             throw new Exception\RuntimeException(
                 'Mandrill only supports up to 10 template labels'
@@ -697,8 +697,7 @@ class MandrillService extends AbstractMailService
         string $html = '',
         string $text = '',
         array $labels = array()
-    ): array
-    {
+    ): array {
         if (count($labels) > 10) {
             throw new Exception\RuntimeException(
                 'Mandrill only supports up to 10 template labels'
@@ -990,19 +989,27 @@ class MandrillService extends AbstractMailService
         switch ($name) {
             case 'InvalidKey':
                 throw new Exception\InvalidCredentialsException(sprintf(
-                    'Mandrill authentication error (code %s): %s', $code, $message
+                    'Mandrill authentication error (code %s): %s',
+                    $code,
+                    $message
                 ));
             case 'ValidationError':
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $code, $message
+                    'An error occurred on Mandrill (code %s): %s',
+                    $code,
+                    $message
                 ));
             case 'Unknown_Template':
                 throw new Exception\UnknownTemplateException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $code, $message
+                    'An error occurred on Mandrill (code %s): %s',
+                    $code,
+                    $message
                 ));
             default:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Mandrill (code %s): %s', $code, $message
+                    'An error occurred on Mandrill (code %s): %s',
+                    $code,
+                    $message
                 ));
         }
     }
