@@ -68,7 +68,7 @@ class Postmark extends Message
      */
     public function setTag(?string $tag): Postmark
     {
-        $this->tag = (string) $tag;
+        $this->tag = $tag;
         return $this;
     }
 }
