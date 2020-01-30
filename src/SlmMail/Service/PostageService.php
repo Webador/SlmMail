@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -52,7 +53,7 @@ class PostageService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.postageapp.com/v.1.0';
+    protected const API_ENDPOINT = 'https://api.postageapp.com/v.1.0';
 
     /**
      * Postage API key
@@ -97,21 +98,21 @@ class PostageService extends AbstractMailService
             throw new Exception\RuntimeException('Postage does not support BCC addresses');
         }
 
-        $parameters = array(
+        $parameters = [
             'uid'       => sha1(json_encode(uniqid())),
-            'arguments' => array(
-                'headers' => array(
+            'arguments' => [
+                'headers' => [
                     'subject' => $message->getSubject(),
                     'from'    => $from->rewind()->toString()
-                ),
-                'content' => array(
+                ],
+                'content' => [
                     'text/plain' => $this->extractText($message),
                     'text/html'  => $this->extractHtml($message)
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
-        $to = array();
+        $to = [];
         foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
@@ -134,10 +135,10 @@ class PostageService extends AbstractMailService
 
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $parameters['arguments']['attachments'][$attachment->filename] = array(
+            $parameters['arguments']['attachments'][$attachment->filename] = [
                 'content_type' => $attachment->type,
                 'content'      => base64_encode($attachment->getRawContent())
-            );
+            ];
         }
 
         $response =  $this->prepareHttpClient('/send_message.json', $parameters)
@@ -145,10 +146,10 @@ class PostageService extends AbstractMailService
 
         $data = $this->parseResponse($response);
 
-        return array(
+        return [
             'uid' => $parameters['uid'],
             'id'  => $data['message']['id']
-        );
+        ];
     }
 
     /**
@@ -164,7 +165,7 @@ class PostageService extends AbstractMailService
      */
     public function getMessageReceipt(string $uid): array
     {
-        $response = $this->prepareHttpClient('/get_message_receipt.json', array('uid' => $uid))
+        $response = $this->prepareHttpClient('/get_message_receipt.json', ['uid' => $uid])
                          ->send();
 
         $result = $this->parseResponse($response);
@@ -180,7 +181,7 @@ class PostageService extends AbstractMailService
      */
     public function getMessageTransmissions(string $uid): array
     {
-        $response = $this->prepareHttpClient('/get_message_transmissions.json', array('uid' => $uid))
+        $response = $this->prepareHttpClient('/get_message_transmissions.json', ['uid' => $uid])
                          ->send();
 
         return $this->parseResponse($response);
@@ -265,9 +266,9 @@ class PostageService extends AbstractMailService
      * @param array $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
-        $parameters = array_merge(array('api_key' => $this->apiKey), $parameters);
+        $parameters = array_merge(['api_key' => $this->apiKey], $parameters);
 
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -289,7 +290,7 @@ class PostageService extends AbstractMailService
         $result = json_decode($response->getBody(), true);
 
         if ($response->isSuccess()) {
-            return isset($result['data']) ? $result['data'] : array();
+            return isset($result['data']) ? $result['data'] : [];
         }
 
         $status = $result['response']['status'] ?? '';
@@ -301,12 +302,14 @@ class PostageService extends AbstractMailService
 
             if (isset($result['response']['message'])) {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, message: %s%s', $result['response']['message'],
+                    'An error occurred on Postage, message: %s%s',
+                    $result['response']['message'],
                     ($errors) ? ' (' . $errors . ')' : ''
                 ));
             } else {
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occurred on Postage, status code: %s%s', $status,
+                    'An error occurred on Postage, status code: %s%s',
+                    $status,
                     ($errors) ? ' (' . $errors . ')' : ''
                 ), (int) $status);
             }
@@ -314,6 +317,6 @@ class PostageService extends AbstractMailService
 
         // We need to return an array and not throw an exception because of the poor Postage API
         // error handling, it may returns an empty array with just status === 'ok'
-        return array();
+        return [];
     }
 }

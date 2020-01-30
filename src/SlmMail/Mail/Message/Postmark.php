@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -67,7 +68,7 @@ class Postmark extends Message
      */
     public function setTag(?string $tag): Postmark
     {
-        $this->tag = (string) $tag;
+        $this->tag = $tag;
         return $this;
     }
 }

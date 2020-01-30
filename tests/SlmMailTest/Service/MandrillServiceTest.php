@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -101,11 +102,11 @@ class MandrillServiceTest extends TestCase
 
     public function exceptionDataProvider()
     {
-        return array(
-            array(401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'),
-            array(500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        return [
+            [401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'],
+            [400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'],
+            [400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'],
+            [500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'],
+        ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -48,12 +49,12 @@ class Mandrill extends Message
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $validOptions = array(
+    protected $validOptions = [
         'auto_html',
         'auto_text',
         'google_analytics_campaign',
@@ -72,12 +73,12 @@ class Mandrill extends Message
         'tracking_domain',
         'url_strip_qs',
         'view_content_link'
-    );
+    ];
 
     /**
      * @var array
      */
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * @var string|null
@@ -87,32 +88,32 @@ class Mandrill extends Message
     /**
      * @var array
      */
-    protected $templateContent = array();
+    protected $templateContent = [];
 
     /**
      * @var array
      */
-    protected $globalVariables = array();
+    protected $globalVariables = [];
 
     /**
      * @var array
      */
-    protected $variables = array();
+    protected $variables = [];
 
     /**
      * @var array
      */
-    protected $globalMetadata = array();
+    protected $globalMetadata = [];
 
     /**
      * @var array
      */
-    protected $metadata = array();
+    protected $metadata = [];
 
     /**
      * @var Part[]
      */
-    protected $images = array();
+    protected $images = [];
 
     /**
      * Add options to the message
@@ -126,7 +127,8 @@ class Mandrill extends Message
         foreach ($options as $key => $value) {
             if (!in_array($key, $this->validOptions)) {
                 throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid option "%s" given', $key
+                    'Invalid option "%s" given',
+                    $key
                 ));
             }
         }
@@ -147,7 +149,8 @@ class Mandrill extends Message
     {
         if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option "%s" given', $key
+                'Invalid option "%s" given',
+                $key
             ));
         }
 

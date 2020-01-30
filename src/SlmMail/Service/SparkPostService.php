@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: niki
@@ -22,7 +23,7 @@ class SparkPostService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://api.eu.sparkpost.com/api/v1';
+    protected const API_ENDPOINT = 'https://api.eu.sparkpost.com/api/v1';
 
     /**
      * SparkPost API key
@@ -186,14 +187,14 @@ class SparkPostService extends AbstractMailService
      * @param array  $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
         $parameters = json_encode($parameters);
         $return = $this->getClient()
             ->resetParameters()
             ->setHeaders(['Authorization' => $this->apiKey])
             ->setMethod(HttpRequest::METHOD_POST)
-            ->setUri(self::API_ENDPOINT.$uri)
+            ->setUri(self::API_ENDPOINT . $uri)
             ->setRawBody($parameters, 'application/json')
         ;
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -100,11 +101,11 @@ class MailgunServiceTest extends TestCase
 
     public function exceptionDataProvider()
     {
-        return array(
-            array(400, 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(402, 'SlmMail\Service\Exception\RuntimeException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-        );
+        return [
+            [400, 'SlmMail\Service\Exception\ValidationErrorException'],
+            [401, 'SlmMail\Service\Exception\InvalidCredentialsException'],
+            [402, 'SlmMail\Service\Exception\RuntimeException'],
+            [500, 'SlmMail\Service\Exception\RuntimeException'],
+        ];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -60,7 +61,7 @@ class ElasticEmailTransportTest extends TestCase
 
     public function testTransportUsesElasticEmailService()
     {
-        $service   = $this->createMock('SlmMail\Service\ElasticEmailService', array(), array('my-username', 'my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\ElasticEmailService', [], ['my-username', 'my-secret-key']);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

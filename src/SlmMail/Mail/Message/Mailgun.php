@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -44,34 +45,34 @@ use Laminas\Mail\Message;
 
 class Mailgun extends Message
 {
-    const TAG_LIMIT = 3;
+    public const TAG_LIMIT = 3;
 
     /**
      * @var array
      */
-    protected $tags = array();
+    protected $tags = [];
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $validOptions = array(
+    protected $validOptions = [
         'dkim'            => 'o:dkim',
         'delivery_time'   => 'o:deliverytime',
         'test_mode'       => 'o:testmode',
         'tracking'        => 'o:tracking',
         'tracking_clicks' => 'o:tracking-clicks',
         'tracking_opens'  => 'o:tracking-opens',
-    );
+    ];
 
     /**
      * @var array
      */
-    protected $recipientVariables = array();
+    protected $recipientVariables = [];
 
     /**
      * Get all tags for this message
@@ -94,7 +95,8 @@ class Mailgun extends Message
     {
         if (count($tags) > self::TAG_LIMIT) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Mailgun only allows up to %s tags', self::TAG_LIMIT
+                'Mailgun only allows up to %s tags',
+                self::TAG_LIMIT
             ));
         }
 
@@ -113,7 +115,8 @@ class Mailgun extends Message
     {
         if (count($this->tags) + 1 > self::TAG_LIMIT) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Mailgun only allows up to %s tags', self::TAG_LIMIT
+                'Mailgun only allows up to %s tags',
+                self::TAG_LIMIT
             ));
         }
 
@@ -133,7 +136,8 @@ class Mailgun extends Message
         foreach ($options as $key => $value) {
             if (!array_key_exists($key, $this->getValidOptions())) {
                 throw new Exception\InvalidArgumentException(sprintf(
-                    'Invalid option "%s" given', $key
+                    'Invalid option "%s" given',
+                    $key
                 ));
             }
         }
@@ -154,7 +158,8 @@ class Mailgun extends Message
     {
         if (!array_key_exists($key, $this->getValidOptions())) {
             throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid option "%s" given', $key
+                'Invalid option "%s" given',
+                $key
             ));
         }
 

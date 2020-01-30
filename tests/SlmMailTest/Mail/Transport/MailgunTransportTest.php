@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -60,7 +61,7 @@ class MailgunTransportTest extends TestCase
 
     public function testTransportUsesMailgunService()
     {
-        $service   = $this->createMock('SlmMail\Service\MailgunService', array(), array('my-domain', 'my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\MailgunService', [], ['my-domain', 'my-secret-key']);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -60,7 +61,7 @@ class MandrillTransportTest extends TestCase
 
     public function testTransportUsesMandrillService()
     {
-        $service   = $this->createMock('SlmMail\Service\MandrillService', array(), array('my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\MandrillService', [], ['my-secret-key']);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

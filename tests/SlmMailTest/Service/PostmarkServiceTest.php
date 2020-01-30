@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -98,11 +99,11 @@ class PostmarkServiceTest extends TestCase
 
     public function exceptionDataProvider()
     {
-        return array(
-            array(401, 'SlmMail\Service\Exception\InvalidCredentialsException'),
-            array(422, 'SlmMail\Service\Exception\ValidationErrorException'),
-            array(500, 'SlmMail\Service\Exception\RuntimeException'),
-            array(404, 'SlmMail\Service\Exception\RuntimeException')
-        );
+        return [
+            [401, 'SlmMail\Service\Exception\InvalidCredentialsException'],
+            [422, 'SlmMail\Service\Exception\ValidationErrorException'],
+            [500, 'SlmMail\Service\Exception\RuntimeException'],
+            [404, 'SlmMail\Service\Exception\RuntimeException']
+        ];
     }
 }

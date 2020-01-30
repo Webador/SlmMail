@@ -22,7 +22,7 @@ class SparkPostTransportTest extends TestCase
 
     public function testTransportUsesSparkPostService()
     {
-        $service   = $this->createMock('SlmMail\Service\SparkPostService', array(), array('my-secret-key'));
+        $service   = $this->createMock('SlmMail\Service\SparkPostService', [], ['my-secret-key']);
         $transport = new HttpTransport($service);
         $message   = new Message();
 

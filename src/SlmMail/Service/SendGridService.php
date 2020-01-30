@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -51,7 +52,7 @@ class SendGridService extends AbstractMailService
     /**
      * API endpoint
      */
-    const API_ENDPOINT = 'https://sendgrid.com/api';
+    protected const API_ENDPOINT = 'https://sendgrid.com/api';
 
     /**
      * SendGrid username
@@ -102,13 +103,13 @@ class SendGridService extends AbstractMailService
             throw new Exception\RuntimeException('SendGrid does not support CC addresses');
         }
 
-        $parameters = array(
+        $parameters = [
             'from'     => $from->rewind()->getEmail(),
             'fromname' => $from->rewind()->getName(),
             'subject'  => $message->getSubject(),
             'text'     => $this->extractText($message),
             'html'     => $this->extractHtml($message)
-        );
+        ];
 
         foreach ($message->getTo() as $address) {
             $parameters['to'][] = $address->getEmail();
@@ -158,9 +159,8 @@ class SendGridService extends AbstractMailService
         string $startDate = '',
         string $endDate = '',
         bool $aggregate = false
-    ): array
-    {
-        $parameters = array('date' => $date, 'start_date' => $startDate, 'end_date' => $endDate, 'aggregate' => (int)$aggregate);
+    ): array {
+        $parameters = ['date' => $date, 'start_date' => $startDate, 'end_date' => $endDate, 'aggregate' => (int)$aggregate];
 
         $response = $this->prepareHttpClient('/stats.get.json', $parameters)
                          ->send();
@@ -194,10 +194,9 @@ class SendGridService extends AbstractMailService
         string $email = '',
         int $limit = 100,
         int $offset = 0
-    ): array
-    {
-        $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
-                            'email' => $email, 'limit' => $limit, 'offset' => $offset);
+    ): array {
+        $parameters = ['date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
+                            'email' => $email, 'limit' => $limit, 'offset' => $offset];
 
         $response = $this->prepareHttpClient('/bounces.get.json', $parameters)
                          ->send();
@@ -215,7 +214,7 @@ class SendGridService extends AbstractMailService
      */
     public function deleteBounces(string $startDate = '', string $endDate = '', string $email = ''): array
     {
-        $parameters = array('start_date' => $startDate, 'end_date' => $endDate, 'email' => $email);
+        $parameters = ['start_date' => $startDate, 'end_date' => $endDate, 'email' => $email];
 
         $response = $this->prepareHttpClient('/bounces.delete.json', $parameters)
                          ->send();
@@ -230,7 +229,7 @@ class SendGridService extends AbstractMailService
      */
     public function countBounces(string $startDate = '', string $endDate = ''): array
     {
-        $parameters = array('start_date' => $startDate, 'end_date' => $endDate);
+        $parameters = ['start_date' => $startDate, 'end_date' => $endDate];
 
         $response = $this->prepareHttpClient('/bounces.count.json', $parameters)
                          ->send();
@@ -264,10 +263,9 @@ class SendGridService extends AbstractMailService
         string $email = '',
         int $limit = 100,
         int $offset = 0
-    ): array
-    {
-        $parameters = array('date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
-                            'email' => $email, 'limit' => $limit, 'offset' => $offset);
+    ): array {
+        $parameters = ['date' => $date, 'days' => $days, 'start_date' => $startDate, 'end_date' => $endDate,
+                            'email' => $email, 'limit' => $limit, 'offset' => $offset];
 
         $response = $this->prepareHttpClient('/spamreports.get.json', $parameters)
                          ->send();
@@ -283,7 +281,7 @@ class SendGridService extends AbstractMailService
      */
     public function deleteSpamReport(string $email = ''): array
     {
-        $response = $this->prepareHttpClient('/spamreports.delete.json', array('email' => $email))
+        $response = $this->prepareHttpClient('/spamreports.delete.json', ['email' => $email])
                          ->send();
 
         return $this->parseResponse($response);
@@ -310,14 +308,13 @@ class SendGridService extends AbstractMailService
         int $days = 1,
         string $startDate = '',
         string $endDate = ''
-    ): array
-    {
-        $parameters = array(
+    ): array {
+        $parameters = [
             'date'       => $date,
             'days'       => $days,
             'start_date' => $startDate,
             'end_date'   => $endDate
-        );
+        ];
 
         $response = $this->prepareHttpClient('/blocks.get.json', $parameters)
                          ->send();
@@ -334,7 +331,7 @@ class SendGridService extends AbstractMailService
      */
     public function deleteBlock(string $email): array
     {
-        $response = $this->prepareHttpClient('/blocks.delete', array('email' => $email))
+        $response = $this->prepareHttpClient('/blocks.delete', ['email' => $email])
                          ->send();
 
         return $this->parseResponse($response);
@@ -345,9 +342,9 @@ class SendGridService extends AbstractMailService
      * @param array $parameters
      * @return \Laminas\Http\Client
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
-        $parameters = array_merge(array('api_user' => $this->username, 'api_key' => $this->apiKey), $parameters);
+        $parameters = array_merge(['api_user' => $this->username, 'api_key' => $this->apiKey], $parameters);
 
         return $this->getClient()
                     ->resetParameters()
@@ -367,7 +364,9 @@ class SendGridService extends AbstractMailService
 
         if (!is_array($result)) {
             throw new Exception\RuntimeException(sprintf(
-                'An error occured on SendGrid (http code %s), could not interpret result as JSON. Body: %s', $response->getStatusCode(), $response->getBody()
+                'An error occured on SendGrid (http code %s), could not interpret result as JSON. Body: %s',
+                $response->getStatusCode(),
+                $response->getBody()
             ));
         }
 
@@ -386,7 +385,9 @@ class SendGridService extends AbstractMailService
             }
 
             throw new Exception\RuntimeException(sprintf(
-                'An error occured on SendGrid (http code %s), message: %s', $response->getStatusCode(), $message
+                'An error occured on SendGrid (http code %s), message: %s',
+                $response->getStatusCode(),
+                $message
             ));
         }
 

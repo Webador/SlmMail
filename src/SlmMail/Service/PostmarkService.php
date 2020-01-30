@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -50,14 +51,14 @@ use Laminas\Mail\Message;
 class PostmarkService extends AbstractMailService
 {
     /**
-     * API endpoint
-     */
-    const API_ENDPOINT = 'https://api.postmarkapp.com';
-
-    /**
      * Postmark supports a maximum of 20 recipients per messages
      */
-    const RECIPIENT_LIMIT = 20;
+    public const RECIPIENT_LIMIT = 20;
+
+    /**
+     * API endpoint
+     */
+    protected const API_ENDPOINT = 'https://api.postmarkapp.com';
 
     /**
      * Postmark API key
@@ -71,7 +72,7 @@ class PostmarkService extends AbstractMailService
      *
      * @var array
      */
-    protected $filters = array(
+    protected $filters = [
         'HardBounce',
         'Transient',
         'Unsubscribe',
@@ -90,7 +91,7 @@ class PostmarkService extends AbstractMailService
         'ManuallyDeactivated',
         'Unconfirmed',
         'Blocked'
-    );
+    ];
 
     /**
      * @param string $apiKey
@@ -121,16 +122,16 @@ class PostmarkService extends AbstractMailService
             );
         }
 
-        $parameters = array(
+        $parameters = [
             'From'     => $from->rewind()->toString(),
             'Subject'  => $message->getSubject(),
             'TextBody' => $this->extractText($message),
             'HtmlBody' => $this->extractHtml($message)
-        );
+        ];
 
         $countRecipients = count($message->getTo());
 
-        $to = array();
+        $to = [];
         foreach ($message->getTo() as $address) {
             $to[] = $address->toString();
         }
@@ -139,7 +140,7 @@ class PostmarkService extends AbstractMailService
 
         $countRecipients += count($message->getCc());
 
-        $cc = array();
+        $cc = [];
         foreach ($message->getCc() as $address) {
             $cc[] = $address->toString();
         }
@@ -148,7 +149,7 @@ class PostmarkService extends AbstractMailService
 
         $countRecipients += count($message->getBcc());
 
-        $bcc = array();
+        $bcc = [];
         foreach ($message->getBcc() as $address) {
             $bcc[] = $address->toString();
         }
@@ -178,11 +179,11 @@ class PostmarkService extends AbstractMailService
 
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $parameters['Attachments'][] = array(
+            $parameters['Attachments'][] = [
                 'Name'        => $attachment->filename,
                 'ContentType' => $attachment->type,
                 'Content'     => base64_encode($attachment->getRawContent())
-            );
+            ];
         }
 
         $response = $this->prepareHttpClient('/email')
@@ -234,8 +235,7 @@ class PostmarkService extends AbstractMailService
         string $type = null,
         string $inactive = null,
         string $emailFilter = null
-    ): array
-    {
+    ): array {
         if (null !== $type && !in_array($type, $this->filters)) {
             throw new Exception\RuntimeException(sprintf(
                 'Type %s is not a supported filter',
@@ -316,7 +316,7 @@ class PostmarkService extends AbstractMailService
      * @param array $parameters
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = array()): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
         $client = $this->getClient()->resetParameters();
         $client->getRequest()
@@ -351,7 +351,9 @@ class PostmarkService extends AbstractMailService
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Postmark API Key header');
             case 422:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occured on Postmark (error code %s), message: %s', $errorCode, $message
+                    'An error occured on Postmark (error code %s), message: %s',
+                    $errorCode,
+                    $message
                 ), (int) $errorCode);
             case 500:
                 throw new Exception\RuntimeException('Postmark server error, please try again');

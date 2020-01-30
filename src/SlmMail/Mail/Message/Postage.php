@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2012-2013 Jurian Sluiman.
  * All rights reserved.
@@ -52,7 +53,7 @@ class Postage extends Message
     /**
      * @var array
      */
-    protected $variables = array();
+    protected $variables = [];
 
     /**
      * Set Postage template name to use
