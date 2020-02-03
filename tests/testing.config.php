@@ -1,4 +1,5 @@
 <?php
+
 return [
     'slm_mail' => [
         'elastic_email' => [
