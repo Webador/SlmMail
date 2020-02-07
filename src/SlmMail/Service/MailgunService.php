@@ -179,7 +179,7 @@ class MailgunService extends AbstractMailService
         foreach ($attachments as $attachment) {
             $client->setFileUpload(
                 $attachment->filename,
-                'attachment',
+                $attachment->disposition,
                 $attachment->getRawContent(),
                 $attachment->type
             );
