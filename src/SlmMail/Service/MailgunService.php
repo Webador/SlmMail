@@ -251,7 +251,11 @@ class MailgunService extends AbstractMailService
             case 504:
                 throw new Exception\RuntimeException('Mailgun server error, please try again');
             default:
-                throw new Exception\RuntimeException('Unknown error during request to Mailgun server');
+                throw new Exception\RuntimeException(sprintf(
+                    'Unknown error during request to Mailgun server, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
+                ));
         }
     }
 
