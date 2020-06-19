@@ -43,6 +43,7 @@ namespace SlmMail\Service\Exception;
 
 use InvalidArgumentException;
 use SlmMail\Exception\ExceptionInterface;
+use Throwable;
 
 /**
  * This exception is thrown if the API returned validation errors

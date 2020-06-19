@@ -233,15 +233,17 @@ class MailgunService extends AbstractMailService
         switch ($response->getStatusCode()) {
             case 400:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occured on Mailgun, reason: %s',
-                    $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
                 ));
             case 401:
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Mailgun authorization');
             case 402:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occured on Mailgun, reason: %s',
-                    $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
                 ));
             case 500:
             case 502:
