@@ -46,7 +46,6 @@ use SlmMail\Mail\Message\Mailgun as MailgunMessage;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
-use Laminas\Mail\Address;
 use Laminas\Mail\Message;
 
 class MailgunService extends AbstractMailService
@@ -233,15 +232,17 @@ class MailgunService extends AbstractMailService
         switch ($response->getStatusCode()) {
             case 400:
                 throw new Exception\ValidationErrorException(sprintf(
-                    'An error occured on Mailgun, reason: %s',
-                    $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
                 ));
             case 401:
                 throw new Exception\InvalidCredentialsException('Authentication error: missing or incorrect Mailgun authorization');
             case 402:
                 throw new Exception\RuntimeException(sprintf(
-                    'An error occured on Mailgun, reason: %s',
-                    $response->getReasonPhrase()
+                    'An error occured on Mailgun, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
                 ));
             case 500:
             case 502:
@@ -249,7 +250,11 @@ class MailgunService extends AbstractMailService
             case 504:
                 throw new Exception\RuntimeException('Mailgun server error, please try again');
             default:
-                throw new Exception\RuntimeException('Unknown error during request to Mailgun server');
+                throw new Exception\RuntimeException(sprintf(
+                    'Unknown error during request to Mailgun server, reason: %s, details: %s',
+                    $response->getReasonPhrase(),
+                    $response->getBody()
+                ));
         }
     }
 
