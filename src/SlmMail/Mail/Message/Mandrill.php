@@ -47,6 +47,10 @@ use Laminas\Mime\Part;
 class Mandrill extends Message
 {
     /**
+     * Map of option key to its value.
+     *
+     * Note a value can be a non-string value, like an array or an integer.
+     *
      * @var array
      */
     protected $options = [];
@@ -141,11 +145,11 @@ class Mandrill extends Message
      * Set an option to the message
      *
      * @param  string $key
-     * @param  string $value
+     * @param  mixed $value
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOption(string $key, string $value): Mandrill
+    public function setOption(string $key, $value): Mandrill
     {
         if (!in_array($key, $this->validOptions)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -160,8 +164,6 @@ class Mandrill extends Message
 
     /**
      * Get all the options of the message
-     *
-     * @return string[]
      */
     public function getOptions(): array
     {
