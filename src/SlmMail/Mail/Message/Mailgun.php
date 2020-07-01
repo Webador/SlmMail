@@ -53,6 +53,10 @@ class Mailgun extends Message
     protected $tags = [];
 
     /**
+     * Map of option key to its value.
+     *
+     * Note a value can be a non-string value, like an array or an integer.
+     *
      * @var array
      */
     protected $options = [];
@@ -150,11 +154,11 @@ class Mailgun extends Message
      * Set an option to the message
      *
      * @param  string $key
-     * @param  string $value
+     * @param  mixed $value
      * @throws Exception\InvalidArgumentException
      * @return self
      */
-    public function setOption(string $key, string $value): Mailgun
+    public function setOption(string $key, $value): Mailgun
     {
         if (!array_key_exists($key, $this->getValidOptions())) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -169,8 +173,6 @@ class Mailgun extends Message
 
     /**
      * Get all the options of the message
-     *
-     * @return string[]
      */
     public function getOptions(): array
     {
