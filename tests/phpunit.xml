@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<phpunit bootstrap="./Bootstrap.php" colors="true">
-    <testsuite name="SlmMail tests">
-        <directory>./</directory>
-    </testsuite>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./Bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage includeUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuite name="SlmMail tests">
+    <directory>./</directory>
+  </testsuite>
 </phpunit>

@@ -22,6 +22,12 @@ matrix:
       env:
         - DEPS=latest
         - EXECUTE_CS_CHECK=true
+    - php: nightly
+      env:
+        - DEPS=lowest
+    - php: nightly
+      env:
+        - DEPS=latest
 
 cache:
   directories:
