@@ -22,10 +22,10 @@ matrix:
       env:
         - DEPS=latest
         - EXECUTE_CS_CHECK=true
-    - php: nightly
+    - php: 8.0
       env:
         - DEPS=lowest
-    - php: nightly
+    - php: 8.0
       env:
         - DEPS=latest
 
