@@ -978,6 +978,14 @@ class MandrillService extends AbstractMailService
     {
         $result = json_decode($response->getBody(), true);
 
+        if (!is_array($result)) {
+            throw new Exception\RuntimeException(sprintf(
+                'An error occured on Mandrill (http code %s), could not interpret result as JSON. Body: %s',
+                $response->getStatusCode(),
+                $response->getBody()
+            ));
+        }
+
         if ($response->isSuccess()) {
             return $result;
         }
@@ -985,7 +993,7 @@ class MandrillService extends AbstractMailService
         $name = $result['name'] ?? '';
         $code = $result['code'] ?? '';
         $message = $result['message'] ?? '';
-        
+
         switch ($name) {
             case 'InvalidKey':
                 throw new Exception\InvalidCredentialsException(sprintf(
