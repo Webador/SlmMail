@@ -83,7 +83,7 @@ class MandrillServiceTest extends TestCase
     /**
      * @dataProvider exceptionDataProvider
      */
-    public function testExceptionsAreThrownOnErrors($statusCode, $content, $expectedException)
+    public function testExceptionsAreThrownOnErrors($statusCode, $content, $expectedException, $expectedExceptionMessage)
     {
         $method = new ReflectionMethod('SlmMail\Service\MandrillService', 'parseResponse');
         $method->setAccessible(true);
@@ -94,6 +94,7 @@ class MandrillServiceTest extends TestCase
 
         if ($expectedException !== null) {
             $this->expectException($expectedException);
+            $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
         $actual = $method->invoke($this->service, $response);
@@ -103,10 +104,36 @@ class MandrillServiceTest extends TestCase
     public function exceptionDataProvider()
     {
         return [
-            [401, '{"name":"InvalidKey","message":"Invalid credentials", "code":4}', 'SlmMail\Service\Exception\InvalidCredentialsException'],
-            [400, '{"name":"ValidationError","message":"Validation failed", "code":4}', 'SlmMail\Service\Exception\ValidationErrorException'],
-            [400, '{"name":"Unknown_Template","message":"Unknown template", "code":4}', 'SlmMail\Service\Exception\UnknownTemplateException'],
-            [500, '{"name":"GeneralError","message":"Failed", "code":4}', 'SlmMail\Service\Exception\RuntimeException'],
+            [
+                400,
+                'some jiberish, non-JSON',
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occured on Mandrill (http code 400), could not interpret result as JSON. Body: some jiberish, non-JSON'
+            ],
+            [
+                401,
+                '{"name":"InvalidKey","message":"Invalid credentials", "code":4}',
+                'SlmMail\Service\Exception\InvalidCredentialsException',
+                'Mandrill authentication error (code 4): Invalid credentials'
+            ],
+            [
+                400,
+                '{"name":"ValidationError","message":"Validation failed", "code":4}',
+                'SlmMail\Service\Exception\ValidationErrorException',
+                'An error occurred on Mandrill (code 4): Validation failed'
+            ],
+            [
+                400,
+                '{"name":"Unknown_Template","message":"Unknown template", "code":4}',
+                'SlmMail\Service\Exception\UnknownTemplateException',
+                'An error occurred on Mandrill (code 4): Unknown template'
+            ],
+            [
+                500,
+                '{"name":"GeneralError","message":"Failed", "code":4}',
+                'SlmMail\Service\Exception\RuntimeException',
+                'An error occurred on Mandrill (code 4): Failed'
+            ],
         ];
     }
 }
