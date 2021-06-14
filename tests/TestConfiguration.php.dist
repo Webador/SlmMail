@@ -16,9 +16,8 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-return array(
+$config = array(
     'modules' => array(
-        'AwsModule',
         'SlmMail',
     ),
     'module_listener_options' => array(
@@ -30,3 +29,9 @@ return array(
         ),
     ),
 );
+
+if (class_exists(\AwsModule\Module::class)) {
+    $config['modules'] = 'AwsModule';
+}
+
+return $config;
