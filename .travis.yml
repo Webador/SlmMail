@@ -34,12 +34,12 @@ matrix:
     - php: 8.0
       env:
         - DEPS=latest
-
 cache:
   directories:
     - $HOME/.composer/cache
 
 install:
+  - if [[ $AWS_SDK == 'true' ]]; then composer self-update --1 ; fi
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --no-interaction ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --no-interaction --prefer-lowest ; fi
   - if [[ $AWS_SDK == 'true' ]]; then composer require aws/aws-sdk-php-zf2 ; fi
