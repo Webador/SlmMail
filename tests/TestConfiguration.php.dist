@@ -31,7 +31,7 @@ $config = array(
 );
 
 if (class_exists(\AwsModule\Module::class)) {
-    $config['modules'] = 'AwsModule';
+    $config['modules'][] = 'AwsModule';
 }
 
 return $config;
