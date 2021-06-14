@@ -43,7 +43,6 @@
         "laminas/laminas-servicemanager": "^3.3"
     },
     "require-dev": {
-        "aws/aws-sdk-php-zf2": "~4.2",
         "container-interop/container-interop": "^1.1",
         "guzzlehttp/guzzle": "^6.5",
         "laminas/laminas-modulemanager": "^2.8",

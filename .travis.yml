@@ -6,22 +6,28 @@ matrix:
     - php: 7.2
       env:
         - DEPS=lowest
+        - AWS_SDK=true
     - php: 7.2
       env:
         - DEPS=latest
+        - AWS_SDK=true
     - php: 7.3
       env:
         - DEPS=lowest
+        - AWS_SDK=true
     - php: 7.3
       env:
         - DEPS=latest
+        - AWS_SDK=true
     - php: 7.4
       env:
         - DEPS=lowest
+        - AWS_SDK=true
     - php: 7.4
       env:
         - DEPS=latest
         - EXECUTE_CS_CHECK=true
+        - AWS_SDK=true
     - php: 8.0
       env:
         - DEPS=lowest
@@ -36,6 +42,7 @@ cache:
 install:
   - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --prefer-stable --no-interaction ; fi
   - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --prefer-stable --no-interaction --prefer-lowest ; fi
+  - if [[ $AWS_SDK == 'true' ]]; then composer require aws/aws-sdk-php-zf2 ; fi
   - composer show --installed
 
 script:
