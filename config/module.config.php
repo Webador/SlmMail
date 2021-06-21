@@ -71,6 +71,7 @@ return [
              * HTTP client
              */
             'SlmMail\Http\Client' => Factory\HttpClientFactory::class,
+            'SlmMail\Aws\Sdk' => Factory\AwsSdkFactory::class,
         ],
     ],
     'slm_mail' => [

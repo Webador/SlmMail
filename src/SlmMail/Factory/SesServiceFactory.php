@@ -41,7 +41,6 @@
 
 namespace SlmMail\Factory;
 
-use Aws\Sdk;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use SlmMail\Service\SesService;
@@ -50,6 +49,6 @@ class SesServiceFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new SesService($container->get(Sdk::class)->createSes());
+        return new SesService($container->get('SlmMail\Aws\Sdk')->createSes());
     }
 }
