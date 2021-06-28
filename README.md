@@ -1,7 +1,7 @@
 SlmMail
 =======
 
-[![Build Status](https://travis-ci.org/JouwWeb/SlmMail.png)](https://travis-ci.org/JouwWeb/SlmMail)
+![Build Status](https://github.com/JouwWeb/SlmMail/actions/workflows/ci.yml/badge.svg)
 [![Latest Stable Version](https://poser.pugx.org/slm/mail/v/stable.png)](https://packagist.org/packages/slm/mail)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/?branch=master)
 
@@ -18,13 +18,6 @@ Here are the currently supported services:
 * [Send Grid](http://sendgrid.com) (nearly complete)
 * [Spark Post](http://sparkpost.com) (nearly complete)
 * [Amazon SES](http://aws.amazon.com/ses) (nearly complete, attachments are missing)
-
-Requirements
-------------
-
-* PHP 7.2  
-* [Laminas-MVC](https://github.com/laminas/laminas-mvc) or [Mezzio](https://github.com/mezzio/mezzio)
-* [Amazon AWS ZF 2 Module](https://github.com/aws/aws-sdk-php-zf2): only if you plan to use Amazon SES service
 
 Installation
 ------------
