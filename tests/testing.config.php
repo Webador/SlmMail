@@ -32,6 +32,18 @@ return [
 
         'spark_post' => [
             'key' => 'my-secret-key'
+        ],
+        'ses' => [
+            'credentials' => [
+                'key'    => 'change_me',
+                'secret' => 'change_me'
+            ],
+            'region'   => 'us-west-2',
+            'version'  => 'latest',
+            'DynamoDb' => [
+                'region'  => 'us-west-2',
+                'version' => 'latest'
+            ],
         ]
     ],
     
