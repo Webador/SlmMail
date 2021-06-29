@@ -61,13 +61,14 @@
         "aws/aws-sdk-php": "If you need to use Amazon SES"
     },
     "autoload": {
-        "psr-0": {
-            "SlmMail\\": "src/",
-            "SlmMailTest\\": "tests/"
-        },
-        "classmap": [
-            "./"
-        ]
+        "psr-4": {
+            "SlmMail\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SlmMailTest\\": "tests/SlmMailTest/"
+        }
     },
     "extra": {
         "zf": {
