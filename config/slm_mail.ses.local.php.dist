@@ -1,0 +1,18 @@
+<?php
+
+return [
+    'slm_mail' => [
+        'ses' => [
+            'credentials' => [
+                'key'    => 'change_me',
+                'secret' => 'change_me'
+            ],
+            'region'   => 'change_me',
+            'version'  => 'latest',
+            'DynamoDb' => [
+                'region'  => 'another_region',
+                'version' => 'latest'
+            ]
+        ]
+    ]
+];

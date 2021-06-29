@@ -41,12 +41,20 @@
 
 namespace SlmMail\Mail\Transport;
 
+use Aws\Ses\SesClient;
 use PHPUnit\Framework\TestCase;
 use SlmMailTest\Util\ServiceManagerFactory;
 use Laminas\Mail\Message;
 
 class SesTransportTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (! class_exists(SesClient::class)) {
+            $this->markTestSkipped(SesClient::class . ' optional package required to run this test');
+        }
+    }
+
     public function testCreateFromFactory()
     {
         $serviceManager = ServiceManagerFactory::getServiceManager();
