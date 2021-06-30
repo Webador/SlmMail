@@ -10,13 +10,11 @@
 namespace SlmMail\Service;
 
 use Laminas\Http\Client as HttpClient;
-use Laminas\Http\Response;
-use Laminas\Mail\Message;
-use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
-use Laminas\Mail\Address;
-use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
+use Laminas\Mail\Address;
+use Laminas\Mail\Message;
+use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
 
 class SparkPostService extends AbstractMailService
 {
@@ -210,6 +208,15 @@ class SparkPostService extends AbstractMailService
     private function parseResponse(HttpResponse $response): array
     {
         $result = json_decode($response->getBody(), true);
+
+        if (!is_array($result)) {
+            throw new Exception\RuntimeException(sprintf(
+                'An error occured on Sparkpost (http code %s), could not interpret result as JSON. Body: %s',
+                $response->getStatusCode(),
+                $response->getBody()
+            ));
+        }
+
         if ($response->isSuccess()) {
             return $result;
         }
@@ -217,7 +224,12 @@ class SparkPostService extends AbstractMailService
         // There is a 4xx error
         if ($response->isClientError()) {
             if (isset($result['errors']) && is_array($result['errors'])) {
-                $message = implode(', ', $result['errors']);
+                $message = implode(', ', array_map(
+                    function ($error) {
+                        return $error['message'];
+                    },
+                    $result['errors']
+                ));
             } elseif (isset($result['error'])) {
                 $message = $result['error'];
             } else {
@@ -226,7 +238,7 @@ class SparkPostService extends AbstractMailService
 
             throw new Exception\RuntimeException(
                 sprintf(
-                    'An error occured on SparkPost (http code %s), message: %s',
+                    'An error occured on SparkPost (http code %s), messages: %s',
                     $response->getStatusCode(),
                     $message
                 )

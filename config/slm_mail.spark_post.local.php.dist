@@ -2,7 +2,7 @@
 
 return array(
     'slm_mail' => array(
-        'sparkpost' => array(
+        'spark_post' => array(
             /**
              * Set your SparkPost API key
              */
