@@ -12,7 +12,7 @@ namespace SlmMail\Service;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
-use Laminas\Mail\Address;
+use Laminas\Mail\Address\AddressInterface;
 use Laminas\Mail\Message;
 use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
 
@@ -25,53 +25,41 @@ class SparkPostService extends AbstractMailService
 
     /**
      * SparkPost API key
-     *
-     * @var string
      */
-    protected $apiKey;
+    protected string $apiKey;
 
     /**
-     * Constructor.
-     *
-     * @param string $apiKey
+     * Constructor
      */
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
     }
 
-
+    /**
+     * Send a message via the SparkPost Transmissions API
+     */
     public function send(Message $message): array
     {
-        if ($message instanceof SparkPostMessage) {
-            $options = $message->getOptions();
-        }
-
-        $spec['api_key'] = $this->apiKey;
-
-        // Prepare message
-        $from = $this->prepareFromAddress($message);
         $recipients = $this->prepareRecipients($message);
-        $headers = $this->prepareHeaders($message);
-        $body = $this->prepareBody($message);
 
-        $post = [
-            'options' => $options,
-            'content' => [
-                'from' => $from,
-                'subject' => $message->getSubject(),
-                'html' => $body,
-            ],
-        ];
-
-        $post = array_merge($post, $recipients);
-        if ((count($recipients) == 0) && (!empty($headers) || !empty($body))) {
+        if (count($recipients) == 0) {
             throw new Exception\RuntimeException(
                 sprintf(
-                    '%s transport expects at least one recipient if the message has at least one header or body',
+                    '%s transport expects at least one recipient',
                     __CLASS__
                 )
             );
+        }
+
+        // Prepare POST-body
+        $post = $recipients;
+        $post['content'] = $this->prepareContent($message);
+        $post['options'] = $message instanceof SparkPostMessage ? $message->getOptions() : [];
+        $post['metadata'] = $this->prepareMetadata($message);
+
+        if($message instanceof SparkPostMessage && $message->getGlobalVariables()) {
+            $post['substitution_data'] = $message->getGlobalVariables();
         }
 
         $response = $this->prepareHttpClient('/transmissions', $post)
@@ -82,26 +70,52 @@ class SparkPostService extends AbstractMailService
     }
 
     /**
-     * Retrieve email address for envelope FROM
+     * Prepare the 'content' structure for the SparkPost Transmission call
+     */
+    protected function prepareContent(Message $message): array
+    {
+        $content = [
+            'from' => $this->prepareFromAddress($message),
+            'subject' => $message->getSubject(),
+        ];
+
+        if ($message instanceof SparkPostMessage && $message->getTemplateId()) {
+            $content['template_id'] = $message->getTemplateId();
+        } else {
+            $content['html'] = $this->prepareBody($message);
+        }
+
+        if ($message->getHeaders()) {
+            $content['headers'] = $this->prepareHeaders($message);
+        }
+
+        if ($message->getReplyTo()) {
+            $replyToList = $message->getReplyTo();
+            $replyToList->rewind();
+            $replyToAddress = $replyToList->current();
+
+            if($replyToAddress instanceof AddressInterface) {
+                $content['reply_to'] = $replyToAddress->getName() ? $replyToAddress->toString() : $replyToAddress->getEmail();
+            }
+        }
+
+        return $content;
+    }
+
+    /**
+     * Retrieve From address from Message and format it according to
+     * the structure that the SparkPost API expects
      *
      * @param  Message $message
      *
      * @throws Exception\RuntimeException
-     * @return string
+     * @return array
      */
-    protected function prepareFromAddress(Message $message): string
+    protected function prepareFromAddress(Message $message): array
     {
-        #if ($this->getEnvelope() && $this->getEnvelope()->getFrom()) {
-        #    return $this->getEnvelope()->getFrom();
-        #}
-
         $sender = $message->getSender();
-        if ($sender instanceof Address\AddressInterface) {
-            return $sender->getEmail();
-        }
 
-        $from = $message->getFrom();
-        if (!count($from)) {
+        if (!($sender instanceof AddressInterface)) {
             // Per RFC 2822 3.6
             throw new Exception\RuntimeException(
                 sprintf(
@@ -111,18 +125,18 @@ class SparkPostService extends AbstractMailService
             );
         }
 
-        $from->rewind();
-        $sender = $from->current();
+        $fromStructure = [];
+        $fromStructure['email'] = $sender->getEmail();
 
-        return $sender->getEmail();
+        if ($sender->getName()) {
+            $fromStructure['name'] = $sender->getName();
+        }
+
+        return $fromStructure;
     }
 
     /**
-     * Prepare array of email address recipients
-     *
-     * @param  Message $message
-     *
-     * @return array
+     * Prepare array of recipients (note: multiple keys are used to distinguish To/Cc/Bcc-lists)
      */
     protected function prepareRecipients(Message $message): array
     {
@@ -131,49 +145,112 @@ class SparkPostService extends AbstractMailService
         #}
 
         $recipients = [];
-        $recipients['recipients'] = $this->prepareAddresses($message->getTo());
+        $recipients['recipients'] = $this->prepareAddresses($message->getTo(), $message);
         //preparing email recipients we set $recipients['xx'] to be equal to prepareAddress() for different messages
-        !($cc = $this->prepareAddresses($message->getCc())) || $recipients['cc'] = $cc;
-        !($bcc = $this->prepareAddresses($message->getBcc())) || $recipients['bcc'] = $bcc;
+        !($cc = $this->prepareAddresses($message->getCc(), $message)) || $recipients['cc'] = $cc;
+        !($bcc = $this->prepareAddresses($message->getBcc(), $message)) || $recipients['bcc'] = $bcc;
 
         return $recipients;
     }
 
-    protected function prepareAddresses($addresses)
+    /**
+     * Prepare an addressee-sub structure based on (a subset of) addresses from a corresponding message
+     */
+    protected function prepareAddresses($addresses, $message): array
     {
         $recipients = [];
+
         foreach ($addresses as $address) {
-            $item = [];
+            $recipient = []; // will contain addressee-block and optional substitution_data-block
+
+            // Format address-block
+            $addressee = [];
+            $addressee['email'] = $address->getEmail();
+
             if ($address->getName()) {
-                $item['name'] = $address->getName();
+                $addressee['name'] = $address->getName();
             }
-            $recipients[]['address'] = $address->getEmail();
+
+            $recipient['address'] = $addressee;
+
+            // Format optional substitution_data-block
+            if ($message instanceof SparkPostMessage && $message->getVariables())
+            {
+                // Array of recipient-specific substitution variables indexed by email address
+                $substitutionVariables = $message->getVariables();
+
+                if (array_key_exists($addressee['email'], $substitutionVariables)) {
+                    $recipient['substitution_data'] = $substitutionVariables[$addressee['email']];
+                }
+            }
+
+            $recipients[] = $recipient;
         }
 
         return $recipients;
     }
 
     /**
-     * Prepare header string from message
-     *
-     * @param  Message $message
-     *
-     * @return string
+     * Prepare header structure from message
      */
-    protected function prepareHeaders(Message $message): string
+    protected function prepareHeaders(Message $message): array
     {
         $headers = clone $message->getHeaders();
-        $headers->removeHeader('Bcc');
 
-        return $headers->toString();
+        $removeTheseHeaders = [
+            'Bcc',
+            'Subject',
+            'From',
+            'To',
+            'Reply-To',
+            'Content-Type',
+            'Content-Transfer-Encoding',
+        ];
+
+        foreach ($removeTheseHeaders as $headerName) {
+            $headers->removeHeader($headerName);
+        }
+
+        return $headers->toArray();
+    }
+
+    /**
+     * Prepare the 'metadata' structure for the SparkPost Transmission call
+     */
+    protected function prepareMetadata(Message $message): array
+    {
+        $metadata = [];
+
+        if ($message->getSubject()) {
+            $metadata['subject'] = $message->getSubject();
+        }
+
+        if ($message->getSender()) {
+            $sender = $message->getSender();
+
+            if($sender instanceof AddressInterface) {
+                $metadata['from'] = [];
+                $metadata['from']['email'] = $sender->getEmail();
+                $metadata['from']['name'] = $sender->getName() ?: $sender->getEmail();
+            }
+        }
+
+        if ($message->getReplyTo()) {
+            $replyToList = $message->getReplyTo();
+            $replyToList->rewind();
+            $replyToAddress = $replyToList->current();
+
+            if ($replyToAddress instanceof AddressInterface) {
+                \Logger::info('Reply-to: ' + $replyToAddress->toString());
+                $metadata['reply_to'] = $replyToAddress->getName() ? $replyToAddress->toString() : $replyToAddress->getEmail();
+            }
+        }
+
+        return $metadata;
     }
 
     /**
      * Prepare body string from message
-     *
-     * @param  Message $message
-     *
-     * @return string
      */
     protected function prepareBody(Message $message): string
     {
@@ -188,15 +265,16 @@ class SparkPostService extends AbstractMailService
     private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
         $parameters = json_encode($parameters);
-        $return = $this->getClient()
+        return $this->getClient()
             ->resetParameters()
-            ->setHeaders(['Authorization' => $this->apiKey])
+            ->setHeaders([
+                'Authorization' => $this->apiKey,
+                'Content-Type' => 'application/json',
+            ])
             ->setMethod(HttpRequest::METHOD_POST)
             ->setUri(self::API_ENDPOINT . $uri)
-            ->setRawBody($parameters, 'application/json')
+            ->setRawBody($parameters)
         ;
-
-        return $return;
     }
 
     /**
@@ -211,7 +289,7 @@ class SparkPostService extends AbstractMailService
 
         if (!is_array($result)) {
             throw new Exception\RuntimeException(sprintf(
-                'An error occured on Sparkpost (http code %s), could not interpret result as JSON. Body: %s',
+                'An error occurred on Sparkpost (http code %s), could not interpret result as JSON. Body: %s',
                 $response->getStatusCode(),
                 $response->getBody()
             ));
@@ -238,7 +316,7 @@ class SparkPostService extends AbstractMailService
 
             throw new Exception\RuntimeException(
                 sprintf(
-                    'An error occured on SparkPost (http code %s), messages: %s',
+                    'An error occurred on SparkPost (http code %s), messages: %s',
                     $response->getStatusCode(),
                     $message
                 )
