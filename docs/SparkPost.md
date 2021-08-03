@@ -1,10 +1,9 @@
-
 SparkPost
-
+=========
 
 This transport layer forms the coupling between Laminas\Mail and the Email Service Provider [SparkPost](http://sparkpost.com).
 The transport is a drop-in component and can be used to send email messages including Cc & Bcc addresses and attachments.
-The SparkPost api docks are here:  https://developers.sparkpost.com/api/ .
+The SparkPost API docks are here:  https://developers.sparkpost.com/api/ .
 
 
 Installation
@@ -22,6 +21,11 @@ Usage
 
 SlmMail consumes for SparkPost just the standard `Laminas\Mail\Message` object.
 
+When the SparkPostService was constructed with a DKIM-config object, the following methods let you register, verify and remove sending domains:
+
+* registerSendingDomain: Registers a new sending domain using the default DKIM keypair and selector that were configured using the constructor. If the sending domain already exists in SparkPost, the existing sending domain is preserved and the function returns successfully.
+* removeSendingDomain: Remove a sending domain. If the sending domains does not exist on SparkPost the fuction returns successfully.
+* verifySendingDomain: Requests verification of the DKIM-record of a previously registered sending domain.
 
 #### Attachments
 

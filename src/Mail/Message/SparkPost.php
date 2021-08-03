@@ -9,23 +9,27 @@ class SparkPost extends Message
 {
     /**
      * Options that will be passed along with the API call when sending the message
+     * @var array $options
      */
-    protected array $options = [];
+    protected $options = [];
 
     /**
      * SparkPost Template ID to be rendered, if specified
+     * @var string|null $template
      */
-    protected ?string $template = null;
+    protected $template = null;
 
     /**
      * Array of global substitution variables for email (template) rendering
+     * @var array $globalVariables
      */
-    protected array $globalVariables = [];
+    protected $globalVariables = [];
 
     /**
      * Array of recipient-specific substitution variables for email (template) rendering
+     * @var array $variables
      */
-    protected array $variables = [];
+    protected $variables = [];
 
     public function __construct(array $options = [])
     {

@@ -14,6 +14,7 @@ use Laminas\Http\Request as HttpRequest;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mail\Address\AddressInterface;
 use Laminas\Mail\Message;
+use SlmMail\Service\Exception\RuntimeException;
 use SlmMail\Mail\Message\SparkPost as SparkPostMessage;
 
 class SparkPostService extends AbstractMailService
@@ -25,8 +26,9 @@ class SparkPostService extends AbstractMailService
 
     /**
      * SparkPost API key
+     * @var string $apiKey
      */
-    protected string $apiKey;
+    protected $apiKey;
 
     /**
      * Constructor
@@ -34,6 +36,29 @@ class SparkPostService extends AbstractMailService
     public function __construct(string $apiKey)
     {
         $this->apiKey = $apiKey;
+    }
+
+    private function validateDkimConfig(array $dkimConfig): void
+    {
+        if (!is_array($dkimConfig)) {
+            throw new RuntimeException(
+                'Invalid SparkPost DKIM-configuration object, expected an associative array'
+            );
+        }
+
+        foreach(['public', 'private', 'selector'] as $keyName) {
+            if (!isset($dkimConfig[$keyName])) {
+                throw new RuntimeException(
+                    'SparkPost DKIM-configuration contains an error: Missing value for "' . $keyName . '".'
+                );
+            }
+
+            if (!is_string($dkimConfig[$keyName])) {
+                throw new RuntimeException(
+                    'SparkPost DKIM-configuration contains an error: Invalid type for "' . $keyName . '", expected a string.'
+                );
+            }
+        }
     }
 
     /**
@@ -44,7 +69,7 @@ class SparkPostService extends AbstractMailService
         $recipients = $this->prepareRecipients($message);
 
         if (count($recipients) == 0) {
-            throw new Exception\RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     '%s transport expects at least one recipient',
                     __CLASS__
@@ -108,7 +133,7 @@ class SparkPostService extends AbstractMailService
      *
      * @param  Message $message
      *
-     * @throws Exception\RuntimeException
+     * @throws RuntimeException
      * @return array
      */
     protected function prepareFromAddress(Message $message): array
@@ -117,7 +142,7 @@ class SparkPostService extends AbstractMailService
 
         if (!($sender instanceof AddressInterface)) {
             // Per RFC 2822 3.6
-            throw new Exception\RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     '%s transport expects either a Sender or at least one From address in the Message; none provided',
                     __CLASS__
@@ -241,7 +266,6 @@ class SparkPostService extends AbstractMailService
             $replyToAddress = $replyToList->current();
 
             if ($replyToAddress instanceof AddressInterface) {
-                \Logger::info('Reply-to: ' + $replyToAddress->toString());
                 $metadata['reply_to'] = $replyToAddress->getName() ? $replyToAddress->toString() : $replyToAddress->getEmail();
             }
         }
@@ -255,6 +279,79 @@ class SparkPostService extends AbstractMailService
     protected function prepareBody(Message $message): string
     {
         return $message->getBodyText();
+    }
+
+    public function registerSendingDomain(string $domain, array $options = []): bool
+    {
+        $post = [
+            'domain' => urlencode($domain),
+        ];
+
+        if (array_key_exists('dkim', $options)) {
+            $this->validateDkimConfig($options['dkim']);
+            $post['dkim'] = $options['dkim'];
+        }
+
+        $response = $this->prepareHttpClient('/sending-domains', $post)
+            ->send()
+        ;
+
+        // A 409-status means that the domains is already registered, which we consider a 'successful' result
+        $results = $this->parseResponse($response, [409]);
+
+        if($results && isset($results['results']) && isset($results['results']['message'])
+            && ($results['results']['message'] === 'Successfully Created domain.')) {
+            return true;
+        }
+
+        if ($response->getStatusCode() === 409) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function verifySendingDomain(string $domain, array $options = []): bool
+    {
+        $dkimVerify = array_key_exists('dkim_verify', $options) && $options['dkim_verify'] === true;
+        $post = [];
+
+        if ($dkimVerify) {
+            $post['dkim_verify'] = true;
+        }
+
+        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s/verify', urlencode($domain)), $post)
+            ->send()
+        ;
+
+        $results = $this->parseResponse($response);
+
+        if (!$results || !isset($results['results'])) {
+            return false;
+        }
+
+        if ($dkimVerify) {
+            if (!isset($results['results']['dkim_status'])) {
+                return false;
+            }
+
+            if ($results['results']['dkim_status'] !== 'valid') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function removeSendingDomain(string $domain): void
+    {
+        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s', urlencode($domain)))
+            ->setMethod(HttpRequest::METHOD_DELETE)
+            ->send()
+        ;
+
+        // When a 404-status is returned, the domains wasn't found, which is considered as a 'successful' response too
+        $this->parseResponse($response, [404]);
     }
 
     /**
@@ -280,22 +377,26 @@ class SparkPostService extends AbstractMailService
     /**
      * @param  HttpResponse $response
      *
-     * @throws Exception\RuntimeException
+     * @throws RuntimeException
      * @return array
      */
-    private function parseResponse(HttpResponse $response): array
+    private function parseResponse(HttpResponse $response, array $successCodes = []): array
     {
-        $result = json_decode($response->getBody(), true);
+        if ($response->getBody()) {
+            $result = json_decode($response->getBody(), true);
+        } else {
+            $result = []; // represent an empty body by an empty array; json_decode would fail on an empty string
+        }
 
         if (!is_array($result)) {
-            throw new Exception\RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'An error occurred on Sparkpost (http code %s), could not interpret result as JSON. Body: %s',
                 $response->getStatusCode(),
                 $response->getBody()
             ));
         }
 
-        if ($response->isSuccess()) {
+        if ($response->isSuccess() || in_array($response->getStatusCode(), $successCodes)) {
             return $result;
         }
 
@@ -314,7 +415,7 @@ class SparkPostService extends AbstractMailService
                 $message = 'Unknown error';
             }
 
-            throw new Exception\RuntimeException(
+            throw new RuntimeException(
                 sprintf(
                     'An error occurred on SparkPost (http code %s), messages: %s',
                     $response->getStatusCode(),
@@ -324,6 +425,6 @@ class SparkPostService extends AbstractMailService
         }
 
         // There is a 5xx error
-        throw new Exception\RuntimeException('SparkPost server error, please try again');
+        throw new RuntimeException('SparkPost server error, please try again');
     }
 }
