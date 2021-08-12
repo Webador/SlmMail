@@ -58,7 +58,8 @@ class SparkPostServiceFactory implements FactoryInterface
             );
         }
 
-        $service = new SparkPostService($config['slm_mail']['spark_post']['key']);
+        $apiKey = $config['slm_mail']['spark_post']['key'];
+        $service = new SparkPostService($apiKey);
 
         $client = $container->get('SlmMail\Http\Client');
         $service->setClient($client);
