@@ -30,6 +30,13 @@ class SparkPostService extends AbstractMailService
      */
     protected $apiKey;
 
+    public const SUPPRESSION_LIST_TRANSACTIONAL = 'transactional';
+    public const SUPPRESSION_LIST_NON_TRANSACTIONAL = 'non_transactional';
+    public const SUPPRESSION_LISTS = [
+        self::SUPPRESSION_LIST_TRANSACTIONAL,
+        self::SUPPRESSION_LIST_NON_TRANSACTIONAL,
+    ];
+
     /**
      * Constructor
      */
@@ -311,6 +318,54 @@ class SparkPostService extends AbstractMailService
         return false;
     }
 
+    /**
+     * Add an email address to the suppression lists for transactional email, non-transactional email, or both
+     */
+    public function addToSuppressionList(string $emailAddress, string $reason, array $suppressionLists = self::SUPPRESSION_LISTS): void
+    {
+        $put = [
+            'recipients' => [],
+        ];
+
+        foreach($suppressionLists as $suppressionList) {
+            if(in_array($suppressionList, self::SUPPRESSION_LISTS)) {
+                $put['recipients'][] = array(
+                    'recipient' => $emailAddress,
+                    'type' => $suppressionList,
+                    'description' => $reason,
+                );
+            }
+        }
+
+        if ($put['recipients']) {
+            $response = $this->prepareHttpClient('/suppression-list/', $put)
+                ->setMethod(HttpRequest::METHOD_PUT)
+                ->send();
+
+            $this->parseResponse($response);
+        }
+    }
+
+    /**
+     * Remove an email address from the suppression lists for transactional email, non-transactional email, or both
+     */
+    public function removeFromSuppressionList(string $emailAddress, array $suppressionLists = self::SUPPRESSION_LISTS): void
+    {
+        foreach($suppressionLists as $suppressionList) {
+            if (in_array($suppressionList, self::SUPPRESSION_LISTS)) {
+                $delete = [
+                    'type' => $suppressionList,
+                ];
+
+                $response = $this->prepareHttpClient('/suppression-list/' . urlencode($emailAddress), $delete)
+                    ->setMethod(HttpRequest::METHOD_DELETE)
+                    ->send();
+
+                $this->parseResponse($response, [403, 404]);
+            }
+        }
+    }
+
     public function verifySendingDomain(string $domain, array $options = []): bool
     {
         $dkimVerify = array_key_exists('dkim_verify', $options) && $options['dkim_verify'] === true;
@@ -375,8 +430,8 @@ class SparkPostService extends AbstractMailService
     }
 
     /**
-     * @param  HttpResponse $response
-     *
+     * @param HttpResponse $response
+     * @param int[] $successCodes
      * @throws RuntimeException
      * @return array
      */

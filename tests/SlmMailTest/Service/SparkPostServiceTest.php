@@ -7,8 +7,6 @@ use Laminas\Http\Response as HttpResponse;
 use Laminas\Mail\Address;
 use Laminas\Mail\AddressList;
 use Laminas\Mail\Message;
-use PHPUnit\Framework\MockObject\MockBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Mail\Message\SparkPost;
@@ -43,7 +41,7 @@ class SparkPostServiceTest extends TestCase
         }
         $sendMessageResponse->setContent($responseBody);
 
-        $httpClientMock->expects($this->once())
+        $httpClientMock->expects($this->atLeastOnce())
             ->method('send')
             ->willReturn($sendMessageResponse);
 
@@ -190,14 +188,16 @@ class SparkPostServiceTest extends TestCase
     {
         /** @var SparkPostService $sparkPostServiceMock */
         $sparkPostServiceMock = $this->expectApiResponse(204);
-        $this->assertNull($sparkPostServiceMock->removeSendingDomain('sparkpost-sending-domain.com'));
+        $sparkPostServiceMock->removeSendingDomain('sparkpost-sending-domain.com');
+        $this->doesNotPerformAssertions();
     }
 
     public function testRemoveNonExistingSendingDomain()
     {
         /** @var SparkPostService $sparkPostServiceMock */
         $sparkPostServiceMock = $this->expectApiResponse(404);
-        $this->assertNull($sparkPostServiceMock->removeSendingDomain('sparkpost-sending-domain.com'));
+        $sparkPostServiceMock->removeSendingDomain('sparkpost-sending-domain.com');
+        $this->doesNotPerformAssertions();
     }
 
     public function testVerifySendingDomain()
@@ -232,12 +232,52 @@ class SparkPostServiceTest extends TestCase
 
     public function testVerifyUnregisteredSendingDomain()
     {
-        //** @var SparkPostService $sparkPostServiceMock */
+        /** @var SparkPostService $sparkPostServiceMock */
         $sparkPostServiceMock = $this->expectApiResponse(
             404,
             '{"errors":[{"message":"invalid params","description":"Sending domain \'sparkpost-sending-domain.com\' is not a registered sending domain","code":"1200"}]}'
         );
         $this->expectException(RuntimeException::class);
         $sparkPostServiceMock->verifySendingDomain('sparkpost-sending-domain.com');
+    }
+
+    public function testAddToSuppressionList()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(200, '{"results":{"message":"Suppression List successfully updated"}}');
+        $sparkPostServiceMock->addToSuppressionList('sender@sending-domain.com', 'Permanent block after hard bounce');
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testAddToTransactionalSuppressionList()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(200, '{"results":{"message":"Suppression List successfully updated"}}');
+        $sparkPostServiceMock->addToSuppressionList('sender@sending-domain.com', 'Permanent block after hard bounce', [SparkPostService::SUPPRESSION_LIST_TRANSACTIONAL]);
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testRemoveFromSuppressionList()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(204);
+        $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com');
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testRemoveFromTransactionalSuppressionList()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(204);
+        $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com', [SparkPostService::SUPPRESSION_LIST_TRANSACTIONAL]);
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testRemoveNonExistingAddressFromSuppressionList()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(404);
+        $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com');
+        $this->doesNotPerformAssertions();
     }
 }
