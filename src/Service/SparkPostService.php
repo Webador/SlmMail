@@ -172,15 +172,25 @@ class SparkPostService extends AbstractMailService
      */
     protected function prepareRecipients(Message $message): array
     {
-        #if ($this->getEnvelope() && $this->getEnvelope()->getTo()) {
-        #    return (array) $this->getEnvelope()->getTo();
-        #}
-
         $recipients = [];
         $recipients['recipients'] = $this->prepareAddresses($message->getTo(), $message);
-        //preparing email recipients we set $recipients['xx'] to be equal to prepareAddress() for different messages
-        !($cc = $this->prepareAddresses($message->getCc(), $message)) || $recipients['cc'] = $cc;
-        !($bcc = $this->prepareAddresses($message->getBcc(), $message)) || $recipients['bcc'] = $bcc;
+
+        $message->getTo()->rewind();
+        $firstToAddress = $message->getTo()->current()->getEmail();
+
+        $ccRecipients = $this->prepareAddresses($message->getCc(), $message);
+
+        foreach($ccRecipients as $ccRecipient) {
+            $ccRecipient['address']['header_to'] = $firstToAddress;
+            $recipients['recipients'][] = $ccRecipient;
+        }
+
+        $bccRecipients = $this->prepareAddresses($message->getBcc(), $message);
+
+        foreach ($bccRecipients as $bccRecipient) {
+            $bccRecipient['address']['header_to'] = $firstToAddress;
+            $recipients['recipients'][] = $bccRecipient;
+        }
 
         return $recipients;
     }
@@ -237,10 +247,15 @@ class SparkPostService extends AbstractMailService
             'Reply-To',
             'Content-Type',
             'Content-Transfer-Encoding',
+            'MIME-Version',
         ];
 
         foreach ($removeTheseHeaders as $headerName) {
             $headers->removeHeader($headerName);
+        }
+
+        if ($message->getCc()->count() === 0) {
+            $headers->removeHeader('Cc');
         }
 
         return $headers->toArray();
