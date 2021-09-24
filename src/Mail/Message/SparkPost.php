@@ -31,6 +31,12 @@ class SparkPost extends Message
      */
     protected $variables = [];
 
+    /**
+     * Name of the campaign. Maximum length - 64 bytes
+     * @var string|null $campaignId
+     */
+    protected $campaignId = null;
+
     public function __construct(array $options = [])
     {
         $this->setOptions($options);
@@ -111,6 +117,35 @@ class SparkPost extends Message
     public function getTemplateId(): ?string
     {
         return $this->template;
+    }
+
+    /**
+     * Set SparkPost campaign ID to use. Maximum length is 64 bytes, and the input
+     * will be truncated if it exceeds that. Empty strings are nullified and hence
+     * ignored.
+     *
+     * @param  string|null $campaignId
+     * @return self
+     */
+    public function setCampaignId(?string $campaignId): SparkPost
+    {
+        $this->campaignId = (
+            is_string($campaignId)
+            ? (substr($campaignId, 0, 64) ?: null)
+            : null
+        );
+
+        return $this;
+    }
+
+    /**
+     * Get SparkPost campaign ID to use
+     *
+     * @return string|null
+     */
+    public function getCampaignId(): ?string
+    {
+        return $this->campaignId;
     }
 
     /**

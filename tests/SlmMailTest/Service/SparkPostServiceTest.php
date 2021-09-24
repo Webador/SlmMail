@@ -280,4 +280,46 @@ class SparkPostServiceTest extends TestCase
         $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com');
         $this->doesNotPerformAssertions();
     }
+
+    public function testSendBulkMail()
+    {
+        $message = $this->getMessageObject();
+        $message->addTo('second@slmmail.com');
+        $message->addTo('third@slmmail.com');
+
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(200);
+        $sparkPostServiceMock->send($message);
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testCampaignId()
+    {
+        /** @var SparkPost $message */
+        $message = $this->getMessageObject();
+
+        // default value is null
+        $this->assertNull($message->getCampaignId());
+
+        // accepts null-value as a way to unset the Campaign ID
+        $message->setCampaignId('non-null-value');
+        $message->setCampaignId(null);
+        $this->assertNull($message->getCampaignId());
+
+        // nullify empty string
+        $message->setCampaignId('');
+        $this->assertNull($message->getCampaignId());
+
+        // regular use
+        $message->setCampaignId('sample-campaign');
+        $this->assertEquals('sample-campaign', $message->getCampaignId());
+
+        // truncation
+        $message->setCampaignId('abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789');
+        $this->assertEquals('abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz01', $message->getCampaignId());
+
+        // successful transmission injection
+        $sparkPostServiceMock = $this->expectApiResponse(200);
+        $sparkPostServiceMock->send($message);
+    }
 }
