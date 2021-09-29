@@ -94,6 +94,10 @@ class SparkPostService extends AbstractMailService
             $post['substitution_data'] = $message->getGlobalVariables();
         }
 
+        if($message instanceof SparkPostMessage && $message->getCampaignId()) {
+            $post['campaign_id'] = $message->getCampaignId();
+        }
+
         $response = $this->prepareHttpClient('/transmissions', $post)
             ->send()
         ;
