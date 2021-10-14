@@ -37,6 +37,11 @@ class SparkPost extends Message
      */
     protected $campaignId = null;
 
+    /**
+     * Array of attachments. Each attachment has a name, type and base64-encoded data-string without line breaks.
+     */
+    protected $attachments = [];
+
     public function __construct(array $options = [])
     {
         $this->setOptions($options);
@@ -209,5 +214,25 @@ class SparkPost extends Message
         }
 
         return $sender;
+    }
+
+    public function getAttachments(): array
+    {
+        return $this->attachments;
+    }
+
+    /**
+     * @param string $name The filename of the attachment. This is inserted into the filename parameter of the Content-Disposition header. Maximum length - 255 bytes
+     * @param string $type The MIME type of the attachment. The value will apply as-is to the Content-Type header of the generated MIME part for the attachment.
+    Include the charset parameter, if needed (e.g. text/html; charset="UTF-8")
+     * @param string $data The content of the attachment as a Base64 encoded string.
+     */
+    public function addAttachment(string $name, string $type, string $data): void
+    {
+        $this->attachments[] = [
+            'name' => substr($name, 0, 255),
+            'type' => $type,
+            'data' => str_replace(["\r", "\n"], '', $data),
+        ];
     }
 }

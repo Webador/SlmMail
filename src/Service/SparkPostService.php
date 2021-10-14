@@ -135,6 +135,10 @@ class SparkPostService extends AbstractMailService
             }
         }
 
+        if($message instanceof SparkPostMessage && count($message->getAttachments()) > 0) {
+            $content['attachments'] = $message->getAttachments();
+        }
+
         return $content;
     }
 

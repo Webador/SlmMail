@@ -293,6 +293,55 @@ class SparkPostServiceTest extends TestCase
         $this->doesNotPerformAssertions();
     }
 
+    public function testSendAttachment()
+    {
+        $base64image = '/9j/4AAQSkZJRgABAQEAAAAAAAD/4QBORXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAA
+A6ABAAMAAAABAAEAAKACAAQAAAABAAAAKKADAAQAAAABAAAAKAAAAAAAAP/bAEMAAQEBAQEBAgEB
+AgMCAgIDBAMDAwMEBQQEBAQEBQYFBQUFBQUGBgYGBgYGBgcHBwcHBwgICAgICQkJCQkJCQkJCf/b
+AEMBAQEBAgICBAICBAkGBQYJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJ
+CQkJCQkJCQkJCf/AABEIACgAKAMBIgACEQEDEQH/xAAfAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUG
+BwgJCgv/xAC1EAACAQMDAgQDBQUEBAAAAX0BAgMABBEFEiExQQYTUWEHInEUMoGRoQgjQrHBFVLR
+8CQzYnKCCQoWFxgZGiUmJygpKjQ1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5
+eoOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4eLj
+5OXm5+jp6vHy8/T19vf4+fr/xAAfAQADAQEBAQEBAQEBAAAAAAAAAQIDBAUGBwgJCgv/xAC1EQAC
+AQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXx
+FxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqS
+k5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4+Tl5ufo6ery8/T1
+9vf4+fr/3QAEAAP/2gAMAwEAAhEDEQA/AP68f+Ck3/BSb9n3/gmD+z7J8cvjlJPfXV9ONP0DQNPA
+fUdZ1FwSltbIegHWWU/LGv8AeZkR/wAOPBv7FP8AwWw/4K82Ufxd/b6+Luqfsv8Awz1iPzNO+G3g
+BntdbazlOQNVvmIeOV49paObz+chra3OY6T9inwbZf8ABXn/AILYfF39vr4uxx6x8M/2X9UbwB8N
+dOkzLZtrVq5a91UA/u3ljcedGxXP7+2YHNvGa/rPoA/mA/4hKf8AgmVt+3/8JP8AEz+2v+gz/wAJ
+Iv27/vv7J5fXn/V9a8w8ZfsU/wDBbD/gkNZSfFz9gX4u6p+1B8M9Hj8zUfht4/Z7rW1s4jkjSr5S
+XklSPcVjh8jnAW2uDiOv6xL6+sdLsZtT1OZLe2t0aWWWVgiRogLMzMxAVVAySTgCvyA/4JRf8FNf
+G3/BT3xH8Z/iR4d8IwaT8G/CXiSPw/4F8QiSX7Tr4tkk+33MkTgKsYPkPCVAwspjbMkb4APoP/gm
+z/wUm/Z9/wCCnv7Psfxy+Bsk9jdWM50/X9A1ABNR0bUUGXtrlB1B6xSj5ZF9GDon6DV/Jj+2t4Ns
+v+CQ3/BbD4Rft9fCOOPR/hn+1Bqi+APiTp0eYrNdbunD2WqkD92ksjnzpGC5/cXLE5uJDX9Gf/Da
+H7KP/Q/6L/4FJQB//9D9eP8Ag0p2/wDDsnxN9vx/bX/CzPEn9s/9f2203+/+r8vrzX69/tJ/8FOv
+2Sv2Q/2nvh5+yn+0Rq914Y1n4nwTS6Hqt5bGPRXmhkWIWs1+xEcU8jMAqkbRld7IZIw/4bfsU+Mr
+L/gkN/wWw+Lv7Avxdkj0f4Z/tQao3j/4a6jJmKzXWrpyl7pQJ/dpLI58mNS2f3FsoGbiMV/Qh+3F
++wv+zf8A8FD/ANn/AFT9nH9p3Q01fQ9QHmW86YS9067VSIryynIYw3EeThsFWUskivGzowB+M/8A
+wcIftTfFLxXpPgb/AII7fsf3Ofi9+0rcf2deyxE50fwqCw1G8n2/Msc8aSxscHNvHdYw6pn9xP2P
+/wBlj4WfsTfsz+DP2WPgxbfZ/D3gzTo7CBmAElxIMvPdTY4M1zMzzSkcF3bAA4r8cf8Agj//AMEQ
+fGf/AAT6+Pnjv9pn9p34kSfGLxve2Vt4V8Jaxeee0+m+F7FEWKFxcF/LuJVjijdY2dI0iARz5sgr
++iCgD+YD/g7W2/8ADsrwz9g/5DX/AAszw3/Y3/X9tu9nv/q/M6c1/Al/xm//AJ31/c9+2r4ysv8A
+grz/AMFsPhF+wL8I5I9Y+Gf7L+qL4/8AiTqMeZbNtbtXCWOlEj928sbjyZFDZ/f3KkZt5BX9Gf8A
+wxf+yj/0IGi/+AqUAf/R/rx/4KTf8E2f2ff+Cn37PsnwN+OUc9jdWM41DQNf08hNR0bUUBCXNs56
+g9JYj8si/wB1lR0/Djwb+2t/wWw/4JDWUfwi/b6+EWqftQfDPR4/L074k+AFe61tbOI4B1WxYF5J
+Uj2hpJvI5yWubg5kr+s6vmT9s/8A5NS+IH/YFuv/AECgD8G/+Itb/gmVt+wf8Ix8TP7a/wCgN/wj
+a/bv++Ptfl9eP9Z1rzDxl+2t/wAFsP8AgrzZSfCL9gX4Rap+y/8ADPWI/L1H4k+P1e11trOU4J0q
+xUB45Xj3BZIfP5wVubc4kr+GH/m9/wDz/fr/AF0f2MP+TUvh/wD9gW1/9AoA8U/4Js/8E2f2ff8A
+gmF+z7H8DfgbHPfXV9OdQ1/X9QIfUdZ1Fxh7m5cdAOkUQ+WNf7zM7v8AoNRRQB//2Q==';
+
+        /** @var SparkPost $message */
+        $message = $this->getMessageObject();
+        $message->addAttachment('file.jpg', 'image/jpg;base64', $base64image);
+
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(200);
+        $sparkPostServiceMock->send($message);
+        $this->doesNotPerformAssertions();
+    }
+
     public function testCampaignId()
     {
         /** @var SparkPost $message */
