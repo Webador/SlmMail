@@ -505,4 +505,19 @@ class SparkPostService extends AbstractMailService
         // There is a 5xx error
         throw new RuntimeException('SparkPost server error, please try again');
     }
+
+    public function previewTemplate(string $templateId, array $substitutionVariables = []): array
+    {
+        // Request: POST/api/v1/templates/{id}/preview{?draft} ; with POST body given as JSON: { "substitution_data": { "key1": "value1", "key2": "value2" } }
+        // Example: POST /api/v1/templates/11714265276872/preview?draft=true
+        $post = [
+            'substitution_data' => $substitutionVariables,
+        ];
+
+        $response = $this->prepareHttpClient(sprintf('/templates/%s/preview', urlencode($templateId)), $post)
+            ->send()
+        ;
+
+        return $this->parseResponse($response)['results'] ?? [];
+    }
 }
