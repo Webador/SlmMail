@@ -98,6 +98,10 @@ class SparkPostService extends AbstractMailService
             $post['campaign_id'] = $message->getCampaignId();
         }
 
+        if($message instanceof SparkPostMessage && $message->getReturnPath()) {
+            $post['return_path'] = $message->getReturnPath();
+        }
+
         $response = $this->prepareHttpClient('/transmissions', $post)
             ->send()
         ;

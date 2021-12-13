@@ -38,10 +38,18 @@ class SparkPost extends Message
     protected $campaignId = null;
 
     /**
-     * Array of attachments. Each attachment has a name, type and base64-encoded data-string without line breaks.
+     * @var array $attachments Array of attachments. Each attachment has a name, type and base64-encoded data-string without line breaks.
      */
     protected $attachments = [];
 
+    /**
+     * @var string|null $returnPath
+     */
+    protected $returnPath = null;
+
+    /**
+     * @param array $options
+     */
     public function __construct(array $options = [])
     {
         $this->setOptions($options);
@@ -234,5 +242,26 @@ class SparkPost extends Message
             'type' => $type,
             'data' => str_replace(["\r", "\n"], '', $data),
         ];
+    }
+
+    /**
+     * Set the return path for this message. SparkPost will overwrite the local part (blabla@...)
+     * of the address, unless you have an enterprise account.
+     * @param string|null $returnPath Must be valid email address.
+     * @return $this
+     */
+    public function setReturnPath(?string $returnPath): SparkPost
+    {
+        $this->returnPath = $returnPath ?: null;
+        return $this;
+    }
+
+    /**
+     * Get the return path for this message.
+     * @return string|null The configured return path, or `null` if no return path was set
+     */
+    public function getReturnPath(): ?string
+    {
+        return $this->returnPath;
     }
 }
