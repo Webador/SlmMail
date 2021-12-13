@@ -44,7 +44,7 @@
     },
     "require-dev": {
         "container-interop/container-interop": "^1.1",
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^7.4",
         "laminas/laminas-modulemanager": "^2.8",
         "laminas/laminas-mvc": "^3.1",
         "laminas/laminas-view": "^2.11",
