@@ -371,4 +371,31 @@ gmF+z7H8DfgbHPfXV9OdQ1/X9QIfUdZ1Fxh7m5cdAOkUQ+WNf7zM7v8AoNRRQB//2Q==';
         $sparkPostServiceMock = $this->expectApiResponse(200);
         $sparkPostServiceMock->send($message);
     }
+
+
+    public function testReturnPath()
+    {
+        /** @var SparkPost $message */
+        $message = $this->getMessageObject();
+
+        // default value is null
+        $this->assertNull($message->getReturnPath());
+
+        // accepts null-value as a way to unset the return path
+        $message->setReturnPath('non-null-value@example.com');
+        $message->setReturnPath(null);
+        $this->assertNull($message->getReturnPath());
+
+        // nullify empty string
+        $message->setReturnPath('');
+        $this->assertNull($message->getReturnPath());
+
+        // regular use
+        $message->setReturnPath('recipient@example.com');
+        $this->assertEquals('recipient@example.com', $message->getReturnPath());
+
+        // successful transmission injection
+        $sparkPostServiceMock = $this->expectApiResponse(200);
+        $sparkPostServiceMock->send($message);
+    }
 }
