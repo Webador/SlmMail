@@ -140,7 +140,9 @@ class MailgunService extends AbstractMailService
 
         $attachments = $this->extractAttachments($message);
         foreach ($attachments as $attachment) {
-            $parameters['attachment'][] = $attachment->filename;
+            $parameters['attachment'][] = [
+                'filename' => $attachment->filename
+            ];
         }
 
         if ($message instanceof MailgunMessage) {
