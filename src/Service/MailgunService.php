@@ -142,7 +142,7 @@ class MailgunService extends AbstractMailService
         foreach ($attachments as $attachment) {
             $parameters['attachment'][] = [
                 'filename' => $attachment->filename
-            ]
+            ];
         }
 
         if ($message instanceof MailgunMessage) {
