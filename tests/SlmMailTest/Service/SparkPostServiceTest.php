@@ -65,8 +65,12 @@ class SparkPostServiceTest extends TestCase
         if(count($expectedRequestHeaders) > 0) {
             $httpClientMock->expects($this->atLeastOnce())
                 ->method('setHeaders')
-                ->with(self::callback(fn ($actualHeaders) =>
-                    $this->areMandatoryHeadersPresent($expectedRequestHeaders, ($actualHeaders instanceof Headers ? $actualHeaders->toArray() : $actualHeaders))));
+                ->with(self::callback(function ($actualHeaders) use ($expectedRequestHeaders) {
+                    return $this->areMandatoryHeadersPresent(
+                        $expectedRequestHeaders,
+                        ($actualHeaders instanceof Headers ? $actualHeaders->toArray() : $actualHeaders)
+                    );
+                }));
         }
 
         $sparkPostServiceMock = new SparkPostService('MyApiKey');
