@@ -3,6 +3,7 @@
 namespace SlmMailTest\Service;
 
 use Laminas\Http\Client as HttpClient;
+use Laminas\Http\Headers;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mail\Address;
 use Laminas\Mail\AddressList;
@@ -26,12 +27,28 @@ class SparkPostServiceTest extends TestCase
         $this->service = new SparkPostService('my-secret-key');
     }
 
+    private function areMandatoryHeadersPresent(array $needles, array $haystack): bool
+    {
+        foreach (array_keys($needles) as $needleKey) {
+            if (!array_key_exists($needleKey, $haystack)) {
+                return false;
+            }
+
+            if ($needles[$needleKey] !== $haystack[$needleKey]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /** Stub the HTTP response from SparkPost with a custom response */
-    private function expectApiResponse(int $statusCode = 200, string $responseBody = '', array $responseHeaders = []): SparkPostService
+    private function expectApiResponse(int $statusCode = 200, string $responseBody = '', array $responseHeaders = [], array $expectedRequestHeaders = []): SparkPostService
     {
 
         $httpClientMock = $this->createPartialMock(HttpClient::class, [
-            'send'
+            'send',
+            'setHeaders',
         ]);
 
         $sendMessageResponse = new HttpResponse();
@@ -44,6 +61,13 @@ class SparkPostServiceTest extends TestCase
         $httpClientMock->expects($this->atLeastOnce())
             ->method('send')
             ->willReturn($sendMessageResponse);
+
+        if(count($expectedRequestHeaders) > 0) {
+            $httpClientMock->expects($this->atLeastOnce())
+                ->method('setHeaders')
+                ->with(self::callback(fn ($actualHeaders) =>
+                    $this->areMandatoryHeadersPresent($expectedRequestHeaders, ($actualHeaders instanceof Headers ? $actualHeaders->toArray() : $actualHeaders))));
+        }
 
         $sparkPostServiceMock = new SparkPostService('MyApiKey');
         $sparkPostServiceMock->setClient($httpClientMock);
@@ -73,15 +97,15 @@ class SparkPostServiceTest extends TestCase
 
     public function testCreateFromFactory()
     {
-        $service = ServiceManagerFactory::getServiceManager()->get('SlmMail\Service\SparkPostService');
-        $this->assertInstanceOf('SlmMail\Service\SparkPostService', $service);
+        $service = ServiceManagerFactory::getServiceManager()->get(SparkPostService::class);
+        $this->assertInstanceOf(SparkPostService::class, $service);
     }
 
     public function testResultIsProperlyParsed()
     {
         $payload = ['success' => 123];
 
-        $method = new ReflectionMethod('SlmMail\Service\SparkPostService', 'parseResponse');
+        $method = new ReflectionMethod(SparkPostService::class, 'parseResponse');
         $method->setAccessible(true);
 
         $response = new HttpResponse();
@@ -138,6 +162,22 @@ class SparkPostServiceTest extends TestCase
         $sparkPostServiceMock->send($message);
     }
 
+    public function testSendFromSubaccount()
+    {
+        /** @var SparkPost $message */
+        $message = $this->getMessageObject();
+        $message->setOption('subaccount', '1');
+
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(
+            200,
+            '{"results":{"total_rejected_recipients":0,"total_accepted_recipients":1,"id":"11668787484950529"}}',
+            [],
+            ['X-MSYS-SUBACCOUNT' => '1']
+        );
+        $sparkPostServiceMock->send($message);
+    }
+
     public function testRegisterSendingDomain()
     {
         /** @var SparkPostService $sparkPostServiceMock */
@@ -146,6 +186,23 @@ class SparkPostServiceTest extends TestCase
             '{"results":{"message":"Successfully Created domain.","domain":"sparkpost-sending-domain.com","headers":"from:to:subject:date"}}'
         );
         $this->assertTrue($sparkPostServiceMock->registerSendingDomain('sparkpost-sending-domain.com'));
+    }
+
+    public function testRegisterSendingDomainForSubaccount()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(
+            200,
+            '{"results":{"message":"Successfully Created domain.","domain":"sparkpost-sending-domain.com","headers":"from:to:subject:date"}}',
+            [],
+            ['X-MSYS-SUBACCOUNT' => '1337']
+        );
+        $this->assertTrue(
+            $sparkPostServiceMock->registerSendingDomain(
+                'sparkpost-sending-domain.com',
+                ['subaccount' => '1337']
+            )
+        );
     }
 
     public function testRegisterSendingDomainWithDkim(): void
@@ -192,6 +249,14 @@ class SparkPostServiceTest extends TestCase
         $this->doesNotPerformAssertions();
     }
 
+    public function testRemoveSendingDomainForSubaccount()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(204, '', [], ['X-MSYS-SUBACCOUNT' => '1338']);
+        $sparkPostServiceMock->removeSendingDomain('sparkpost-sending-domain.com', ['subaccount' => '1338']);
+        $this->doesNotPerformAssertions();
+    }
+
     public function testRemoveNonExistingSendingDomain()
     {
         /** @var SparkPostService $sparkPostServiceMock */
@@ -208,6 +273,18 @@ class SparkPostServiceTest extends TestCase
             '{"results":{"ownership_verified":true,"dkim_status":"unverified","cname_status":"unverified","mx_status":"unverified","compliance_status":"pending","spf_status":"unverified","abuse_at_status":"unverified","postmaster_at_status":"unverified","verification_mailbox_status":"unverified"}}'
         );
         $this->assertTrue($sparkPostServiceMock->verifySendingDomain('sparkpost-sending-domain.com'));
+    }
+
+    public function testVerifySendingDomainForSubaccount()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(
+            200,
+            '{"results":{"ownership_verified":true,"dkim_status":"unverified","cname_status":"unverified","mx_status":"unverified","compliance_status":"pending","spf_status":"unverified","abuse_at_status":"unverified","postmaster_at_status":"unverified","verification_mailbox_status":"unverified"}}',
+            [],
+            ['X-MSYS-SUBACCOUNT' => '1339']
+        );
+        $this->assertTrue($sparkPostServiceMock->verifySendingDomain('sparkpost-sending-domain.com', ['subaccount' => '1339']));
     }
 
     public function testVerifySendingDomainWithDkimRecord()
@@ -249,6 +326,14 @@ class SparkPostServiceTest extends TestCase
         $this->doesNotPerformAssertions();
     }
 
+    public function testAddToSuppressionListForSubaccount()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(200, '{"results":{"message":"Suppression List successfully updated"}}', [], ['X-MSYS-SUBACCOUNT' => '37']);
+        $sparkPostServiceMock->addToSuppressionList('sender@sending-domain.com', 'Permanent block after hard bounce', SparkPostService::SUPPRESSION_LISTS, ['subaccount' => '37']);
+        $this->doesNotPerformAssertions();
+    }
+
     public function testAddToTransactionalSuppressionList()
     {
         /** @var SparkPostService $sparkPostServiceMock */
@@ -262,6 +347,14 @@ class SparkPostServiceTest extends TestCase
         /** @var SparkPostService $sparkPostServiceMock */
         $sparkPostServiceMock = $this->expectApiResponse(204);
         $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com');
+        $this->doesNotPerformAssertions();
+    }
+
+    public function testRemoveFromSuppressionListForSubaccount()
+    {
+        /** @var SparkPostService $sparkPostServiceMock */
+        $sparkPostServiceMock = $this->expectApiResponse(204, '', [], ['X-MSYS-SUBACCOUNT' => '38']);
+        $sparkPostServiceMock->removeFromSuppressionList('sender@sending-domain.com', SparkPostService::SUPPRESSION_LISTS, ['subaccount' => '38']);
         $this->doesNotPerformAssertions();
     }
 
@@ -371,7 +464,6 @@ gmF+z7H8DfgbHPfXV9OdQ1/X9QIfUdZ1Fxh7m5cdAOkUQ+WNf7zM7v8AoNRRQB//2Q==';
         $sparkPostServiceMock = $this->expectApiResponse(200);
         $sparkPostServiceMock->send($message);
     }
-
 
     public function testReturnPath()
     {

@@ -487,13 +487,15 @@ class SparkPostService extends AbstractMailService
         $allHeaders['Authorization'] = $this->apiKey;
         $allHeaders['Content-Type'] = 'application/json';
 
-        return $this->getClient()
+        $client = $this->getClient()
             ->resetParameters()
-            ->setHeaders($allHeaders)
             ->setMethod(HttpRequest::METHOD_POST)
             ->setUri(self::API_ENDPOINT . $uri)
             ->setRawBody($parameters)
         ;
+        $client->setHeaders($allHeaders);
+
+        return $client;
     }
 
     /**
