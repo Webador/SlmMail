@@ -84,10 +84,17 @@ class SparkPostService extends AbstractMailService
             );
         }
 
+        $options = $message instanceof SparkPostMessage ? $message->getOptions() : [];
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         // Prepare POST-body
         $post = $recipients;
         $post['content'] = $this->prepareContent($message);
-        $post['options'] = $message instanceof SparkPostMessage ? $message->getOptions() : [];
+        $post['options'] = $options;
         $post['metadata'] = $this->prepareMetadata($message);
 
         if($message instanceof SparkPostMessage && $message->getGlobalVariables()) {
@@ -102,7 +109,7 @@ class SparkPostService extends AbstractMailService
             $post['return_path'] = $message->getReturnPath();
         }
 
-        $response = $this->prepareHttpClient('/transmissions', $post)
+        $response = $this->prepareHttpClient('/transmissions', $post, $headers)
             ->send()
         ;
 
@@ -317,6 +324,12 @@ class SparkPostService extends AbstractMailService
 
     public function registerSendingDomain(string $domain, array $options = []): bool
     {
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         $post = [
             'domain' => urlencode($domain),
         ];
@@ -326,7 +339,7 @@ class SparkPostService extends AbstractMailService
             $post['dkim'] = $options['dkim'];
         }
 
-        $response = $this->prepareHttpClient('/sending-domains', $post)
+        $response = $this->prepareHttpClient('/sending-domains', $post, $headers)
             ->send()
         ;
 
@@ -348,8 +361,14 @@ class SparkPostService extends AbstractMailService
     /**
      * Add an email address to the suppression lists for transactional email, non-transactional email, or both
      */
-    public function addToSuppressionList(string $emailAddress, string $reason, array $suppressionLists = self::SUPPRESSION_LISTS): void
+    public function addToSuppressionList(string $emailAddress, string $reason, array $suppressionLists = self::SUPPRESSION_LISTS, array $options = []): void
     {
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         $put = [
             'recipients' => [],
         ];
@@ -365,7 +384,7 @@ class SparkPostService extends AbstractMailService
         }
 
         if ($put['recipients']) {
-            $response = $this->prepareHttpClient('/suppression-list/', $put)
+            $response = $this->prepareHttpClient('/suppression-list/', $put, $headers)
                 ->setMethod(HttpRequest::METHOD_PUT)
                 ->send();
 
@@ -376,15 +395,21 @@ class SparkPostService extends AbstractMailService
     /**
      * Remove an email address from the suppression lists for transactional email, non-transactional email, or both
      */
-    public function removeFromSuppressionList(string $emailAddress, array $suppressionLists = self::SUPPRESSION_LISTS): void
+    public function removeFromSuppressionList(string $emailAddress, array $suppressionLists = self::SUPPRESSION_LISTS, $options = []): void
     {
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         foreach($suppressionLists as $suppressionList) {
             if (in_array($suppressionList, self::SUPPRESSION_LISTS)) {
                 $delete = [
                     'type' => $suppressionList,
                 ];
 
-                $response = $this->prepareHttpClient('/suppression-list/' . urlencode($emailAddress), $delete)
+                $response = $this->prepareHttpClient('/suppression-list/' . urlencode($emailAddress), $delete, $headers)
                     ->setMethod(HttpRequest::METHOD_DELETE)
                     ->send();
 
@@ -395,6 +420,12 @@ class SparkPostService extends AbstractMailService
 
     public function verifySendingDomain(string $domain, array $options = []): bool
     {
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         $dkimVerify = array_key_exists('dkim_verify', $options) && $options['dkim_verify'] === true;
         $post = [];
 
@@ -402,7 +433,7 @@ class SparkPostService extends AbstractMailService
             $post['dkim_verify'] = true;
         }
 
-        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s/verify', urlencode($domain)), $post)
+        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s/verify', urlencode($domain)), $post, $headers)
             ->send()
         ;
 
@@ -425,9 +456,15 @@ class SparkPostService extends AbstractMailService
         return true;
     }
 
-    public function removeSendingDomain(string $domain): void
+    public function removeSendingDomain(string $domain, array $options = []): void
     {
-        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s', urlencode($domain)))
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
+        $response = $this->prepareHttpClient(sprintf('/sending-domains/%s', urlencode($domain)), [], $headers)
             ->setMethod(HttpRequest::METHOD_DELETE)
             ->send()
         ;
@@ -438,22 +475,27 @@ class SparkPostService extends AbstractMailService
 
     /**
      * @param string $uri
-     * @param array  $parameters
+     * @param array $parameters API-call parameters, given associative array. Will be converted to JSON in the request.
+     * @param array $headers Optional extra headers. This function will always add/overwrite Authorization
+     *                       and Content-Type headers regardless of what was given in this parameter.
      * @return HttpClient
      */
-    private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
+    private function prepareHttpClient(string $uri, array $parameters = [], array $headers = []): HttpClient
     {
         $parameters = json_encode($parameters);
-        return $this->getClient()
+        $allHeaders = $headers;
+        $allHeaders['Authorization'] = $this->apiKey;
+        $allHeaders['Content-Type'] = 'application/json';
+
+        $client = $this->getClient()
             ->resetParameters()
-            ->setHeaders([
-                'Authorization' => $this->apiKey,
-                'Content-Type' => 'application/json',
-            ])
             ->setMethod(HttpRequest::METHOD_POST)
             ->setUri(self::API_ENDPOINT . $uri)
             ->setRawBody($parameters)
         ;
+        $client->setHeaders($allHeaders);
+
+        return $client;
     }
 
     /**
@@ -510,15 +552,21 @@ class SparkPostService extends AbstractMailService
         throw new RuntimeException('SparkPost server error, please try again');
     }
 
-    public function previewTemplate(string $templateId, array $substitutionVariables = []): array
+    public function previewTemplate(string $templateId, array $substitutionVariables = [], array $options = []): array
     {
+        $headers = [];
+
+        if(array_key_exists('subaccount', $options) && is_string($options['subaccount'])) {
+            $headers['X-MSYS-SUBACCOUNT'] = $options['subaccount'];
+        }
+
         // Request: POST/api/v1/templates/{id}/preview{?draft} ; with POST body given as JSON: { "substitution_data": { "key1": "value1", "key2": "value2" } }
         // Example: POST /api/v1/templates/11714265276872/preview?draft=true
         $post = [
             'substitution_data' => $substitutionVariables,
         ];
 
-        $response = $this->prepareHttpClient(sprintf('/templates/%s/preview', urlencode($templateId)), $post)
+        $response = $this->prepareHttpClient(sprintf('/templates/%s/preview', urlencode($templateId)), $post, $headers)
             ->send()
         ;
 

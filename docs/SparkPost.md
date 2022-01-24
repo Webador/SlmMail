@@ -19,42 +19,27 @@ Usage
 
 ### Supported functionalities
 
-SlmMail consumes for SparkPost just the standard `Laminas\Mail\Message` object.
+In addition to the default `Laminas\Mail\Message` class, SlmMail offers the SparkPost-specific `SlmMail\Message\SparkPost` class as input for sending email. The latter supports native templates and attachments for the more advanced use cases.
 
-When the SparkPostService was constructed with a DKIM-config object, the following methods let you register, verify and remove sending domains:
+#### Subaccounts
 
-* registerSendingDomain: Registers a new sending domain using the default DKIM keypair and selector that were configured using the constructor. If the sending domain already exists in SparkPost, the existing sending domain is preserved and the function returns successfully.
-* removeSendingDomain: Remove a sending domain. If the sending domains does not exist on SparkPost the fuction returns successfully.
+SparkPost allows multiple *subaccounts* to be used in addition the main account. SlmMail supports subaccounts on SparkPost through the `'subaccount'` option which can be passed along to any method of the `SparkPostService`. Please note that the numeric subaccount **ID** must be used, not the symbolic name of the subaccount.
+
+#### Sending domains
+
+The following SparkPostService-methods let you register, verify and remove sending domains:
+
+* registerSendingDomain: Registers a new sending domain using the DKIM-keypair and selector that were given in the `'dkim'` option. If the sending domain already exists in SparkPost, the existing sending domain is preserved and the function returns successfully.
+
+* removeSendingDomain: Remove a sending domain. If the sending domains does not exist on SparkPost the function returns successfully.
+
 * verifySendingDomain: Requests verification of the DKIM-record of a previously registered sending domain.
 
 #### Attachments
 
-You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
-=======
-SlmMail consumes for SparkPosrt just the standard `Laminas\Mail\Message` object.
+You can add any attachment to a `SparkPost` message using the `addAttachment` method. Please note that the contents of the attachment must be base64-encoded *before* adding the attachment.
 
-#### Attachments
-
-You can add any attachment to a SparkPost message. Attachments are handled just like you normally send emails with attachments. See the [Zend Framework 2 manual](http://framework.zend.com/manual/2.0/en/modules/zend.mail.message.html) for an extensive explanation of the Message class.
->>>>>>> Temporary merge branch 2
-
-```php
-$text = new \Laminas\Mime\Part($textContent);
-$text->type = "text/plain";
-
-$html = new \Laminas\Mime\Part($htmlMarkup);
-$html->type = "text/html";
-
-$pdf = new \Laminas\Mime\Part(fopen($pathToPdf, 'r'));
-$pdf->type     = "application/pdf";
-$pdf->filename = "my-attachment.pdf";
-
-$body = new \Laminas\Mime\Message;
-$body->setParts(array($text, $html, $pdf));
-
-$message = new \Laminas\Mail\Message;
-$message->setBody($body);
-```
+SparkPost limits the total message size to ~20 MB, including base64-encoded attachments. In fact, SparkPost's advice is not to include any attachments to increase the chances of landing in the inbox.
 
 ### Use service locator
 
