@@ -41,15 +41,8 @@
 
 namespace SlmMail\Service;
 
-use Laminas\Mail\Message;
+use Laminas\Mail\Transport\TransportInterface;
 
-interface MailServiceInterface
+interface MailServiceInterface extends TransportInterface
 {
-    /**
-     * Send a message
-     *
-     * @param  Message $message
-     * @return mixed
-     */
-    public function send(Message $message);
 }
