@@ -71,7 +71,7 @@
         }
     },
     "extra": {
-        "zf": {
+        "laminas": {
             "component": "SlmMail",
             "config-provider": "SlmMail\\ConfigProvider"
         }
