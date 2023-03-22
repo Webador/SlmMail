@@ -5,7 +5,7 @@ namespace SlmMail\Factory;
 
 
 use Aws\Sdk;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use SlmMail\Factory\Exception\RuntimeException;
 

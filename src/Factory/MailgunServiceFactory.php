@@ -41,8 +41,8 @@
 
 namespace SlmMail\Factory;
 
-use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
+use Psr\Container\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
 use SlmMail\Factory\Exception\RuntimeException;
 use SlmMail\Service\MailgunService;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
