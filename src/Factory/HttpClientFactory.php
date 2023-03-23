@@ -41,7 +41,7 @@
 
 namespace SlmMail\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Http\Client as HttpClient;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

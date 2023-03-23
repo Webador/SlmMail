@@ -41,7 +41,7 @@
 
 namespace SlmMail\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use SlmMail\Mail\Transport\HttpTransport;
 use SlmMail\Service\SendGridService;
