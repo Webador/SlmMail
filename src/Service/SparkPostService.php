@@ -552,7 +552,12 @@ class SparkPostService extends AbstractMailService
         throw new RuntimeException('SparkPost server error, please try again');
     }
 
-    public function previewTemplate(string $templateId, array $substitutionVariables = [], array $options = []): array
+    public function previewTemplate(
+        string $templateId, 
+        array $substitutionVariables = [], 
+        array $options = [], 
+        bool $useDraftIfAvailable = true
+    ): array
     {
         $headers = [];
 
@@ -566,9 +571,17 @@ class SparkPostService extends AbstractMailService
             'substitution_data' => $substitutionVariables,
         ];
 
-        $response = $this->prepareHttpClient(sprintf('/templates/%s/preview', urlencode($templateId)), $post, $headers)
-            ->send()
-        ;
+        $response = $this->prepareHttpClient(
+            sprintf(
+                '/templates/%s/preview?%s',
+                urlencode($templateId),
+                http_build_query([
+                    'draft' => $useDraftIfAvailable ? 'true' : 'false',
+                ]),
+            ),
+            $post,
+            $headers
+        )->send();
 
         return $this->parseResponse($response)['results'] ?? [];
     }
