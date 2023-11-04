@@ -188,6 +188,7 @@ class PostmarkService extends AbstractMailService
 
         $response = $this->prepareHttpClient('/email')
                          ->setMethod(HttpRequest::METHOD_POST)
+                         ->setEncType('application/json')
                          ->setRawBody(json_encode($this->filterParameters($parameters)))
                          ->send();
 
