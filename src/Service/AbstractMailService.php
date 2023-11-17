@@ -46,11 +46,21 @@ use Laminas\Mail\Message;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
 
+use function in_array;
+
 /**
  * Class AbstractMailService
  */
 abstract class AbstractMailService implements MailServiceInterface
 {
+    private const MULTIPART_TYPES = [
+        Mime::MULTIPART_ALTERNATIVE,
+        Mime::MULTIPART_MIXED,
+        Mime::MULTIPART_RELATED,
+        Mime::MULTIPART_RELATIVE,
+        Mime::MULTIPART_REPORT,
+    ];
+
     /**
      * @var HttpClient
      */
@@ -74,9 +84,21 @@ abstract class AbstractMailService implements MailServiceInterface
             return null;
         }
 
-        foreach ($body->getParts() as $part) {
+        return $this->extractTextFromMimeMessage($body);
+    }
+
+    private function extractTextFromMimeMessage(MimeMessage $message): ?string
+    {
+        foreach ($message->getParts() as $part) {
             if ($part->type === 'text/plain' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
                 return $part->getContent();
+            }
+        }
+        foreach ($message->getParts() as $part) {
+            if (in_array($part->type, self::MULTIPART_TYPES)) {
+                return $this->extractTextFromMimeMessage(
+                    MimeMessage::createFromMessage($part->getContent(), $part->boundary)
+                );
             }
         }
 
@@ -98,9 +120,21 @@ abstract class AbstractMailService implements MailServiceInterface
             return null;
         }
 
-        foreach ($body->getParts() as $part) {
+        return $this->extractHtmlFromMimeMessage($body);
+    }
+
+    private function extractHtmlFromMimeMessage(MimeMessage $message): ?string
+    {
+        foreach ($message->getParts() as $part) {
             if ($part->type === 'text/html' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
                 return $part->getContent();
+            }
+        }
+        foreach ($message->getParts() as $part) {
+            if (in_array($part->type, self::MULTIPART_TYPES)) {
+                return $this->extractHtmlFromMimeMessage(
+                    MimeMessage::createFromMessage($part->getContent(), $part->boundary)
+                );
             }
         }
 

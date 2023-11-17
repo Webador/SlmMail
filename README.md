@@ -103,6 +103,13 @@ $message->setBody($body);
 
 > For accessibility purposes, you should *always* provide both a text and HTML version of your mails.
 
+### `multipart/alternative` emails with attachments
+
+The correct way to compose an email message that contains text, html _and_ attachments is to create a 
+`multipart/alternative` part containing the text and html parts, followed by one or more parts for the attachments. See
+the [Laminas Documentation](https://docs.laminas.dev/laminas-mail/message/attachments/#multipartalternative-emails-with-attachments)
+for a full example.
+
 ### How to configure HttpClient with http_options and http_adapter
 
 By default the adapter is Laminas\Http\Client\Adapter\Socket but you can override it with other adapter like this in your slm_mail.*.local.php
