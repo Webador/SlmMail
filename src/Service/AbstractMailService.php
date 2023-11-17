@@ -45,8 +45,10 @@ use Laminas\Http\Client as HttpClient;
 use Laminas\Mail\Message;
 use Laminas\Mime\Message as MimeMessage;
 use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 
 use function in_array;
+use function strpos;
 
 /**
  * Class AbstractMailService
@@ -90,7 +92,7 @@ abstract class AbstractMailService implements MailServiceInterface
     private function extractTextFromMimeMessage(MimeMessage $message): ?string
     {
         foreach ($message->getParts() as $part) {
-            if ($part->type === 'text/plain' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
+            if ($this->isType($part, Mime::TYPE_TEXT)) {
                 return $part->getContent();
             }
         }
@@ -126,7 +128,7 @@ abstract class AbstractMailService implements MailServiceInterface
     private function extractHtmlFromMimeMessage(MimeMessage $message): ?string
     {
         foreach ($message->getParts() as $part) {
-            if ($part->type === 'text/html' && $part->disposition !== Mime::DISPOSITION_ATTACHMENT) {
+            if ($this->isType($part, Mime::TYPE_HTML)) {
                 return $part->getContent();
             }
         }
@@ -139,6 +141,11 @@ abstract class AbstractMailService implements MailServiceInterface
         }
 
         return null;
+    }
+
+    private function isType(Part $part, string $mimeType): bool
+    {
+        return strpos($part->type, $mimeType) === 0 && $part->disposition !== Mime::DISPOSITION_ATTACHMENT;
     }
 
     /**
@@ -160,15 +167,25 @@ abstract class AbstractMailService implements MailServiceInterface
             return [];
         }
 
-        $filter      = ['text/plain', 'text/html'];
         $attachments = [];
         foreach ($body->getParts() as $part) {
-            if (!in_array($part->type, $filter) || $part->disposition === Mime::DISPOSITION_ATTACHMENT) {
+            if ($this->isAttachment($part)) {
                 $attachments[] = $part;
             }
         }
 
         return $attachments;
+    }
+
+    private function isAttachment(Part $part): bool
+    {
+        if (in_array($part->type, self::MULTIPART_TYPES)) {
+            return false;
+        }
+        if ($part->disposition === Mime::DISPOSITION_ATTACHMENT) {
+            return true;
+        }
+        return strpos($part->type, 'text/') !== 0;
     }
 
     /**

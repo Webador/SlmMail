@@ -11,6 +11,8 @@ use Laminas\Mime\Part;
 use SlmMail\Service\AbstractMailService;
 use PHPUnit\Framework\TestCase;
 
+use function current;
+
 /**
  * @covers \SlmMail\Service\AbstractMailService
  */
@@ -175,5 +177,39 @@ final class AbstractMailServiceTest extends TestCase
 
         $this->service->send($message);
         self::assertSame($expected, trim($this->service->html));
+    }
+
+    /**
+     * @dataProvider extractAttachmentProvider
+     */
+    public function testExtractAttachment(string $mimeType, string $disposition, bool $expected): void
+    {
+        $message = new Message();
+        $body = new MimeMessage();
+        $attachment = (new Part('Foo'))
+            ->setType($mimeType)
+            ->setDisposition($disposition);
+        $body->addPart($attachment);
+        $message->setBody($body);
+
+        $this->service->send($message);
+        if ($expected) {
+            $actual = current($this->service->attachments);
+            self::assertSame($attachment, $actual);
+        } else {
+            self::assertEmpty($this->service->attachments);
+        }
+    }
+
+    public static function extractAttachmentProvider(): array
+    {
+        return [
+            'html' => [Mime::TYPE_HTML, '', false],
+            'text' => [Mime::TYPE_TEXT, '', false],
+            'xml'  => [Mime::TYPE_XML, '', false],
+            'multipart/alternative' => [Mime::MULTIPART_ALTERNATIVE, '', false],
+            'xml attachment' => [Mime::TYPE_XML, Mime::DISPOSITION_ATTACHMENT, true],
+            'pdf' => ['application/pdf', '', true],
+        ];
     }
 }
