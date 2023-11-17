@@ -106,65 +106,9 @@ $message->setBody($body);
 ### `multipart/alternative` emails with attachments
 
 The correct way to compose an email message that contains text, html _and_ attachments is to create a 
-`multipart/alternative` part containing the text and html parts, followed by one or more parts for the attachments.
-
-If you have an existing application using `laminas/laminas-mail`, the developers probably followed the 
-[Laminas Documentation](https://docs.laminas.dev/laminas-mail/message/attachments/#multipartalternative-emails-with-attachments),
-in which case the `multipart/alternative` content part may not have any boundary defined. This library **needs** that 
-boundary to parse out the text and html.
-
-For existing applications, check that it is set when your code creates the content MIME part:
-
-```php
-$content = new MimeMessage();
-$content->setParts([$text, $html]);
-$contentPart = (new MimePart($content->generateMessage()))
-   ->setBoundary($content->getMime()->boundary()); // <-- THIS IS REQUIRED!
-```
-
-If you are starting from scratch, here's the example from the Laminas documentation modified to work correctly:
-
-```php
-use Laminas\Mail\Message;
-use Laminas\Mime\Message as MimeMessage;
-use Laminas\Mime\Mime;
-use Laminas\Mime\Part as MimePart;
-
-$body = new MimeMessage();
-
-$text           = new MimePart($textContent);
-$text->type     = Mime::TYPE_TEXT;
-$text->charset  = 'utf-8';
-$text->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-
-$html           = new MimePart($htmlMarkup);
-$html->type     = Mime::TYPE_HTML;
-$html->charset  = 'utf-8';
-$html->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-
-$content = new MimeMessage();
-// This order is important for email clients to properly display the correct version of the content
-$content->setParts([$text, $html]);
-
-$contentPart = (new MimePart($content->generateMessage()))
-   ->setType(Mime::MULTIPART_ALTERNATIVE)
-   ->setBoundary($content->getMime()->boundary());;
-
-$image              = new MimePart(fopen($pathToImage, 'r'));
-$image->type        = 'image/jpeg';
-$image->filename    = 'image-file-name.jpg';
-$image->disposition = Mime::DISPOSITION_ATTACHMENT;
-$image->encoding    = Mime::ENCODING_BASE64;
-
-$body = new MimeMessage();
-$body->setParts([$contentPart, $image]);
-
-$message = new Message();
-$message->setBody($body);
-
-$contentTypeHeader = $message->getHeaders()->get('Content-Type');
-$contentTypeHeader->setType(Mime::MULTIPART_RELATED);
-```
+`multipart/alternative` part containing the text and html parts, followed by one or more parts for the attachments. See
+the [Laminas Documentation](https://docs.laminas.dev/laminas-mail/message/attachments/#multipartalternative-emails-with-attachments)
+for a full example.
 
 ### How to configure HttpClient with http_options and http_adapter
 
