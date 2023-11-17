@@ -12,6 +12,8 @@ use SlmMail\Service\AbstractMailService;
 use PHPUnit\Framework\TestCase;
 
 use function current;
+use function str_repeat;
+use function trim;
 
 /**
  * @covers \SlmMail\Service\AbstractMailService
@@ -58,13 +60,14 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractTextFromTwoPartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $body->addPart(new Part(''));
         $body->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_TEXT)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $message->setBody($body);
 
@@ -89,7 +92,7 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractTextFromMultipartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $contentPart = new MimeMessage();
@@ -97,6 +100,7 @@ final class AbstractMailServiceTest extends TestCase
         $contentPart->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_TEXT)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $body->addPart(
             (new Part($contentPart->generateMessage()))
@@ -128,13 +132,14 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractHtmlFromTwoPartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $body->addPart(new Part(''));
         $body->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_HTML)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $message->setBody($body);
 
@@ -159,7 +164,7 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractHtmlFromMultipartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $contentPart = new MimeMessage();
@@ -167,6 +172,7 @@ final class AbstractMailServiceTest extends TestCase
         $contentPart->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_HTML)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $body->addPart(
             (new Part($contentPart->generateMessage()))

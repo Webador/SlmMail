@@ -93,7 +93,7 @@ abstract class AbstractMailService implements MailServiceInterface
     {
         foreach ($message->getParts() as $part) {
             if ($this->isType($part, Mime::TYPE_TEXT)) {
-                return $part->getContent();
+                return $part->getRawContent();
             }
         }
         foreach ($message->getParts() as $part) {
@@ -129,7 +129,7 @@ abstract class AbstractMailService implements MailServiceInterface
     {
         foreach ($message->getParts() as $part) {
             if ($this->isType($part, Mime::TYPE_HTML)) {
-                return $part->getContent();
+                return $part->getRawContent();
             }
         }
         foreach ($message->getParts() as $part) {
