@@ -11,6 +11,10 @@ use Laminas\Mime\Part;
 use SlmMail\Service\AbstractMailService;
 use PHPUnit\Framework\TestCase;
 
+use function current;
+use function str_repeat;
+use function trim;
+
 /**
  * @covers \SlmMail\Service\AbstractMailService
  */
@@ -56,13 +60,14 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractTextFromTwoPartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $body->addPart(new Part(''));
         $body->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_TEXT)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $message->setBody($body);
 
@@ -87,7 +92,7 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractTextFromMultipartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $contentPart = new MimeMessage();
@@ -95,6 +100,7 @@ final class AbstractMailServiceTest extends TestCase
         $contentPart->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_TEXT)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $body->addPart(
             (new Part($contentPart->generateMessage()))
@@ -126,13 +132,14 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractHtmlFromTwoPartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $body->addPart(new Part(''));
         $body->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_HTML)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $message->setBody($body);
 
@@ -157,7 +164,7 @@ final class AbstractMailServiceTest extends TestCase
 
     public function testExtractHtmlFromMultipartMessageReturnsString(): void
     {
-        $expected = 'Foo';
+        $expected = trim(str_repeat('Foo ', 100));
         $message = new Message();
         $body = new MimeMessage();
         $contentPart = new MimeMessage();
@@ -165,6 +172,7 @@ final class AbstractMailServiceTest extends TestCase
         $contentPart->addPart(
             (new Part($expected))
                 ->setType(Mime::TYPE_HTML)
+                ->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE)
         );
         $body->addPart(
             (new Part($contentPart->generateMessage()))
@@ -175,5 +183,39 @@ final class AbstractMailServiceTest extends TestCase
 
         $this->service->send($message);
         self::assertSame($expected, trim($this->service->html));
+    }
+
+    /**
+     * @dataProvider extractAttachmentProvider
+     */
+    public function testExtractAttachment(string $mimeType, string $disposition, bool $expected): void
+    {
+        $message = new Message();
+        $body = new MimeMessage();
+        $attachment = (new Part('Foo'))
+            ->setType($mimeType)
+            ->setDisposition($disposition);
+        $body->addPart($attachment);
+        $message->setBody($body);
+
+        $this->service->send($message);
+        if ($expected) {
+            $actual = current($this->service->attachments);
+            self::assertSame($attachment, $actual);
+        } else {
+            self::assertEmpty($this->service->attachments);
+        }
+    }
+
+    public static function extractAttachmentProvider(): array
+    {
+        return [
+            'html' => [Mime::TYPE_HTML, '', false],
+            'text' => [Mime::TYPE_TEXT, '', false],
+            'xml'  => [Mime::TYPE_XML, '', false],
+            'multipart/alternative' => [Mime::MULTIPART_ALTERNATIVE, '', false],
+            'xml attachment' => [Mime::TYPE_XML, Mime::DISPOSITION_ATTACHMENT, true],
+            'pdf' => ['application/pdf', '', true],
+        ];
     }
 }
