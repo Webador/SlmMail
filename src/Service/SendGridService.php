@@ -70,6 +70,8 @@ class SendGridService extends AbstractMailService
 
 
     /**
+     * If $username is an empty string header authentication will be used
+     *
      * @param string $username
      * @param string $apiKey
      */
@@ -344,13 +346,26 @@ class SendGridService extends AbstractMailService
      */
     private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
-        $parameters = array_merge(['api_user' => $this->username, 'api_key' => $this->apiKey], $parameters);
+        if ($this->username) {
+            $parameters = array_merge(
+                ['api_user' => $this->username, 'api_key' => $this->apiKey],
+                $parameters
+            );
+        }
 
-        return $this->getClient()
-                    ->resetParameters()
-                    ->setMethod(HttpRequest::METHOD_GET)
-                    ->setUri(self::API_ENDPOINT . $uri)
-                    ->setParameterGet($this->filterParameters($parameters));
+        $client = $this->getClient()
+            ->resetParameters()
+            ->setMethod(HttpRequest::METHOD_GET)
+            ->setUri(self::API_ENDPOINT . $uri)
+            ->setParameterGet($this->filterParameters($parameters));
+
+        if (! $this->username) {
+            $client->setHeaders([
+                'Authorization' => sprintf('Bearer %s', $this->apiKey),
+            ]);
+        }
+
+        return $client;
     }
 
     /**

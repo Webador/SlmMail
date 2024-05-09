@@ -41,6 +41,7 @@
 
 namespace SlmMailTest\Service;
 
+use Laminas\Http\Client as HttpClient;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\SendGridService;
@@ -78,6 +79,65 @@ class SendGridServiceTest extends TestCase
 
         $actual = $method->invoke($this->service, $response);
         $this->assertEquals($payload, $actual);
+    }
+
+
+    /** @dataProvider dataProviderTestPrepareHttpClientWithUsername */
+    public function testPrepareHttpClientWithUsername(
+        string $username,
+        bool $expectHeaderAuthentication
+    ): void {
+        $apiKey = 'api_key';
+
+        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient->method('resetParameters')
+                   ->willReturn($httpClient);
+        $httpClient->method('setMethod')
+                   ->willReturn($httpClient);
+        $httpClient->method('setUri')
+                   ->willReturn($httpClient);
+        $httpClient->method('setParameterGet')
+                   ->willReturnCallback(function (array $query) use (
+                        $username,
+                        $apiKey,
+                        $expectHeaderAuthentication,
+                        $httpClient
+                    ) {
+                        if ($expectHeaderAuthentication) {
+                            self::assertFalse(isset($query['api_user']));
+                            self::assertFalse(isset($query['api_key']));
+                        } else {
+                            self::assertEquals($username, $query['api_user']);
+                            self::assertNotEmpty($apiKey, $query['api_key']);
+                        }
+
+                        return $httpClient;
+                    });
+
+        if ($expectHeaderAuthentication) {
+            $httpClient->expects(self::once())
+                       ->method('setHeaders')
+                       ->with([
+                           'Authorization' => sprintf('Bearer %s', $apiKey),
+                       ]);
+        } else {
+            $httpClient->expects(self::never())->method('setHeaders');
+        }
+
+        $service = new SendGridService($username, $apiKey);
+        $service->setClient($httpClient);
+        $method = new ReflectionMethod($service, 'prepareHttpClient');
+        $method->setAccessible(true);
+
+        $method->invoke($service, '/mail.send.json', []);
+    }
+
+    public static function dataProviderTestPrepareHttpClientWithUsername(): array
+    {
+        return [
+            'with username'    => ['my-user', false],
+            'without username' => ['', true],
+        ];
     }
 
     /**

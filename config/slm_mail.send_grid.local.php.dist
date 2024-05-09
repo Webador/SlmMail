@@ -5,6 +5,7 @@ return array(
         'send_grid' => array(
             /**
              * Set your Send Grid username
+             * If empty string then header authentication will be used
              */
             // 'username' => '',
 
