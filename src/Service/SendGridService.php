@@ -99,10 +99,6 @@ class SendGridService extends AbstractMailService
             );
         }
 
-        if (count($message->getCc())) {
-            throw new Exception\RuntimeException('SendGrid does not support CC addresses');
-        }
-
         $parameters = [
             'from'     => $from->rewind()->getEmail(),
             'fromname' => $from->rewind()->getName(),
@@ -113,6 +109,10 @@ class SendGridService extends AbstractMailService
 
         foreach ($message->getTo() as $address) {
             $parameters['to'][] = $address->getEmail();
+        }
+
+        foreach ($message->getCc() as $address) {
+            $parameters['cc'][] = $address->getEmail();
         }
 
         foreach ($message->getBcc() as $address) {
