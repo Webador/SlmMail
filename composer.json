@@ -43,6 +43,7 @@
         "laminas/laminas-servicemanager": "^3.11"
     },
     "require-dev": {
+        "ext-json": "*",
         "psr/container": "^1.0 || ^2.0",
         "guzzlehttp/guzzle": "^7.4",
         "laminas/laminas-modulemanager": "^2.8",

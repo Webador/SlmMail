@@ -4,12 +4,6 @@ return array(
     'slm_mail' => array(
         'send_grid' => array(
             /**
-             * Set your Send Grid username
-             * If empty string then header authentication will be used
-             */
-            // 'username' => '',
-
-            /**
              * Set your Send Grid API key
              */
             // 'key' => '',

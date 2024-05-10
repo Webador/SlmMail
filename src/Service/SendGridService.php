@@ -55,13 +55,6 @@ class SendGridService extends AbstractMailService
     protected const API_ENDPOINT = 'https://sendgrid.com/api';
 
     /**
-     * SendGrid username
-     *
-     * @var string
-     */
-    protected $username;
-
-    /**
      * SendGrid API key
      *
      * @var string
@@ -70,14 +63,10 @@ class SendGridService extends AbstractMailService
 
 
     /**
-     * If $username is an empty string header authentication will be used
-     *
-     * @param string $username
      * @param string $apiKey
      */
-    public function __construct(string $username, string $apiKey)
+    public function __construct(string $apiKey)
     {
-        $this->username = $username;
         $this->apiKey   = $apiKey;
     }
 
@@ -346,24 +335,15 @@ class SendGridService extends AbstractMailService
      */
     private function prepareHttpClient(string $uri, array $parameters = []): HttpClient
     {
-        if ($this->username) {
-            $parameters = array_merge(
-                ['api_user' => $this->username, 'api_key' => $this->apiKey],
-                $parameters
-            );
-        }
-
         $client = $this->getClient()
             ->resetParameters()
             ->setMethod(HttpRequest::METHOD_GET)
             ->setUri(self::API_ENDPOINT . $uri)
             ->setParameterGet($this->filterParameters($parameters));
 
-        if (! $this->username) {
-            $client->setHeaders([
-                'Authorization' => sprintf('Bearer %s', $this->apiKey),
-            ]);
-        }
+        $client->setHeaders([
+            'Authorization' => sprintf('Bearer %s', $this->apiKey),
+        ]);
 
         return $client;
     }
