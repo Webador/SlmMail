@@ -41,6 +41,7 @@
 
 namespace SlmMailTest\Service;
 
+use Laminas\Http\Client as HttpClient;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SlmMail\Service\SendGridService;
@@ -49,6 +50,8 @@ use Laminas\Http\Response as HttpResponse;
 
 class SendGridServiceTest extends TestCase
 {
+    private const API_KEY = 'my-secret-key';
+
     /**
      * @var SendGridService
      */
@@ -56,7 +59,7 @@ class SendGridServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->service = new SendGridService('my-username', 'my-secret-key');
+        $this->service = new SendGridService(self::API_KEY);
     }
 
     public function testCreateFromFactory()
@@ -78,6 +81,35 @@ class SendGridServiceTest extends TestCase
 
         $actual = $method->invoke($this->service, $response);
         $this->assertEquals($payload, $actual);
+    }
+
+
+    public function testPrepareHttpClientWithUsername(): void
+    {
+        $httpClient = $this->createMock(HttpClient::class);
+        $httpClient->method('resetParameters')
+                   ->willReturn($httpClient);
+        $httpClient->method('setMethod')
+                   ->willReturn($httpClient);
+        $httpClient->method('setUri')
+            ->willReturn($httpClient);
+        $httpClient->method('setParameterGet')
+                   ->willReturn($httpClient);
+
+        $httpClient->expects(self::once())
+                   ->method('setHeaders')
+                   ->with([
+                       'Authorization' => sprintf(
+                           'Bearer %s',
+                           self::API_KEY
+                       ),
+                   ]);
+
+        $this->service->setClient($httpClient);
+        $method = new ReflectionMethod($this->service, 'prepareHttpClient');
+        $method->setAccessible(true);
+
+        $method->invoke($this->service, '/mail.send.json', []);
     }
 
     /**
