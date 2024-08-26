@@ -36,7 +36,7 @@
         }
     ],
     "require": {
-        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
+        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
         "laminas/laminas-mail": "^2.9",
         "laminas/laminas-http": "^2.8",
         "laminas/laminas-mime": "^2.8",
