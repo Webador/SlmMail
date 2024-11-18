@@ -524,32 +524,27 @@ class SparkPostService extends AbstractMailService
             return $result;
         }
 
-        // There is a 4xx error
-        if ($response->isClientError()) {
-            if (isset($result['errors']) && is_array($result['errors'])) {
-                $message = implode(', ', array_map(
-                    function ($error) {
-                        return $error['message'];
-                    },
-                    $result['errors']
-                ));
-            } elseif (isset($result['error'])) {
-                $message = $result['error'];
-            } else {
-                $message = 'Unknown error';
-            }
-
-            throw new RuntimeException(
-                sprintf(
-                    'An error occurred on SparkPost (http code %s), messages: %s',
-                    $response->getStatusCode(),
-                    $message
-                )
-            );
+        if (isset($result['errors']) && is_array($result['errors'])) {
+            $message = implode(', ', array_map(
+                function ($error) {
+                    return $error['message'];
+                },
+                $result['errors']
+            ));
+        } elseif (isset($result['error'])) {
+            $message = $result['error'];
+        } else {
+            $message = 'Unknown error';
         }
 
-        // There is a 5xx error
-        throw new RuntimeException('SparkPost server error, please try again');
+        throw new RuntimeException(
+            sprintf(
+                'An error occurred on SparkPost (http code %s), messages: %s',
+                $response->getStatusCode(),
+                $message
+            ),
+            $response->getStatusCode()
+        );
     }
 
     public function previewTemplate(
