@@ -14,8 +14,8 @@ Here are the currently supported services:
 * [Mailgun](http://www.mailgun.com) (complete)
 * [Postmark](https://postmarkapp.com) (complete)
 * [Postage](http://postageapp.com) (complete)
-* [Send Grid](http://sendgrid.com) (nearly complete)
-* [Spark Post](http://sparkpost.com) (nearly complete)
+* [SendGrid](http://sendgrid.com) (nearly complete)
+* [SparkPost](http://sparkpost.com) (nearly complete)
 * [Amazon SES](http://aws.amazon.com/ses) (nearly complete, attachments are missing)
 * [Mandrill](http://mandrill.com) (complete, but please don't use this party, as Mailchimp / Mandrill do not actively maintain this service)
 
