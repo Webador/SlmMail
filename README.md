@@ -1,6 +1,10 @@
 SlmMail
 =======
 
+> **Warning** This package relies on [slm](https://github.com/laminas/laminas-mail), which is abandoned and will receive no further development. For that reason, we don't recommend starting any project with this package. Instead take a look at https://github.com/omnimail/omnimail or use symfony/mailer with a [3rd Party Transport](https://symfony.com/doc/current/mailer.html#using-a-3rd-party-transport).
+
+---
+
 ![Build Status](https://github.com/JouwWeb/SlmMail/actions/workflows/ci.yml/badge.svg)
 [![Latest Stable Version](https://poser.pugx.org/slm/mail/v/stable.png)](https://packagist.org/packages/slm/mail)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JouwWeb/SlmMail/?branch=master)
